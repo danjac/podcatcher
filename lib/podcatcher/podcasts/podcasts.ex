@@ -5,9 +5,10 @@ defmodule Podcatcher.Podcasts do
   use Arc.Ecto.Schema
 
   import Ecto.{Query, Changeset}, warn: false
-  alias Podcatcher.Repo
 
+  alias Podcatcher.Repo
   alias Podcatcher.Podcasts.Podcast
+  alias Podcatcher.Parser.FeedParser
 
   @doc """
   Returns the list of podcasts.
@@ -57,6 +58,22 @@ defmodule Podcatcher.Podcasts do
   end
 
   @doc """
+  Creates a podcast from an RSS feed. If a podcast
+  with this feed already exists then just returns that podcast.
+
+  Adds any categories and episodes to the podcast.
+  """
+  def create_podcast_from_rss_feed(url) do
+    data = FeedParser.fetch_and_parse(url)
+    case data do
+      {:error, reason} -> {:error, reason}
+      _ ->
+        podcast = create_podcast(Map.put_new(data.podcast, :rss_feed, url))
+    end
+  end
+
+
+  @doc """
   Updates a podcast.
 
   ## Examples
@@ -88,10 +105,6 @@ defmodule Podcatcher.Podcasts do
   """
   def delete_podcast(%Podcast{} = podcast) do
     Repo.delete(podcast)
-  end
-
-  def from_url(url) do
-
   end
 
   @doc """

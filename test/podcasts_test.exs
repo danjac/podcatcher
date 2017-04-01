@@ -1,7 +1,10 @@
 defmodule Podcatcher.PodcastsTest do
   use Podcatcher.DataCase
 
+  import Mock
+
   alias Podcatcher.Podcasts
+  alias Podcatcher.Uploaders.Image
   alias Podcatcher.Podcasts.Podcast
 
   @create_attrs %{copyright: "some copyright", description: "some description", email: "some email", explicit: true, owner: "some owner", rss_feed: "some rss_feed", subtitle: "some subtitle", title: "some title", website: "some website"}
@@ -11,6 +14,26 @@ defmodule Podcatcher.PodcastsTest do
   def fixture(:podcast, attrs \\ @create_attrs) do
     {:ok, podcast} = Podcasts.create_podcast(attrs)
     podcast
+  end
+
+  def fetch_mock_rss_feed(_url, _headers, _options) do
+    body = File.read! "./test/fixtures/sample.xml"
+    {:ok, %HTTPoison.Response{body: body, status_code: 200}}
+  end
+
+  def create_mock_image(_source) do
+    {:ok, "test_image.jpg"}
+  end
+
+  test "create_podcast_from_rss_feed/1 should create a new podcast" do
+    with_mocks([
+      {HTTPoison, [], [get: &fetch_mock_rss_feed/3]},
+      {Image, [], [store: &create_mock_image/1]},
+      ]) do
+      {:ok, %Podcast{} = podcast} = Podcasts.create_podcast_from_rss_feed("https://somefeed.xml")
+      assert podcast.title == "Fat Man on Batman"
+      assert length(podcast.episodes) == 164
+    end
   end
 
   test "list_podcasts/1 returns all podcasts" do

@@ -2,6 +2,7 @@ defmodule Podcatcher.Podcasts.Podcast do
   use Ecto.Schema
 
   alias Podcatcher.Categories.Category
+  alias Podcatcher.Episodes.Episode
 
   schema "podcasts_podcasts" do
     field :copyright, :string
@@ -15,6 +16,7 @@ defmodule Podcatcher.Podcasts.Podcast do
     field :title, :string
     field :website, :string
 
+    has_many :episodes, Episode
     many_to_many :categories, Category, join_through: "podcasts_categories"
 
     timestamps()

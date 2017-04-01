@@ -34,6 +34,7 @@ defmodule Podcatcher.Mixfile do
      {:postgrex, ">= 0.0.0"},
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
+     {:mock, "~> 0.2.0", only: :test},
      {:gettext, "~> 0.11"},
      {:arc, "~> 0.7.0"},
      {:arc_ecto, "~> 0.6.0"},
