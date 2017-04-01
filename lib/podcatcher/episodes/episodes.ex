@@ -18,7 +18,7 @@ defmodule Podcatcher.Episodes do
 
   """
   def list_episodes do
-    Repo.all(Episode)
+    Repo.all(Episode) |> Repo.preload(:podcast)
   end
 
   @doc """
@@ -35,7 +35,7 @@ defmodule Podcatcher.Episodes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_episode!(id), do: Repo.get!(Episode, id)
+  def get_episode!(id), do: Repo.get!(Episode, id) |> Repo.preload(:podcast)
 
   @doc """
   Creates a episode.
@@ -49,8 +49,8 @@ defmodule Podcatcher.Episodes do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_episode(attrs \\ %{}) do
-    %Episode{}
+  def create_episode(podcast, attrs \\ %{}) do
+    %Episode{podcast: podcast}
     |> episode_changeset(attrs)
     |> Repo.insert()
   end
@@ -105,7 +105,6 @@ defmodule Podcatcher.Episodes do
   defp episode_changeset(%Episode{} = episode, attrs) do
     episode
     |> cast(attrs, [:guid, :title, :link, :description, :summary, :subtitle, :pub_date, :explicit, :author, :content_length, :content_url, :content_type, :duration])
-    |> cast_assoc(:podcast)
     |> validate_required([:guid, :title, :pub_date, :explicit, :content_length, :content_url, :content_type, :duration])
     |> unique_constraint(:guid)
   end

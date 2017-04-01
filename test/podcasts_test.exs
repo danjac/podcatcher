@@ -4,8 +4,8 @@ defmodule Podcatcher.PodcastsTest do
   alias Podcatcher.Podcasts
   alias Podcatcher.Podcasts.Podcast
 
-  @create_attrs %{copyright: "some copyright", description: "some description", email: "some email", explicit: true, image: "some image", owner: "some owner", rss_feed: "some rss_feed", subtitle: "some subtitle", title: "some title", website: "some website"}
-  @update_attrs %{copyright: "some updated copyright", description: "some updated description", email: "some updated email", explicit: false, image: "some updated image", owner: "some updated owner", rss_feed: "some updated rss_feed", subtitle: "some updated subtitle", title: "some updated title", website: "some updated website"}
+  @create_attrs %{copyright: "some copyright", description: "some description", email: "some email", explicit: true, owner: "some owner", rss_feed: "some rss_feed", subtitle: "some subtitle", title: "some title", website: "some website"}
+  @update_attrs %{copyright: "some updated copyright", description: "some updated description", email: "some updated email", explicit: false, owner: "some updated owner", rss_feed: "some updated rss_feed", subtitle: "some updated subtitle", title: "some updated title", website: "some updated website"}
   @invalid_attrs %{copyright: nil, description: nil, email: nil, explicit: nil, image: nil, owner: nil, rss_feed: nil, subtitle: nil, title: nil, website: nil}
 
   def fixture(:podcast, attrs \\ @create_attrs) do
@@ -29,7 +29,6 @@ defmodule Podcatcher.PodcastsTest do
     assert podcast.description == "some description"
     assert podcast.email == "some email"
     assert podcast.explicit == true
-    assert podcast.image == "some image"
     assert podcast.owner == "some owner"
     assert podcast.rss_feed == "some rss_feed"
     assert podcast.subtitle == "some subtitle"
@@ -49,7 +48,6 @@ defmodule Podcatcher.PodcastsTest do
     assert podcast.description == "some updated description"
     assert podcast.email == "some updated email"
     assert podcast.explicit == false
-    assert podcast.image == "some updated image"
     assert podcast.owner == "some updated owner"
     assert podcast.rss_feed == "some updated rss_feed"
     assert podcast.subtitle == "some updated subtitle"

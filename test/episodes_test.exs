@@ -9,7 +9,8 @@ defmodule Podcatcher.EpisodesTest do
   @invalid_attrs %{author: nil, content_length: nil, content_type: nil, content_url: nil, description: nil, duration: nil, explicit: nil, guid: nil, link: nil, pub_date: nil, subtitle: nil, summary: nil, title: nil}
 
   def fixture(:episode, attrs \\ @create_attrs) do
-    {:ok, episode} = Episodes.create_episode(attrs)
+    podcast = Podcatcher.PodcastsTest.fixture(:podcast)
+    {:ok, episode} = Episodes.create_episode(podcast, attrs)
     episode
   end
 
@@ -24,7 +25,8 @@ defmodule Podcatcher.EpisodesTest do
   end
 
   test "create_episode/1 with valid data creates a episode" do
-    assert {:ok, %Episode{} = episode} = Episodes.create_episode(@create_attrs)
+    podcast = Podcatcher.PodcastsTest.fixture(:podcast)
+    assert {:ok, %Episode{} = episode} = Episodes.create_episode(podcast, @create_attrs)
     assert episode.author == "some author"
     assert episode.content_length == 42
     assert episode.content_type == "some content_type"

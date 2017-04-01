@@ -1,4 +1,4 @@
-defmodule Podcatcher.Parser.PodcastParser do
+defmodule Podcatcher.Parser.FeedParser do
   import SweetXml, except: [parse: 1]
   # require Logger
 
@@ -52,14 +52,14 @@ defmodule Podcatcher.Parser.PodcastParser do
 
   def parse(xml_string) do
     xml_string |> xmap(
-      channel: [
+      categories: ~x"//itunes:category/@text"l |> transform_by(&parse_categories/1),
+      podcast: [
         ~x"./channel",
         title: ~x"./title/text()"s,
-        link: ~x"./link/text()"s,
+        website: ~x"./link/text()"s,
         description: ~x"./description/text()"s,
         subtitle: ~x"./itunes:subtitle/text()"s,
         explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
-        categories: ~x"//itunes:category/@text"l |> transform_by(&Enum.uniq/1),
         image: ~x"./image/url/text()"s,
       ],
       episodes: [
@@ -78,6 +78,10 @@ defmodule Podcatcher.Parser.PodcastParser do
         content_length: ~x"./enclosure/@length"s |> transform_by(&parse_integer/1),
       ]
     )
+  end
+
+  def parse_categories(values) do
+    values |> Enum.uniq |> Enum.map(&to_string/1)
   end
 
   def parse_boolean(value, match_true \\ "yes") do

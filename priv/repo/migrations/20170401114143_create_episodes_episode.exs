@@ -21,7 +21,7 @@ defmodule Podcatcher.Repo.Migrations.CreatePodcatcher.Episodes.Episode do
       timestamps()
     end
 
-    create unique_index(:episodes_episodes, [:guid])
+    create unique_index(:episodes_episodes, [:guid, :podcast_id])
     create index(:episodes_episodes, [:podcast_id])
   end
 end
