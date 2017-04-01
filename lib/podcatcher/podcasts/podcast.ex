@@ -8,14 +8,14 @@ defmodule Podcatcher.Podcasts.Podcast do
     field :description, :string
     field :email, :string
     field :explicit, :boolean, default: false
-    field :image, :string
+    field :image, Podcatcher.Uploaders.Image.Type
     field :owner, :string
     field :rss_feed, :string
     field :subtitle, :string
     field :title, :string
     field :website, :string
 
-    many_to_many :categories_categories, Category, join_through: :podcasts_categories
+    many_to_many :categories, Category, join_through: "podcasts_categories"
 
     timestamps()
   end

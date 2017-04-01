@@ -6,7 +6,7 @@ defmodule Podcatcher.Categories.Category do
   schema "categories_categories" do
     field :name, :string
 
-    many_to_many :podcasts_podcast, Podcast, join_through: :podcasts_categories
+    many_to_many :podcasts, Podcast, join_through: "podcasts_categories"
 
     timestamps()
   end

@@ -2,6 +2,7 @@ defmodule Podcatcher.Podcasts do
   @moduledoc """
   The boundary for the Podcasts system.
   """
+  use Arc.Ecto.Schema
 
   import Ecto.{Query, Changeset}, warn: false
   alias Podcatcher.Repo
@@ -105,7 +106,8 @@ defmodule Podcatcher.Podcasts do
   defp podcast_changeset(%Podcast{} = podcast, attrs) do
     podcast
     |> cast(attrs, [:rss_feed, :website, :title, :description, :subtitle, :image, :explicit, :owner, :email, :copyright])
-    |> validate_required([:rss_feed, :website, :title, :description, :subtitle, :image, :explicit, :owner, :email, :copyright])
+    |> cast_attachments(attrs, [:image], allow_paths: true)
+    |> validate_required([:rss_feed, :title])
     |> unique_constraint(:rss_feed)
   end
 end
