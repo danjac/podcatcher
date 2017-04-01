@@ -105,7 +105,8 @@ defmodule Podcatcher.Episodes do
   defp episode_changeset(%Episode{} = episode, attrs) do
     episode
     |> cast(attrs, [:guid, :title, :link, :description, :summary, :subtitle, :pub_date, :explicit, :author, :content_length, :content_url, :content_type, :duration])
-    |> validate_required([:guid, :title, :link, :description, :summary, :subtitle, :pub_date, :explicit, :author, :content_length, :content_url, :content_type, :duration])
+    |> cast_assoc(:podcast)
+    |> validate_required([:guid, :title, :pub_date, :explicit, :content_length, :content_url, :content_type, :duration])
     |> unique_constraint(:guid)
   end
 end

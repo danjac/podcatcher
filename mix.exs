@@ -37,6 +37,8 @@ defmodule Podcatcher.Mixfile do
      {:gettext, "~> 0.11"},
      {:arc, "~> 0.7.0"},
      {:arc_ecto, "~> 0.6.0"},
+     {:sweet_xml, "~> 0.6.5"},
+     {:timex, "~> 3.0"},
      {:cowboy, "~> 1.0"}]
   end
 

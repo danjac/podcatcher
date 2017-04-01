@@ -90,6 +90,10 @@ defmodule Podcatcher.Podcasts do
     Repo.delete(podcast)
   end
 
+  def from_url(url) do
+
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking podcast changes.
 

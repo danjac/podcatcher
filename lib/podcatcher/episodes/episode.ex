@@ -1,6 +1,8 @@
 defmodule Podcatcher.Episodes.Episode do
   use Ecto.Schema
 
+  alias Podcatcher.Podcasts.Podcast
+
   schema "episodes_episodes" do
     field :author, :string
     field :content_length, :integer
@@ -15,7 +17,8 @@ defmodule Podcatcher.Episodes.Episode do
     field :subtitle, :string
     field :summary, :string
     field :title, :string
-    field :podcast_id, :id
+
+    belongs_to :podcast, Podcast
 
     timestamps()
   end
