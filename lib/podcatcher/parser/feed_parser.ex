@@ -1,5 +1,6 @@
 defmodule Podcatcher.Parser.FeedParser do
   import SweetXml, except: [parse: 1]
+  use Timex
   # require Logger
 
   @user_agents [
@@ -103,7 +104,8 @@ defmodule Podcatcher.Parser.FeedParser do
 
   defp do_parse_date([format | tail], value) do
     case Timex.parse(value, format) do
-      {:ok, datetime} -> datetime
+      # convert to UTC for database compatibility
+      {:ok, datetime} -> Timezone.convert(datetime, "Etc/UTC")
       {:error, _} -> do_parse_date(tail, value)
     end
   end

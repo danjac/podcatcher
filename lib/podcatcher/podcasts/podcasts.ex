@@ -8,6 +8,7 @@ defmodule Podcatcher.Podcasts do
 
   alias Podcatcher.Repo
   alias Podcatcher.Podcasts.Podcast
+  alias Podcatcher.Episodes.Episode
   alias Podcatcher.Parser.FeedParser
 
   @doc """
@@ -58,17 +59,52 @@ defmodule Podcatcher.Podcasts do
   end
 
   @doc """
-  Creates a podcast from an RSS feed. If a podcast
-  with this feed already exists then just returns that podcast.
+  Gets a podcast with the rss_feed. If it does not exist,
+  creates a new podcast with episodes.
+  """
+  def get_or_create_podcast_from_rss_feed(url) do
+    case Repo.get_by(Podcast, rss_feed: url) do
+      nil ->
+        with result = create_podcast_from_rss_feed(url) do
+          case result do
+            {:ok, {podcast, _}} -> {:ok, podcast}
+            _ -> result
+          end
+        end
+      %Podcast{} = podcast -> {:ok, podcast}
+    end
+  end
 
+  @doc """
+  Creates a podcast from an RSS feed.
   Adds any categories and episodes to the podcast.
+
+  If the podcast does not contain any episodes, then the podcast is NOT
+  created.
   """
   def create_podcast_from_rss_feed(url) do
     data = FeedParser.fetch_and_parse(url)
     case data do
       {:error, reason} -> {:error, reason}
       _ ->
-        podcast = create_podcast(Map.put_new(data.podcast, :rss_feed, url))
+        Repo.transaction(fn ->
+          {:ok, %Podcast{} = podcast} = create_podcast(Map.put(data.podcast, :rss_feed, url))
+          episodes = data.episodes
+          |> Enum.filter(fn(episode) -> episode.content_url != "" end)
+          |> Enum.map(fn(episode) ->
+            Map.merge(episode, %{
+            podcast_id: podcast.id,
+            inserted_at: DateTime.utc_now,
+            updated_at: DateTime.utc_now,
+          }) end)
+          {num_episodes, _} = Repo.insert_all(Episode, episodes)
+          case num_episodes do
+            0 ->
+            Repo.rollback(:invalid_podcast)
+            _ ->
+            {podcast, num_episodes}
+          end
+        end)
     end
   end
 

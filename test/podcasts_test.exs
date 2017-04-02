@@ -21,8 +21,29 @@ defmodule Podcatcher.PodcastsTest do
     {:ok, %HTTPoison.Response{body: body, status_code: 200}}
   end
 
+  def fetch_mock_empty_rss_feed(_url, _headers, _options) do
+    body = File.read! "./test/fixtures/empty.xml"
+    {:ok, %HTTPoison.Response{body: body, status_code: 200}}
+  end
+
   def create_mock_image(_source) do
     {:ok, "test_image.jpg"}
+  end
+
+  test "get_or_create_podcast_from_rss_feed/1 should return podcast if already exists" do
+    podcast = fixture(:podcast)
+    {:ok, result} = Podcasts.get_or_create_podcast_from_rss_feed(podcast.rss_feed)
+    assert result.id == podcast.id
+  end
+
+  test "get_or_create_podcast_from_rss_feed/1 should create new podcast if none found" do
+    with_mocks([
+      {HTTPoison, [], [get: &fetch_mock_rss_feed/3]},
+      {Image, [], [store: &create_mock_image/1]},
+      ]) do
+      {:ok, podcast} = Podcasts.get_or_create_podcast_from_rss_feed("https://somefeed.xml")
+      assert podcast.title == "Fat Man on Batman"
+    end
   end
 
   test "create_podcast_from_rss_feed/1 should create a new podcast" do
@@ -30,9 +51,20 @@ defmodule Podcatcher.PodcastsTest do
       {HTTPoison, [], [get: &fetch_mock_rss_feed/3]},
       {Image, [], [store: &create_mock_image/1]},
       ]) do
-      {:ok, %Podcast{} = podcast} = Podcasts.create_podcast_from_rss_feed("https://somefeed.xml")
+      {:ok, {%Podcast{} = podcast, num_episodes}} = Podcasts.create_podcast_from_rss_feed("https://somefeed.xml")
       assert podcast.title == "Fat Man on Batman"
-      assert length(podcast.episodes) == 164
+      assert num_episodes == 164
+    end
+  end
+
+  test "create_podcast_from_rss_feed/1 should not create a podcast if no episodes" do
+    with_mocks([
+      {HTTPoison, [], [get: &fetch_mock_empty_rss_feed/3]},
+      {Image, [], [store: &create_mock_image/1]},
+      ]) do
+      {:error, reason} = Podcasts.create_podcast_from_rss_feed("https://somefeed.xml")
+      assert reason == :invalid_podcast
+      assert length(Podcasts.list_podcasts()) == 0
     end
   end
 

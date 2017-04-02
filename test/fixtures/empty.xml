@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" media="screen" href="/~d/styles/rss2enclosuresfull.xsl"?><?xml-stylesheet type="text/css" media="screen" href="http://feeds.feedburner.com/~d/styles/itemcontent.css"?><rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0" version="2.0">
+  <channel>
+
+    <atom:link href="http://feeds.soundcloud.com/users/soundcloud:users:79294269/sounds.rss?before=167202864" rel="next" type="application/rss+xml" />
+    <title>Fat Man on Batman</title>
+    <link>http://soundcloud.com/fatmanonbatman</link>
+    <pubDate>Sat, 25 Mar 2017 05:55:52 +0000</pubDate>
+    <lastBuildDate>Sat, 25 Mar 2017 05:55:52 +0000</lastBuildDate>
+    <ttl>60</ttl>
+    <language>en</language>
+    <copyright>SModCo, Inc.</copyright>
+    <webMaster>feeds@soundcloud.com (SoundCloud Feeds)</webMaster>
+    <description>Kevin Smith passionately discusses the Dark Knight with other Caped Crusader creators and fans.</description>
+    <itunes:subtitle>Kevin Smith passionately discusses the Dark Knight with other Caped Crusader creators and fans.</itunes:subtitle>
+
+    <itunes:author>SModcast Network</itunes:author>
+    <itunes:explicit>yes</itunes:explicit>
+    <itunes:image href="http://www.viewaskew.com/PodArt/fatman-current.png" />
+    <image>
+      <url>http://i1.sndcdn.com/avatars-000204810712-xboiiu-original.jpg</url>
+      <title>Fat Man on Batman</title>
+      <link>http://soundcloud.com/fatmanonbatman</link>
+    </image>
+
+    <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="http://feeds.feedburner.com/FatManOnBatman" /><feedburner:info uri="fatmanonbatman" /><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/" /><media:copyright>SModCo, Inc.</media:copyright><media:thumbnail url="http://www.viewaskew.com/PodArt/fatman-current.png" /><media:keywords>Kevin,Smith,Clerks,Mallrats,Chasing,Amy,Dogma,Dark,Knight,Batman,Robin,Joker,Worlds,greatest,detective</media:keywords><media:category scheme="http://www.itunes.com/dtds/podcast-1.0.dtd">Comedy</media:category><media:category scheme="http://www.itunes.com/dtds/podcast-1.0.dtd">TV &amp; Film</media:category><media:category scheme="http://www.itunes.com/dtds/podcast-1.0.dtd">Society &amp; Culture/Philosophy</media:category><media:category scheme="http://www.itunes.com/dtds/podcast-1.0.dtd">Religion &amp; Spirituality/Other</media:category><itunes:owner><itunes:email>will@smodcast.com</itunes:email><itunes:name>SModcast Network</itunes:name></itunes:owner><itunes:keywords>Kevin,Smith,Clerks,Mallrats,Chasing,Amy,Dogma,Dark,Knight,Batman,Robin,Joker,Worlds,greatest,detective</itunes:keywords><itunes:summary>Kevin Smith passionately discusses the Dark Knight with other Caped Crusader creators and fans.</itunes:summary><itunes:category text="Comedy" /><itunes:category text="TV &amp; Film" /><itunes:category text="Society &amp; Culture"><itunes:category text="Philosophy" /></itunes:category><itunes:category text="Religion &amp; Spirituality"><itunes:category text="Other" /></itunes:category>    <author>will@smodcast.com (SModcast Network)</author><media:content url="http://feeds.soundcloud.com/stream/307182501-fatmanonbatman-159-so-much-news-and-logan.mp3" fileSize="47582190" type="audio/mpeg" /><itunes:keywords>Kevin,Smith,Clerks,Mallrats,Chasing,Amy,Dogma,Dark,Knight,Batman,Robin,Joker,Worlds,greatest,detective</itunes:keywords><feedburner:origLink>https://soundcloud.com/fatmanonbatman/159-so-much-news-and-logan</feedburner:origLink>
+  </channel>
+</rss>
