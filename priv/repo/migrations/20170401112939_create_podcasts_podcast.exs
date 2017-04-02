@@ -5,7 +5,7 @@ defmodule Podcatcher.Repo.Migrations.CreatePodcatcher.Podcasts.Podcast do
     create table(:podcasts_podcasts) do
       add :rss_feed, :string
       add :website, :string
-      add :title, :string
+      add :title, :text
       add :description, :text
       add :subtitle, :text
       add :image, :string

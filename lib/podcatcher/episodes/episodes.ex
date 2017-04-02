@@ -68,7 +68,7 @@ defmodule Podcatcher.Episodes do
         inserted_at: DateTime.utc_now,
         updated_at: DateTime.utc_now,
       }) end)
-      {num_episodes, _} = Repo.insert_all(Episode, data_to_insert)
+      {num_episodes, _} = Repo.insert_all(Episode, data_to_insert, on_conflict: :nothing)
       num_episodes
   end
 

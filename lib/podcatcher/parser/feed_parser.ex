@@ -61,7 +61,7 @@ defmodule Podcatcher.Parser.FeedParser do
         description: ~x"./description/text()"s,
         subtitle: ~x"./itunes:subtitle/text()"s,
         explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
-        image: ~x"./image/url/text()"s,
+        image: ~x"./image/url/text()[1]"s, # TBD may be in itunes image
       ],
       episodes: [
         ~x"./channel/item"l,
@@ -74,9 +74,11 @@ defmodule Podcatcher.Parser.FeedParser do
         duration: ~x"./itunes:duration/text()"s,
         explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
         pub_date: ~x"./pubDate/text()"s |> transform_by(&parse_date/1),
-        content_url: ~x"./enclosure/@url"s,
-        content_type: ~x"./enclosure/@type"s,
-        content_length: ~x"./enclosure/@length"s |> transform_by(&parse_integer/1),
+        # TO CHECK : sometimes this can be repeated multiple times
+        # and results are for some reason concatenated
+        content_url: ~x"./enclosure/@url[1]"s,
+        content_type: ~x"./enclosure/@type[1]"s,
+        content_length: ~x"./enclosure/@length[1]"s |> transform_by(&parse_integer/1),
       ]
     )
   end

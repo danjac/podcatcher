@@ -55,6 +55,7 @@ defmodule Podcatcher.Podcasts do
   """
   def create_podcast(attrs \\ %{}, categories \\ nil) do
     %Podcast{}
+    |> preload_categories(categories)
     |> podcast_changeset(attrs, categories)
     |> Repo.insert()
   end
@@ -107,11 +108,11 @@ defmodule Podcatcher.Podcasts do
         # all episodes have unique GUID. If GUID is not found in
         # current list of episodes then we should add that episode.
 
-        guids = podcast.episodes
-        |> Enum.map(fn(episode) -> episode.guid end)
+        #guids = podcast.episodes
+        #|> Enum.map(fn(episode) -> episode.guid end)
 
         episodes = feed.episodes
-        |> Enum.reject(fn(episode) -> Enum.member?(guids, episode.guid) end)
+        #|> Enum.reject(fn(episode) -> Enum.member?(guids, episode.guid) end)
         Episodes.create_episodes(podcast, episodes)
     end
 
@@ -161,6 +162,7 @@ defmodule Podcatcher.Podcasts do
   """
   def update_podcast(%Podcast{} = podcast, attrs, categories \\ nil) do
     podcast
+    |> preload_categories(categories)
     |> podcast_changeset(attrs, categories)
     |> Repo.update()
   end
@@ -194,8 +196,8 @@ defmodule Podcatcher.Podcasts do
     podcast_changeset(podcast, %{})
   end
 
-  defp preload_if_categories(%Podcast{} = podcast, categories) do
-    # ensure we have preloaded if we're addig categories
+  defp preload_categories(%Podcast{} = podcast, categories) do
+    # ensure we have preloaded if we're adding categories
     case categories do
       [] -> podcast
       nil -> podcast
@@ -211,11 +213,22 @@ defmodule Podcatcher.Podcasts do
     end
   end
 
+  defp cast_image_if_present(%Ecto.Changeset{} = changeset, attrs=%{image: image}) do
+    case image do
+      "" -> changeset
+      nil -> changeset
+      _ -> cast_attachments(changeset, attrs, [:image], allow_paths: true)
+    end
+  end
+
+  defp cast_image_if_present(%Ecto.Changeset{} = changeset, %{}) do
+    changeset
+  end
+
   defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ nil) do
     podcast
-    |> preload_if_categories(categories)
     |> cast(attrs, [:rss_feed, :website, :title, :description, :subtitle, :image, :explicit, :owner, :email, :copyright])
-    |> cast_attachments(attrs, [:image], allow_paths: true)
+    |> cast_image_if_present(attrs)
     |> validate_required([:rss_feed, :title])
     |> unique_constraint(:rss_feed)
     |> cast_categories(categories)

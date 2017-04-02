@@ -4,8 +4,8 @@ defmodule Podcatcher.Repo.Migrations.CreatePodcatcher.Episodes.Episode do
   def change do
     create table(:episodes_episodes) do
       add :guid, :string
-      add :title, :string
       add :link, :string
+      add :title, :text
       add :description, :text
       add :summary, :text
       add :subtitle, :text
