@@ -84,6 +84,7 @@ defmodule Podcatcher.PodcastsTest do
       {:ok, {%Podcast{} = podcast, num_episodes}} = Podcasts.create_podcast_from_rss_feed("https://somefeed.xml")
       assert podcast.title == "Fat Man on Batman"
       assert num_episodes == 164
+      assert length(podcast.categories) == 6
     end
   end
 

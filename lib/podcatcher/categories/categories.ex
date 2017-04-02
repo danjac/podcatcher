@@ -49,7 +49,7 @@ defmodule Podcatcher.Categories do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_category(attrs) do
+  def create_category(attrs \\ %{}) do
     %Category{}
     |> category_changeset(attrs)
     |> Repo.insert()

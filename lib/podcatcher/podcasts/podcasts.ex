@@ -7,8 +7,9 @@ defmodule Podcatcher.Podcasts do
   import Ecto.{Query, Changeset}, warn: false
 
   alias Podcatcher.Repo
-  alias Podcatcher.Podcasts.Podcast
   alias Podcatcher.Episodes
+  alias Podcatcher.Categories
+  alias Podcatcher.Podcasts.Podcast
   alias Podcatcher.Parser.FeedParser
 
   @doc """
@@ -52,9 +53,9 @@ defmodule Podcatcher.Podcasts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_podcast(attrs \\ %{}) do
+  def create_podcast(attrs \\ %{}, categories \\ nil) do
     %Podcast{}
-    |> podcast_changeset(attrs)
+    |> podcast_changeset(attrs, categories)
     |> Repo.insert()
   end
 
@@ -98,7 +99,9 @@ defmodule Podcatcher.Podcasts do
         # TBD: downloading image is costly. Only include
         # if the image is different
 
-        update_podcast(podcast, feed.podcast)
+        categories = Categories.get_or_create_categories(feed.categories)
+
+        update_podcast(podcast, feed.podcast, categories)
 
         # check if new episodes
         # all episodes have unique GUID. If GUID is not found in
@@ -127,7 +130,13 @@ defmodule Podcatcher.Podcasts do
       {:error, reason} -> {:error, reason}
       _ ->
         Repo.transaction(fn ->
-          {:ok, %Podcast{} = podcast} = create_podcast(Map.put(feed.podcast, :rss_feed, url))
+
+          categories = Categories.get_or_create_categories(feed.categories)
+
+          {:ok, %Podcast{} = podcast} = feed.podcast
+          |> Map.put(:rss_feed, url)
+          |> create_podcast(categories)
+
           num_episodes = Episodes.create_episodes(podcast, feed.episodes)
           case num_episodes do
             0 -> Repo.rollback(:invalid_podcast)
@@ -150,9 +159,9 @@ defmodule Podcatcher.Podcasts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_podcast(%Podcast{} = podcast, attrs) do
+  def update_podcast(%Podcast{} = podcast, attrs, categories \\ nil) do
     podcast
-    |> podcast_changeset(attrs)
+    |> podcast_changeset(attrs, categories)
     |> Repo.update()
   end
 
@@ -185,11 +194,31 @@ defmodule Podcatcher.Podcasts do
     podcast_changeset(podcast, %{})
   end
 
-  defp podcast_changeset(%Podcast{} = podcast, attrs) do
+  defp preload_if_categories(%Podcast{} = podcast, categories) do
+    # ensure we have preloaded if we're addig categories
+    case categories do
+      [] -> podcast
+      nil -> podcast
+      _ -> Repo.preload(podcast, :categories)
+    end
+  end
+
+  defp cast_categories(%Ecto.Changeset{} = changeset, categories) do
+    case categories do
+      [] -> changeset
+      nil -> changeset
+      _  -> changeset |> put_assoc(:categories, categories)
+    end
+  end
+
+  defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ nil) do
     podcast
+    |> preload_if_categories(categories)
     |> cast(attrs, [:rss_feed, :website, :title, :description, :subtitle, :image, :explicit, :owner, :email, :copyright])
     |> cast_attachments(attrs, [:image], allow_paths: true)
     |> validate_required([:rss_feed, :title])
     |> unique_constraint(:rss_feed)
+    |> cast_categories(categories)
   end
+
 end
