@@ -109,7 +109,7 @@ defmodule Podcatcher.Podcasts do
 
         episodes = feed.episodes
         |> Enum.reject(fn(episode) -> Enum.member?(guids, episode.guid) end)
-        Episodes.create_episodes!(podcast, episodes)
+        Episodes.create_episodes(podcast, episodes)
     end
 
   end
@@ -128,7 +128,7 @@ defmodule Podcatcher.Podcasts do
       _ ->
         Repo.transaction(fn ->
           {:ok, %Podcast{} = podcast} = create_podcast(Map.put(feed.podcast, :rss_feed, url))
-          num_episodes = Episodes.create_episodes!(podcast, feed.episodes)
+          num_episodes = Episodes.create_episodes(podcast, feed.episodes)
           case num_episodes do
             0 -> Repo.rollback(:invalid_podcast)
             _ -> {podcast, num_episodes}

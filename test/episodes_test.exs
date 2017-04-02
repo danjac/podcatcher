@@ -22,12 +22,12 @@ defmodule Podcatcher.EpisodesTest do
     end
   end
 
-  test "create_episodes!/2 should create new episodes" do
+  test "create_episodes/2 should create new episodes" do
     podcast = podcast_fixture()
     episodes = for guid <- 1..10 do
       %{ @create_attrs | guid: to_string(guid) }
     end
-    num_episodes = Episodes.create_episodes!(podcast, episodes)
+    num_episodes = Episodes.create_episodes(podcast, episodes)
     assert num_episodes == 10
   end
 

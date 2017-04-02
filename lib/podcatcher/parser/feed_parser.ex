@@ -82,7 +82,10 @@ defmodule Podcatcher.Parser.FeedParser do
   end
 
   def parse_categories(values) do
-    values |> Enum.uniq |> Enum.map(&to_string/1)
+    values
+    |> Enum.uniq
+    |> Enum.map(&to_string/1)
+    |> Enum.map(&String.replace(&1, "&amp;", "&"))
   end
 
   def parse_boolean(value, match_true \\ "yes") do

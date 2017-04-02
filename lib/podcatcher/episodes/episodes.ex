@@ -60,7 +60,7 @@ defmodule Podcatcher.Episodes do
   Returns number created.
   """
 
-  def create_episodes!(podcast, episodes) do
+  def create_episodes(podcast, episodes) do
       data_to_insert = episodes
       |> Enum.map(fn(episode) ->
         Map.merge(episode, %{

@@ -13,6 +13,16 @@ defmodule Podcatcher.CategoriesTest do
     category
   end
 
+  test "get_or_create_categories/1 should create new categories if not already present" do
+    names = ["TV & Film", "Comedy", "Arts"]
+    categories = Categories.get_or_create_categories(names)
+    assert length(categories) == 3
+
+    new_categories = Categories.get_or_create_categories(["History" | names])
+    assert length(new_categories) == 4
+
+  end
+
   test "list_categories/1 returns all categories" do
     category = fixture(:category)
     assert Categories.list_categories() == [category]

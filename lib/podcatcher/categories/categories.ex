@@ -49,10 +49,20 @@ defmodule Podcatcher.Categories do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_category(attrs \\ %{}) do
+  def create_category(attrs) do
     %Category{}
     |> category_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def get_or_create_categories(names) do
+    names |> Enum.map(&upsert_category/1)
+  end
+
+  defp upsert_category(name) do
+    Repo.insert!(%Category{name: name},
+                on_conflict: [set: [name: name]],
+                conflict_target: :name)
   end
 
   @doc """
