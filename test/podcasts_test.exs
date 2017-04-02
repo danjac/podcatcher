@@ -30,9 +30,39 @@ defmodule Podcatcher.PodcastsTest do
     {:ok, "test_image.jpg"}
   end
 
+  test "update_podcast_from_rss_feed/0 shoud fetch new episodes" do
+    podcast = fixture(:podcast)
+
+    # add an episode with an existing GUID
+    episode = %{
+      guid: "tag:soundcloud,2010:tracks/314041941",
+      title: "test",
+      content_type: "audio/mpeg",
+      content_url: "test",
+      content_length: 1000,
+      duration: "1.0.0",
+      pub_date: DateTime.utc_now,
+    }
+    Podcatcher.EpisodesTest.fixture(:episode, episode, podcast)
+
+    # fetch episode again
+
+    podcast = Podcasts.get_podcast!(podcast.id) |> Repo.preload(:episodes)
+
+    with_mocks([
+      {HTTPoison, [], [get: &fetch_mock_rss_feed/3]},
+      {Image, [], [store: &create_mock_image/1]},
+      ]) do
+      new_episodes = Podcasts.update_podcast_from_rss_feed(podcast)
+      # should not include existing episode
+      assert new_episodes == 163
+    end
+
+  end
+
   test "get_or_create_podcast_from_rss_feed/1 should return podcast if already exists" do
     podcast = fixture(:podcast)
-    {:ok, result} = Podcasts.get_or_create_podcast_from_rss_feed(podcast.rss_feed)
+    {:ok, false, result} = Podcasts.get_or_create_podcast_from_rss_feed(podcast.rss_feed)
     assert result.id == podcast.id
   end
 
@@ -41,7 +71,7 @@ defmodule Podcatcher.PodcastsTest do
       {HTTPoison, [], [get: &fetch_mock_rss_feed/3]},
       {Image, [], [store: &create_mock_image/1]},
       ]) do
-      {:ok, podcast} = Podcasts.get_or_create_podcast_from_rss_feed("https://somefeed.xml")
+      {:ok, true, podcast} = Podcasts.get_or_create_podcast_from_rss_feed("https://somefeed.xml")
       assert podcast.title == "Fat Man on Batman"
     end
   end

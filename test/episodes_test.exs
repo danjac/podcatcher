@@ -3,15 +3,32 @@ defmodule Podcatcher.EpisodesTest do
 
   alias Podcatcher.Episodes
   alias Podcatcher.Episodes.Episode
+  alias Podcatcher.Podcasts.Podcast
 
   @create_attrs %{author: "some author", content_length: 42, content_type: "some content_type", content_url: "some content_url", description: "some description", duration: "some duration", explicit: true, guid: "some guid", link: "some link", pub_date: ~N[2010-04-17 14:00:00.000000], subtitle: "some subtitle", summary: "some summary", title: "some title"}
   @update_attrs %{author: "some updated author", content_length: 43, content_type: "some updated content_type", content_url: "some updated content_url", description: "some updated description", duration: "some updated duration", explicit: false, guid: "some updated guid", link: "some updated link", pub_date: ~N[2011-05-18 15:01:01.000000], subtitle: "some updated subtitle", summary: "some updated summary", title: "some updated title"}
   @invalid_attrs %{author: nil, content_length: nil, content_type: nil, content_url: nil, description: nil, duration: nil, explicit: nil, guid: nil, link: nil, pub_date: nil, subtitle: nil, summary: nil, title: nil}
 
-  def fixture(:episode, attrs \\ @create_attrs) do
-    podcast = Podcatcher.PodcastsTest.fixture(:podcast)
-    {:ok, episode} = Episodes.create_episode(podcast, attrs)
+  def fixture(:episode, attrs \\ @create_attrs, podcast \\ nil) do
+    {:ok, episode} = Episodes.create_episode(podcast_fixture(podcast), attrs)
     episode
+  end
+
+  def podcast_fixture(podcast \\ nil) do
+    case podcast do
+      nil -> Podcatcher.PodcastsTest.fixture(:podcast)
+      %Podcast{} -> podcast
+      %{} -> Podcatcher.PodcastsTest.fixture(:podcast, podcast)
+    end
+  end
+
+  test "create_episodes!/2 should create new episodes" do
+    podcast = podcast_fixture()
+    episodes = for guid <- 1..10 do
+      %{ @create_attrs | guid: to_string(guid) }
+    end
+    num_episodes = Episodes.create_episodes!(podcast, episodes)
+    assert num_episodes == 10
   end
 
   test "list_episodes/1 returns all episodes" do

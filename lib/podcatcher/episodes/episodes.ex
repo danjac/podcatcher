@@ -56,6 +56,23 @@ defmodule Podcatcher.Episodes do
   end
 
   @doc """
+  Creates multiple episodes for a single podcast.
+  Returns number created.
+  """
+
+  def create_episodes!(podcast, episodes) do
+      data_to_insert = episodes
+      |> Enum.map(fn(episode) ->
+        Map.merge(episode, %{
+        podcast_id: podcast.id,
+        inserted_at: DateTime.utc_now,
+        updated_at: DateTime.utc_now,
+      }) end)
+      {num_episodes, _} = Repo.insert_all(Episode, data_to_insert)
+      num_episodes
+  end
+
+  @doc """
   Updates a episode.
 
   ## Examples
