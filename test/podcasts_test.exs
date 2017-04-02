@@ -56,6 +56,8 @@ defmodule Podcatcher.PodcastsTest do
       new_episodes = Podcasts.update_podcast_from_rss_feed(podcast)
       # should not include existing episode
       assert new_episodes == 163
+      podcast = Podcasts.get_podcast!(podcast.id) |> Repo.preload(:categories)
+      assert length(podcast.categories) == 6
     end
 
   end
