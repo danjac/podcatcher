@@ -5,7 +5,7 @@ defmodule Podcatcher.Podcasts.Podcast do
   alias Podcatcher.Episodes.Episode
   alias Podcatcher.Podcasts.Image
 
-  schema "podcasts_podcasts" do
+  schema "podcasts" do
     field :copyright, :string
     field :description, :string
     field :email, :string

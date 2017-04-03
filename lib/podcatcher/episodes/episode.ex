@@ -3,7 +3,7 @@ defmodule Podcatcher.Episodes.Episode do
 
   alias Podcatcher.Podcasts.Podcast
 
-  schema "episodes_episodes" do
+  schema "episodes" do
     field :author, :string
     field :content_length, :integer
     field :content_type, :string

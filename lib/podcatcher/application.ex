@@ -12,6 +12,7 @@ defmodule Podcatcher.Application do
       supervisor(Podcatcher.Repo, []),
       # Start the endpoint when the application starts
       supervisor(Podcatcher.Web.Endpoint, []),
+      supervisor(Podcatcher.Parser, []),
       # Start your own worker by calling: Podcatcher.Worker.start_link(arg1, arg2, arg3)
       # worker(Podcatcher.Worker, [arg1, arg2, arg3]),
     ]

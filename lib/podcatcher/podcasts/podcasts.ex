@@ -54,10 +54,10 @@ defmodule Podcatcher.Podcasts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_podcast(attrs \\ %{}, categories \\ nil) do
+  def create_podcast(attrs \\ %{}, categories \\ nil, images \\ []) do
     %Podcast{}
     |> preload_categories(categories)
-    |> podcast_changeset(attrs, categories)
+    |> podcast_changeset(attrs, categories, images)
     |> Repo.insert()
   end
 
@@ -96,25 +96,14 @@ defmodule Podcatcher.Podcasts do
     case feed do
       {:error, reason} -> {:error, reason}
       _ ->
-        # update podcast metadata
-
-        # TBD: downloading image is costly. Only include
-        # if the image is different
 
         categories = Categories.get_or_create_categories(feed.categories)
 
-        update_podcast(podcast, feed.podcast, categories)
+        podcast |> update_podcast(feed.podcast, categories, feed.images)
+        Episodes.create_episodes(podcast, feed.episodes)
 
-        # check if new episodes
-        # all episodes have unique GUID. If GUID is not found in
-        # current list of episodes then we should add that episode.
+        :ok
 
-        #guids = podcast.episodes
-        #|> Enum.map(fn(episode) -> episode.guid end)
-
-        episodes = feed.episodes
-        #|> Enum.reject(fn(episode) -> Enum.member?(guids, episode.guid) end)
-        Episodes.create_episodes(podcast, episodes)
     end
 
   end
@@ -137,7 +126,7 @@ defmodule Podcatcher.Podcasts do
 
           {:ok, %Podcast{} = podcast} = feed.podcast
           |> Map.put(:rss_feed, url)
-          |> create_podcast(categories)
+          |> create_podcast(categories, feed.images)
 
           num_episodes = Episodes.create_episodes(podcast, feed.episodes)
           case num_episodes do
@@ -161,10 +150,10 @@ defmodule Podcatcher.Podcasts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_podcast(%Podcast{} = podcast, attrs, categories \\ nil) do
+  def update_podcast(%Podcast{} = podcast, attrs, categories \\ nil, images \\ []) do
     podcast
     |> preload_categories(categories)
-    |> podcast_changeset(attrs, categories)
+    |> podcast_changeset(attrs, categories, images)
     |> Repo.update()
   end
 
@@ -214,37 +203,28 @@ defmodule Podcatcher.Podcasts do
     end
   end
 
-  defp cast_image_if_present(%Ecto.Changeset{} = changeset, _attrs=%{image: nil}), do: changeset
-  defp cast_image_if_present(%Ecto.Changeset{} = changeset, _attrs=%{image: ""}), do: changeset
+  defp cast_image(%Ecto.Changeset{} = changeset, []), do: changeset
+  defp cast_image(%Ecto.Changeset{} = changeset, [nil | images]), do: cast_image(changeset, images)
+  defp cast_image(%Ecto.Changeset{} = changeset, ["" | images]), do: cast_image(changeset, images)
 
-  defp cast_image_if_present(%Ecto.Changeset{} = changeset, attrs=%{image: _image}) do
-    # TBD: parser should return enumerable :images (from itunes/rss). If present, recurse through
-    # images until one matches or none left.
+  defp cast_image(%Ecto.Changeset{} = changeset, [image | images]) do
     try do
-      result = cast_attachments(changeset, attrs, [:image], allow_paths: true)
-        case result do
-        %Ecto.Changeset{valid?: false} -> changeset
-        _ -> result
+      new_changeset = cast_attachments(changeset, %{image: image}, [:image], allow_paths: true)
+      case new_changeset.valid? do
+        true  -> new_changeset
+        false -> cast_image(changeset, images)
       end
     rescue # some crapshoot with HTTPoison maybe?
       reason ->
-        Logger.error("some error: #{inspect reason}")
-        changeset
+        Logger.error("Image error: #{inspect reason}")
+        cast_image(changeset, images)
     end
   end
 
-  defp cast_image_if_present(%Ecto.Changeset{} = changeset, attrs=%{other_image: other_image}) do
-    # TBD: this never matches
-    new_attrs = Map.delete(attrs, :other_image) |> Map.put(:image, other_image)
-    cast_image_if_present(changeset, new_attrs)
-  end
-
-  defp cast_image_if_present(%Ecto.Changeset{} = changeset, _attrs=%{}), do: changeset
-
-  defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ nil) do
+  defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ nil, images \\ []) do
       podcast
       |> cast(attrs, [:rss_feed, :website, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
-      |> cast_image_if_present(attrs)
+      |> cast_image(images)
       |> validate_required([:rss_feed, :title])
       |> unique_constraint(:rss_feed)
       |> cast_categories(categories)

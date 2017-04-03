@@ -61,8 +61,8 @@ defmodule Podcatcher.Parser.FeedParser do
         description: ~x"./description/text()"s,
         subtitle: ~x"./itunes:subtitle/text()"s,
         explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
-        rss_image: ~x"./image/url/text()[1]"s,
-        itunes_image: ~x"./itunes:image/@href[1]"s
+        rss_image: ~x"./image/url/text()"l |> transform_by(&to_string/1),
+        itunes_image: ~x"./itunes:image/@href"l |> transform_by(&to_string/1),
       ],
       episodes: [
         ~x"./channel/item"l,
@@ -75,16 +75,18 @@ defmodule Podcatcher.Parser.FeedParser do
         duration: ~x"./itunes:duration/text()"s,
         explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
         pub_date: ~x"./pubDate/text()"s |> transform_by(&parse_date/1),
-        # TO CHECK : sometimes this can be repeated multiple times
-        # and results are for some reason concatenated
         content_url: ~x"./enclosure/@url[1]"s,
         content_type: ~x"./enclosure/@type[1]"s,
         content_length: ~x"./enclosure/@length[1]"s |> transform_by(&parse_integer/1),
       ]
-    )
+    ) |> add_images
   end
 
-  def parse_categories(values) do
+  defp add_images(%{podcast: %{rss_image: rss_image, itunes_image: itunes_image}} = feed) do
+    feed |> Map.put(:images, [rss_image, itunes_image])
+  end
+
+  defp parse_categories(values) do
     values
     |> Enum.uniq
     |> Enum.map(&to_string/1)
@@ -95,14 +97,14 @@ defmodule Podcatcher.Parser.FeedParser do
     value == match_true
   end
 
-  def parse_integer(value) do
+  defp parse_integer(value) do
     case Integer.parse(value) do
       {num, _} -> num
       :error -> 0
     end
   end
 
-  def parse_date(value) do
+  defp parse_date(value) do
     do_parse_date(@date_formats, value)
   end
 

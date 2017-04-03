@@ -17,7 +17,7 @@ defmodule Podcatcher.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Podcatcher.Application, []},
-     extra_applications: [:logger, :runtime_tools]]
+     extra_applications: [:logger, :runtime_tools, :scrivener_ecto]]
   end
 
   # Specifies which paths to compile per environment.
@@ -38,8 +38,11 @@ defmodule Podcatcher.Mixfile do
      {:gettext, "~> 0.11"},
      {:arc, "~> 0.7.0"},
      {:arc_ecto, "~> 0.6.0"},
+     {:httpoison, "~> 0.11.1"},
      {:sweet_xml, "~> 0.6.5"},
      {:timex, "~> 3.0"},
+     {:scrivener_ecto, "~> 1.0"},
+     {:poolboy, "~> 1.5"},
      {:cowboy, "~> 1.0"}]
   end
 
