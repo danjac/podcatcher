@@ -218,6 +218,8 @@ defmodule Podcatcher.Podcasts do
   defp cast_image_if_present(%Ecto.Changeset{} = changeset, _attrs=%{image: ""}), do: changeset
 
   defp cast_image_if_present(%Ecto.Changeset{} = changeset, attrs=%{image: _image}) do
+    # TBD: parser should return enumerable :images (from itunes/rss). If present, recurse through
+    # images until one matches or none left.
     try do
       result = cast_attachments(changeset, attrs, [:image], allow_paths: true)
         case result do
@@ -232,6 +234,7 @@ defmodule Podcatcher.Podcasts do
   end
 
   defp cast_image_if_present(%Ecto.Changeset{} = changeset, attrs=%{other_image: other_image}) do
+    # TBD: this never matches
     new_attrs = Map.delete(attrs, :other_image) |> Map.put(:image, other_image)
     cast_image_if_present(changeset, new_attrs)
   end

@@ -3,13 +3,14 @@ defmodule Podcatcher.Podcasts.Podcast do
 
   alias Podcatcher.Categories.Category
   alias Podcatcher.Episodes.Episode
+  alias Podcatcher.Podcasts.Image
 
   schema "podcasts_podcasts" do
     field :copyright, :string
     field :description, :string
     field :email, :string
     field :explicit, :boolean, default: false
-    field :image, Podcatcher.Uploaders.Image.Type
+    field :image, Image.Type
     field :owner, :string
     field :rss_feed, :string
     field :subtitle, :string

@@ -1,4 +1,4 @@
-defmodule Podcatcher.Uploaders.Image do
+defmodule Podcatcher.Podcasts.Image do
   use Arc.Definition
   use Arc.Ecto.Definition
 

@@ -4,7 +4,7 @@ defmodule Podcatcher.PodcastsTest do
   import Mock
 
   alias Podcatcher.Podcasts
-  alias Podcatcher.Uploaders.Image
+  alias Podcatcher.Podcasts.Image
   alias Podcatcher.Podcasts.Podcast
 
   @create_attrs %{copyright: "some copyright", description: "some description", email: "some email", explicit: true, owner: "some owner", rss_feed: "some rss_feed", subtitle: "some subtitle", title: "some title", website: "some website"}

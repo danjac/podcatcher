@@ -570,7 +570,6 @@ http://risky.biz/feeds/risky-business
 http://rjandbleysuckatgirls.libsyn.com/rss
 http://robertkelly.libsyn.com//rss
 http://rockthedocpodcast.podomatic.com/rss2.xml
-http://rogueagentradio.podbean.com/feed/
 http://roosterteeth.com/show/rt-podcast/feed/mp3
 http://roymathur.com/podcast/podcast.xml
 http://rss.acast.com/callyourgirlfriend
@@ -705,7 +704,6 @@ http://thegenerationwhypodcast.com/feed/category/podcast
 http://thehighersidechats.com/feed/podcast/
 http://theindoorkids.libsyn.com/rss
 http://theknow.tv/show/the-patch/feed/mp3
-http://themeateater.com/feed/podcast/
 http://themonsterpopcorn.com/feed/
 http://thepersuaders.libsyn.com/rss
 http://theretroleague.libsyn.com/rss
@@ -724,7 +722,6 @@ http://ultrarunnerpodcast.com/feed/podcast
 http://urbanshooter.libsyn.com/rss
 http://vicemeets.vice-media.libsynpro.com/rss
 http://vimcasts.org/feeds/itunes.xml
-http://vimcasts.org/feeds/ogg
 http://waltsentmepodcast.podomatic.com/rss2.xml
 http://weeklyplanetpod.libsyn.com/rss
 http://wegotthis.libsyn.com/rss
@@ -778,7 +775,7 @@ http://www.billburr.com/feed/podcast/
 http://www.blameitonouterspace.com/feeds/posts/default?alt=rss
 http://www.blogtalkradio.com/barstoolsports/podcast
 http://www.blogtalkradio.com/bigfoothotspot/podcast
-http://www.blogtalkradio.com/callyourgirlfriend.rss
+https://rss.art19.com/call-your-girlfriend
 http://www.blogtalkradio.com/onairwithdouglas/podcast
 http://www.bootstrapped.fm/feed/podcast/
 http://www.buddhistgeeks.com/feed/

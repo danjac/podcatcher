@@ -61,8 +61,8 @@ defmodule Podcatcher.Parser.FeedParser do
         description: ~x"./description/text()"s,
         subtitle: ~x"./itunes:subtitle/text()"s,
         explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
-        image: ~x"./image/url/text()[1]"s,
-        other_image: ~x"./itunes:image/@href[1]"s
+        rss_image: ~x"./image/url/text()[1]"s,
+        itunes_image: ~x"./itunes:image/@href[1]"s
       ],
       episodes: [
         ~x"./channel/item"l,
