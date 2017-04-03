@@ -4,7 +4,7 @@ defmodule Podcatcher.Repo.Migrations.CreatePodcatcher.Episodes.Episode do
   def change do
     create table(:episodes_episodes) do
       add :guid, :string
-      add :link, :string
+      add :link, :text
       add :title, :text
       add :description, :text
       add :summary, :text
@@ -12,8 +12,8 @@ defmodule Podcatcher.Repo.Migrations.CreatePodcatcher.Episodes.Episode do
       add :pub_date, :naive_datetime
       add :explicit, :boolean, default: false, null: false
       add :author, :string
-      add :content_length, :integer
-      add :content_url, :string
+      add :content_length, :bigint
+      add :content_url, :text
       add :content_type, :string
       add :duration, :string
       add :podcast_id, references(:podcasts_podcasts, on_delete: :delete_all, null: false)

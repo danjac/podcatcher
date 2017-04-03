@@ -1,4 +1,5 @@
 defmodule Podcatcher.Podcasts do
+  require Logger
   @moduledoc """
   The boundary for the Podcasts system.
   """
@@ -213,25 +214,37 @@ defmodule Podcatcher.Podcasts do
     end
   end
 
-  defp cast_image_if_present(%Ecto.Changeset{} = changeset, attrs=%{image: image}) do
-    case image do
-      "" -> changeset
-      nil -> changeset
-      _ -> cast_attachments(changeset, attrs, [:image], allow_paths: true)
+  defp cast_image_if_present(%Ecto.Changeset{} = changeset, _attrs=%{image: nil}), do: changeset
+  defp cast_image_if_present(%Ecto.Changeset{} = changeset, _attrs=%{image: ""}), do: changeset
+
+  defp cast_image_if_present(%Ecto.Changeset{} = changeset, attrs=%{image: _image}) do
+    try do
+      result = cast_attachments(changeset, attrs, [:image], allow_paths: true)
+        case result do
+        %Ecto.Changeset{valid?: false} -> changeset
+        _ -> result
+      end
+    rescue # some crapshoot with HTTPoison maybe?
+      reason ->
+        Logger.error("some error: #{inspect reason}")
+        changeset
     end
   end
 
-  defp cast_image_if_present(%Ecto.Changeset{} = changeset, %{}) do
-    changeset
+  defp cast_image_if_present(%Ecto.Changeset{} = changeset, attrs=%{other_image: other_image}) do
+    new_attrs = Map.delete(attrs, :other_image) |> Map.put(:image, other_image)
+    cast_image_if_present(changeset, new_attrs)
   end
 
+  defp cast_image_if_present(%Ecto.Changeset{} = changeset, _attrs=%{}), do: changeset
+
   defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ nil) do
-    podcast
-    |> cast(attrs, [:rss_feed, :website, :title, :description, :subtitle, :image, :explicit, :owner, :email, :copyright])
-    |> cast_image_if_present(attrs)
-    |> validate_required([:rss_feed, :title])
-    |> unique_constraint(:rss_feed)
-    |> cast_categories(categories)
+      podcast
+      |> cast(attrs, [:rss_feed, :website, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
+      |> cast_image_if_present(attrs)
+      |> validate_required([:rss_feed, :title])
+      |> unique_constraint(:rss_feed)
+      |> cast_categories(categories)
   end
 
 end
