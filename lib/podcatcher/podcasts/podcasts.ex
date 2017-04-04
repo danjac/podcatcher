@@ -11,7 +11,7 @@ defmodule Podcatcher.Podcasts do
   alias Podcatcher.Episodes
   alias Podcatcher.Categories
   alias Podcatcher.Podcasts.Podcast
-  alias Podcatcher.Parser.FeedParser
+  alias Podcatcher.Podcasts.FeedParser
 
   @doc """
   Returns the list of podcasts.

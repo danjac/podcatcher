@@ -1,4 +1,4 @@
-defmodule Podcatcher.Parser.Worker do
+defmodule Podcatcher.Updater.Worker do
   use GenServer
   require Logger
 

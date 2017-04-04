@@ -2,7 +2,7 @@ defmodule Podcatcher.Parser do
   use Supervisor
 
   alias Podcatcher.Podcasts
-  alias Podcatcher.Parser.Worker
+  alias Podcatcher.Updater.Worker
 
   @worker_timeout 100_000
   @await_timeout  1_000_000

@@ -1,7 +1,7 @@
 defmodule Podcatcher.ParserTest do
   use Podcatcher.DataCase
 
-  alias Podcatcher.Parser.FeedParser
+  alias Podcatcher.Podcasts.FeedParser
 
   test "parse/1 parses XML" do
     feed = File.read!("./test/fixtures/sample.xml") |> FeedParser.parse

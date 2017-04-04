@@ -1,4 +1,4 @@
-defmodule Podcatcher.Parser.FeedParser do
+defmodule Podcatcher.Podcasts.FeedParser do
   import SweetXml, except: [parse: 1]
   use Timex
   # require Logger
