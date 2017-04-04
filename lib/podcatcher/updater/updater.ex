@@ -1,4 +1,4 @@
-defmodule Podcatcher.Parser do
+defmodule Podcatcher.Updater do
   use Supervisor
 
   alias Podcatcher.Podcasts
