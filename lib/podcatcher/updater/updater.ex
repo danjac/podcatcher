@@ -24,9 +24,8 @@ defmodule Podcatcher.Updater do
 
   def run do
     Podcasts.list_podcasts
-    |> Enum.chunk(10)
-    |> Enum.map(&run_batch/1)
-    |> List.flatten
+    |> Enum.chunk(20)
+    |> Enum.each(&run_batch/1)
   end
 
 
