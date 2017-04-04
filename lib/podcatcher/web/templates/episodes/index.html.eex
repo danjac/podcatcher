@@ -1,0 +1,3 @@
+<%= for episode <- @page.entries do %>
+<%= episode.title %>
+<% end %>
