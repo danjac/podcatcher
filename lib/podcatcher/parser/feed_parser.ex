@@ -9,7 +9,7 @@ defmodule Podcatcher.Parser.FeedParser do
   "Chrome/39.0.2171.95 Safari/537.36",
   ]
 
-  @date_formats ["{RFC1123}", "{RFC1123z}"]
+  @date_formats ~w"{RFC1123} {RFC1123z} {RFC822} {RFC822z} {RFC3339} {RFC3339z} {ANSIC} {UNIX}"
 
   @default_options [
     # follow_redirect: true,
@@ -58,6 +58,8 @@ defmodule Podcatcher.Parser.FeedParser do
         ~x"./channel",
         title: ~x"./title/text()"s,
         website: ~x"./link/text()"s,
+        last_build_date: ~x"./lastBuildDate/text()"s |> transform_by(&parse_date/1),
+        pub_date: ~x"./pubDate/text()"s |> transform_by(&parse_date/1),
         description: ~x"./description/text()"s,
         subtitle: ~x"./itunes:subtitle/text()"s,
         explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
@@ -79,8 +81,29 @@ defmodule Podcatcher.Parser.FeedParser do
         content_type: ~x"./enclosure/@type[1]"s,
         content_length: ~x"./enclosure/@length[1]"s |> transform_by(&parse_integer/1),
       ]
-    ) |> add_images
+    )
+    |> add_images
+    |> fix_last_build_date
   end
+
+  # some feeds use pubDate instead of lastBuildDate; if either missing use most recent episode pubDate
+
+  defp fix_last_build_date(%{podcast: %{last_build_date: nil, pub_date: nil} = podcast, episodes: episodes} = feed) do
+    # find most recent episode
+    last_build_date =
+    episodes
+    |> Enum.reject(fn(episode) -> is_nil(episode.pub_date) end)
+    |> Enum.map(fn(episode) -> episode.pub_date end)
+    |> Enum.max_by(&DateTime.to_unix/1, fn -> nil end)
+    %{ feed | podcast: %{ podcast | last_build_date: last_build_date } }
+  end
+
+  defp fix_last_build_date(%{podcast: %{last_build_date: nil, pub_date: pub_date} = podcast} = feed) do
+    # use the pub date of the channel
+    %{ feed | podcast: %{ podcast | last_build_date: pub_date } }
+  end
+
+  defp fix_last_build_date(feed), do: feed
 
   defp add_images(%{podcast: %{rss_image: rss_image, itunes_image: itunes_image}} = feed) do
     feed |> Map.put(:images, [rss_image, itunes_image])

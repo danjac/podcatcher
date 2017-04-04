@@ -97,16 +97,27 @@ defmodule Podcatcher.Podcasts do
       {:error, reason} -> {:error, reason}
       _ ->
 
-        categories = Categories.get_or_create_categories(feed.categories)
+        if should_update(podcast, feed) do
+          IO.puts "SHOULD UPDATE!!! #{url} #{inspect podcast.last_build_date} #{inspect feed.podcast.last_build_date}"
 
-        podcast |> update_podcast(feed.podcast, categories, feed.images)
-        Episodes.create_episodes(podcast, feed.episodes)
+          categories = Categories.get_or_create_categories(feed.categories)
+          podcast |> update_podcast(feed.podcast, categories, feed.images)
+          Episodes.create_episodes(podcast, feed.episodes)
 
-        :ok
-
+        end
     end
 
   end
+
+  defp should_update(%Podcast{last_build_date: nil}, %{}), do: true
+
+  defp should_update(%Podcast{}, %{podcast: %{last_build_date: nil}}), do: true
+
+  defp should_update(%Podcast{} = podcast, %{podcast: %{last_build_date: last_build_date}}) do
+    DateTime.compare(last_build_date, DateTime.from_naive!(podcast.last_build_date, "Etc/UTC")) == :gt
+  end
+
+  defp should_update(_podcast, _feed), do: true
 
   @doc """
   Creates a podcast from an RSS feed.
@@ -223,7 +234,7 @@ defmodule Podcatcher.Podcasts do
 
   defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ nil, images \\ []) do
       podcast
-      |> cast(attrs, [:rss_feed, :website, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
+      |> cast(attrs, [:rss_feed, :website, :last_build_date, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
       |> cast_image(images)
       |> validate_required([:rss_feed, :title])
       |> unique_constraint(:rss_feed)

@@ -13,6 +13,7 @@ defmodule Podcatcher.Parser.Worker do
     try do
       result = Podcasts.update_podcast_from_rss_feed(podcast)
       if result == :ok do
+        Logger.info(podcast.title)
         GenServer.call(pid, {:fetch, podcast.id}, timeout)
       end
     catch

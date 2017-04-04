@@ -6,15 +6,16 @@ defmodule Podcatcher.Podcasts.Podcast do
   alias Podcatcher.Podcasts.Image
 
   schema "podcasts" do
+    field :title, :string
     field :copyright, :string
     field :description, :string
     field :email, :string
+    field :last_build_date, :naive_datetime
     field :explicit, :boolean, default: false
     field :image, Image.Type
     field :owner, :string
     field :rss_feed, :string
     field :subtitle, :string
-    field :title, :string
     field :website, :string
 
     has_many :episodes, Episode

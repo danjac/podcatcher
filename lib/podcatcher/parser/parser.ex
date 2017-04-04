@@ -23,16 +23,14 @@ defmodule Podcatcher.Parser do
   end
 
   def run do
-
-    #tbd: paginate
     Podcasts.list_podcasts
     |> Enum.chunk(10)
-    |> Enum.map(&do_batch/1)
+    |> Enum.map(&run_batch/1)
     |> List.flatten
-
   end
 
-  def do_batch(podcasts) do
+
+  defp run_batch(podcasts) do
 
     podcasts
     |> Enum.map(&Task.async(__MODULE__, :do_fetch, [&1]))
