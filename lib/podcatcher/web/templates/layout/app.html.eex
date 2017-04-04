@@ -1,35 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <title>Hello Podcatcher!</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-  <body>
-    <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
-          </ul>
-        </nav>
-        <span class="logo"></span>
-      </header>
+  <!-- Compressed CSS -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation.min.css" rel="stylesheet" >
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css">
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+  <!-- Compressed JavaScript -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/js/foundation.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/jplayer/jquery.jplayer.min.js"></script>
 
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
+  <title>Podbaby</title>
 
-    </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-  </body>
+  <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+</head>
+
+<body class="no-js">
+  <div class="title-bar" data-responsive-toggle="top-bar" data-hide-for="medium">
+    <button class="menu-icon" type="button" data-toggle></button>
+    <div class="title-bar-title">Menu</div>
+  </div>
+  <div class="top-bar" id="top-bar">
+    <div class="top-bar-left">
+      <ul class="vertical medium-horizontal menu">
+        <li class="menu-text"><i class="fa fa-headphones"></i> Podbaby</li>
+        <li><a href="">
+            <i class="fa fa-flash"></i> Latest
+        </a></li>
+        <li><a href="#">
+            <i class="fa fa-folder-open"></i> Browse
+        </a></li>
+        <li><a href="">
+            <i class="fa fa-search"></i> Search
+        </a></li>
+      </ul>
+    </div>
+    <div class="top-bar-right">
+      <ul class="vertical medium-horizontal menu">
+       <li><a href="#">
+        <i class="fa fa-sign-in"></i> Login
+      </a></li>
+       <li><a href="#">
+        <i class="fa fa-user-plus"></i> Sign up
+      </a></li>
+      </ul>
+   </div>
+
+  </div>
+
+  <div id="notifications" class="row column">
+  </div>
+
+  <div class="row column">
+    <%= render @view_module, @view_template, assigns %>
+  </div>
+
+  </div>
+  <!-- /container -->
+  <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+</body>
+
 </html>
