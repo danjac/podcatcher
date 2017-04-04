@@ -87,7 +87,7 @@ defmodule Podcatcher.Podcasts do
   Pulls latest rss feed and updates podcast, episodes and categories as appropriate.
   NOTE: episodes and categories should be preloaded!!
 
-  Returns number of new episodes.
+  Returns number of new episodes or {:error, reason}
   """
 
   def update_podcast_from_rss_feed(%Podcast{rss_feed: url} = podcast) do
@@ -98,12 +98,11 @@ defmodule Podcatcher.Podcasts do
       _ ->
 
         if should_update(podcast, feed) do
-          IO.puts "SHOULD UPDATE!!! #{url} #{inspect podcast.last_build_date} #{inspect feed.podcast.last_build_date}"
-
           categories = Categories.get_or_create_categories(feed.categories)
           podcast |> update_podcast(feed.podcast, categories, feed.images)
           Episodes.create_episodes(podcast, feed.episodes)
-
+        else
+          0
         end
     end
 

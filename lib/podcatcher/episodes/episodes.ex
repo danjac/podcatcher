@@ -4,21 +4,25 @@ defmodule Podcatcher.Episodes do
   """
 
   import Ecto.{Query, Changeset}, warn: false
+
   alias Podcatcher.Repo
 
   alias Podcatcher.Episodes.Episode
 
   @doc """
-  Returns the list of episodes.
+  Returns page of latest episodes by pub_date. Filters any episodes without a pub_date.
 
-  ## Examples
-
-      iex> list_episodes()
-      [%Episode{}, ...]
-
+  # TBD : we shouldn't include episodes without a pub_date: this is an issue
+  with date parsing certain formats. When fixed we can remove the filter.
   """
-  def list_episodes do
-    Repo.all(Episode) |> Repo.preload(:podcast)
+  def latest_episodes(params \\ []) do
+    from(
+      e in Episode,
+      where: not is_nil(e.pub_date),
+      order_by: [desc: :pub_date],
+      preload: :podcast,
+    )
+    |> Repo.paginate(params)
   end
 
   @doc """

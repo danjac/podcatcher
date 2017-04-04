@@ -1,17 +1,14 @@
 defmodule Podcatcher.CategoriesTest do
   use Podcatcher.DataCase
 
+  import Podcatcher.Fixtures
+
   alias Podcatcher.Categories
   alias Podcatcher.Categories.Category
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
-
-  def fixture(:category, attrs \\ @create_attrs) do
-    {:ok, category} = Categories.create_category(attrs)
-    category
-  end
 
   test "get_or_create_categories/1 should create new categories if not already present" do
     names = ["TV & Film", "Comedy", "Arts"]

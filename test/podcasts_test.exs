@@ -3,18 +3,16 @@ defmodule Podcatcher.PodcastsTest do
 
   import Mock
 
+  import Podcatcher.Fixtures
+
   alias Podcatcher.Podcasts
+  alias Podcatcher.Episodes
   alias Podcatcher.Podcasts.Image
   alias Podcatcher.Podcasts.Podcast
 
   @create_attrs %{copyright: "some copyright", description: "some description", email: "some email", explicit: true, owner: "some owner", rss_feed: "some rss_feed", subtitle: "some subtitle", title: "some title", website: "some website"}
   @update_attrs %{copyright: "some updated copyright", description: "some updated description", email: "some updated email", explicit: false, owner: "some updated owner", rss_feed: "some updated rss_feed", subtitle: "some updated subtitle", title: "some updated title", website: "some updated website"}
   @invalid_attrs %{copyright: nil, description: nil, email: nil, explicit: nil, image: nil, owner: nil, rss_feed: nil, subtitle: nil, title: nil, website: nil}
-
-  def fixture(:podcast, attrs \\ @create_attrs) do
-    {:ok, podcast} = Podcasts.create_podcast(attrs)
-    podcast
-  end
 
   def fetch_mock_rss_feed(_url, _headers, _options) do
     body = File.read! "./test/fixtures/sample.xml"
@@ -34,16 +32,9 @@ defmodule Podcatcher.PodcastsTest do
     podcast = fixture(:podcast)
 
     # add an episode with an existing GUID
-    episode = %{
-      guid: "tag:soundcloud,2010:tracks/314041941",
-      title: "test",
-      content_type: "audio/mpeg",
-      content_url: "test",
-      content_length: 1000,
-      duration: "1.0.0",
-      pub_date: DateTime.utc_now,
-    }
-    Podcatcher.EpisodesTest.fixture(:episode, episode, podcast)
+    attrs = episode_attrs()
+      |> Map.put(:guid, "tag:soundcloud,2010:tracks/314041941")
+    Episodes.create_episode(podcast, attrs)
 
     # fetch episode again
 
