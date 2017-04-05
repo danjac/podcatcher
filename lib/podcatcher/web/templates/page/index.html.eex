@@ -4,7 +4,7 @@
   PodBaby makes it easy to find and listen to your favorite podcasts, and to discover new sources of podcasting nirvana.
   </p>
   <p>
-    <a href="" class="button primary large">Browse podcasts</a><br>
+    <%= link("Browse podcasts", to: episodes_path(@conn, :index), class: "button primary large") %><br>
     <a href="" class="button secondary large">Login</a><br>
     <a href="">Not a member yet? Join today!</a>
   </p>

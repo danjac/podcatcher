@@ -17,8 +17,12 @@ defmodule Podcatcher.Web.Formatters do
     Timex.format! dt, "{Mfull} {D}, {YYYY}"
   end
 
+  def markdown(nil), do: ""
+  def markdown(""), do: ""
+
   def markdown(content) do
     content
+    |> String.trim
     |> Earmark.as_html!
     |> HtmlSanitizeEx.basic_html
     |> raw

@@ -28,7 +28,7 @@
         </div>
       </td><td>
 
-        <h4><a href=""><%= truncate(episode.podcast.title, 60) %></a></h4>
+        <h4><%= link(truncate(episode.podcast.title, 60), to: podcasts_path(@conn, :podcast, episode.podcast))  %></a></h4>
         <h5><%= link(truncate(episode.title, 80), to: episodes_path(@conn, :episode, episode)) %></h5>
 
         <div class="button-group">

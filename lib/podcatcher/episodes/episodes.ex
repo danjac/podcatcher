@@ -26,6 +26,18 @@ defmodule Podcatcher.Episodes do
   end
 
   @doc """
+  Returns page of latest (by pub_date) episodes for a specific podcast.
+  """
+  def latest_episodes_for_podcast(podcast, params \\ []) do
+
+    Episode
+    |> where(podcast_id: ^podcast.id)
+    |> order_by([desc: :pub_date])
+    |> Repo.paginate(params)
+
+  end
+
+  @doc """
   Gets a single episode.
 
   Raises `Ecto.NoResultsError` if the Episode does not exist.

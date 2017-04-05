@@ -99,7 +99,7 @@ defmodule Podcatcher.PodcastsTest do
 
   test "get_podcast! returns the podcast with given id" do
     podcast = fixture(:podcast)
-    assert Podcasts.get_podcast!(podcast.id) == podcast
+    assert Podcasts.get_podcast!(podcast.id).id == podcast.id
   end
 
   test "create_podcast/1 with valid data creates a podcast" do
@@ -137,7 +137,7 @@ defmodule Podcatcher.PodcastsTest do
   test "update_podcast/2 with invalid data returns error changeset" do
     podcast = fixture(:podcast)
     assert {:error, %Ecto.Changeset{}} = Podcasts.update_podcast(podcast, @invalid_attrs)
-    assert podcast == Podcasts.get_podcast!(podcast.id)
+    assert podcast.id == Podcasts.get_podcast!(podcast.id).id
   end
 
   test "delete_podcast/1 deletes the podcast" do
