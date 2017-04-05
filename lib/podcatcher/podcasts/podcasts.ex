@@ -11,6 +11,7 @@ defmodule Podcatcher.Podcasts do
   alias Podcatcher.Episodes
   alias Podcatcher.Categories
   alias Podcatcher.Podcasts.Podcast
+  alias Podcatcher.Podcasts.Slug
   alias Podcatcher.Podcasts.FeedParser
 
   @doc """
@@ -234,9 +235,11 @@ defmodule Podcatcher.Podcasts do
   defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ nil, images \\ []) do
       podcast
       |> cast(attrs, [:rss_feed, :website, :last_build_date, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
-      |> cast_image(images)
       |> validate_required([:rss_feed, :title])
       |> unique_constraint(:rss_feed)
+      |> Slug.maybe_generate_slug
+      |> Slug.unique_constraint
+      |> cast_image(images)
       |> cast_categories(categories)
   end
 

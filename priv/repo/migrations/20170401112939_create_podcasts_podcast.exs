@@ -4,6 +4,7 @@ defmodule Podcatcher.Repo.Migrations.CreatePodcatcher.Podcasts.Podcast do
   def change do
     create table(:podcasts_podcasts) do
       add :rss_feed, :string
+      add :slug, :string
       add :website, :text
       add :title, :text
       add :description, :text
@@ -17,6 +18,6 @@ defmodule Podcatcher.Repo.Migrations.CreatePodcatcher.Podcasts.Podcast do
       timestamps()
     end
 
-    create unique_index(:podcasts_podcasts, [:rss_feed])
+    create unique_index(:podcasts_podcasts, [:slug, :rss_feed])
   end
 end

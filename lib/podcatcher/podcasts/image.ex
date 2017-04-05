@@ -19,10 +19,13 @@ defmodule Podcatcher.Podcasts.Image do
     {:convert, "-strip -thumbnail 100x100^ -gravity center -extent 100x100 -format png", :png}
   end
 
-
   # Override the persisted filenames:
-  def filename(version, {file, _scope}) do
-    "#{version}-#{Path.rootname(file.file_name)}"
+  def filename(version, {_file, _scope}) do
+    version
+  end
+
+  def storage_dir(_version, {_file, scope}) do
+    "uploads/podcasts/#{scope.slug}"
   end
 
   # Override the storage directory:
