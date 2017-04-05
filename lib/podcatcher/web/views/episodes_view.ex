@@ -1,5 +1,6 @@
 defmodule Podcatcher.Web.EpisodesView do
   use Podcatcher.Web, :view
+  use Timex
 
   alias Podcatcher.Podcasts.Podcast
   alias Podcatcher.Podcasts.Image
@@ -12,10 +13,32 @@ defmodule Podcatcher.Web.EpisodesView do
     end
   end
 
-  def truncate(value, max_length)  do
+  def truncate(s, max_length)  do
     cond do
-      String.length(value) < max_length -> value
-      true -> "#{value |> String.slice(0, (max_length - 3))}..."
+      String.length(s) < max_length -> s
+      true -> "#{s |> String.slice(0, (max_length - 3))}..."
     end
+  end
+
+  def format_date(nil), do: ""
+
+  def format_date(dt) do
+    Timex.format! dt, "{Mfull} {D}, {YYYY}"
+  end
+
+  def audio_ext(""), do: ""
+  def audio_ext(nil), do: ""
+
+  def audio_ext(url) do
+    ext = URI.parse(url).path
+    |> Path.extname
+    String.slice(ext, 1, String.length(ext))
+  end
+
+  def markdown(content) do
+    content
+    |> Earmark.as_html!
+    |> HtmlSanitizeEx.basic_html
+    |> raw
   end
 end

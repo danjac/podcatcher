@@ -439,7 +439,6 @@ http://galactisuburbia.podbean.com/feed/
 http://gamerstavern.org/feed/gamerstavern/
 http://gamerstavern.org/feed/gametable/
 http://garbage.fm/episodes.rss
-http://gastropod.com/feed/
 http://getitgotitgood.libsyn.com/rss
 http://gooddadproject.libsyn.com/rss
 http://goodjobbrain.libsyn.com/rss

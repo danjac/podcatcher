@@ -18,6 +18,7 @@ defmodule Podcatcher.Web.Router do
 
     get "/", PageController, :index
     get "/latest/", EpisodesController, :index
+    get "/episode/:id/", EpisodesController, :episode
   end
 
   # Other scopes may use custom stacks.

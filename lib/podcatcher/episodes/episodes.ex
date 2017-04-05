@@ -39,7 +39,10 @@ defmodule Podcatcher.Episodes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_episode!(id), do: Repo.get!(Episode, id) |> Repo.preload(:podcast)
+  def get_episode!(id) do
+    Repo.get!(Episode, id)
+    |> Repo.preload([:podcast, [podcast: :categories]])
+  end
 
   @doc """
   Creates a episode.

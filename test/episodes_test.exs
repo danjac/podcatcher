@@ -26,7 +26,7 @@ defmodule Podcatcher.EpisodesTest do
 
   test "get_episode! returns the episode with given id" do
     episode = fixture(:episode)
-    assert Episodes.get_episode!(episode.id) == episode
+    assert Episodes.get_episode!(episode.id).id == episode.id
   end
 
   test "create_episode/1 with valid data creates a episode" do
@@ -73,7 +73,7 @@ defmodule Podcatcher.EpisodesTest do
   test "update_episode/2 with invalid data returns error changeset" do
     episode = fixture(:episode)
     assert {:error, %Ecto.Changeset{}} = Episodes.update_episode(episode, @invalid_attrs)
-    assert episode == Episodes.get_episode!(episode.id)
+    assert episode.id == Episodes.get_episode!(episode.id).id
   end
 
   test "delete_episode/1 deletes the episode" do

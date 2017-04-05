@@ -42,6 +42,8 @@ defmodule Podcatcher.Mixfile do
      {:sweet_xml, "~> 0.6.5"},
      {:ecto_autoslug_field, "~> 0.2"},
      {:timex, "~> 3.0"},
+     {:earmark, "~> 1.2.0"},
+     {:html_sanitize_ex, "~> 1.0.0"},
      {:scrivener_ecto, "~> 1.0"},
      {:poolboy, "~> 1.5"},
      {:cowboy, "~> 1.0"}]
