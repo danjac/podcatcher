@@ -28,6 +28,18 @@ defmodule Podcatcher.Podcasts do
   end
 
   @doc """
+  Searches for podcasts. Returns paginated result, ordered
+  by relevance.
+  """
+
+  def search_podcasts(term, params \\ []) do
+    Podcast
+    |> where(fragment("tsv @@ plainto_tsquery(?)", ^term))
+    |> order_by(fragment("ts_rank(tsv, plainto_tsquery(?)) DESC", ^term))
+    |> Repo.paginate(params)
+  end
+
+  @doc """
   Gets a single podcast.
 
   Raises `Ecto.NoResultsError` if the Podcast does not exist.
@@ -206,7 +218,7 @@ defmodule Podcatcher.Podcasts do
     end
   end
 
-  defp cast_categories(%Ecto.Changeset{} = changeset, categories) do
+  defp put_categories_assoc(%Ecto.Changeset{} = changeset, categories) do
     case categories do
       [] -> changeset
       nil -> changeset
@@ -214,21 +226,21 @@ defmodule Podcatcher.Podcasts do
     end
   end
 
-  defp cast_image(%Ecto.Changeset{} = changeset, []), do: changeset
-  defp cast_image(%Ecto.Changeset{} = changeset, [nil | images]), do: cast_image(changeset, images)
-  defp cast_image(%Ecto.Changeset{} = changeset, ["" | images]), do: cast_image(changeset, images)
+  defp maybe_save_image(%Ecto.Changeset{} = changeset, []), do: changeset
+  defp maybe_save_image(%Ecto.Changeset{} = changeset, [nil | images]), do: maybe_save_image(changeset, images)
+  defp maybe_save_image(%Ecto.Changeset{} = changeset, ["" | images]), do: maybe_save_image(changeset, images)
 
-  defp cast_image(%Ecto.Changeset{} = changeset, [image | images]) do
+  defp maybe_save_image(%Ecto.Changeset{} = changeset, [image | images]) do
     try do
       new_changeset = cast_attachments(changeset, %{image: image}, [:image], allow_paths: true)
       case new_changeset.valid? do
         true  -> new_changeset
-        false -> cast_image(changeset, images)
+        false -> maybe_save_image(changeset, images)
       end
     rescue # some crapshoot with HTTPoison maybe?
       reason ->
         Logger.error("Image error: #{inspect reason}")
-        cast_image(changeset, images)
+        maybe_save_image(changeset, images)
     end
   end
 
@@ -239,8 +251,8 @@ defmodule Podcatcher.Podcasts do
       |> unique_constraint(:rss_feed)
       |> Slug.maybe_generate_slug
       |> Slug.unique_constraint
-      |> cast_image(images)
-      |> cast_categories(categories)
-  end
+      |> maybe_save_image(images)
+      |> put_categories_assoc(categories)
+ end
 
 end

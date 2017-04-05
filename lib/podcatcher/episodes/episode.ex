@@ -4,11 +4,12 @@ defmodule Podcatcher.Episodes.Episode do
   alias Podcatcher.Podcasts.Podcast
 
   schema "episodes" do
+    field :title, :string
+    field :description, :string
     field :author, :string
     field :content_length, :integer
     field :content_type, :string
     field :content_url, :string
-    field :description, :string
     field :duration, :string
     field :explicit, :boolean, default: false
     field :guid, :string
@@ -16,7 +17,6 @@ defmodule Podcatcher.Episodes.Episode do
     field :pub_date, :naive_datetime
     field :subtitle, :string
     field :summary, :string
-    field :title, :string
 
     belongs_to :podcast, Podcast
 

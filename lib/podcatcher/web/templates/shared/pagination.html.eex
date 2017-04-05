@@ -1,0 +1,19 @@
+<ul class="pagination text-center" role="navigation" aria-label="Pagination">
+
+  <%= if @page.page_number == 1 do %>
+  <li class="pagination-previous disabled" aria-label="Previous page">Previous</li>
+  <% else %>
+  <li class="pagination-previous" aria-label="Previous page">
+    <a href="<%= replace_page_param(@conn, @page.page_number - 1) %>">Previous</a>
+  </li>
+  <% end %>
+
+  <%= if @page.page_number == @page.total_pages do %>
+  <li class="pagination-next disabled" aria-label="Next page">Next</li>
+  <% else %>
+  <li class="pagination-next" aria-label="Next page">
+    <a href="<%= replace_page_param(@conn, @page.page_number + 1) %>">Next</a>
+  </li>
+  <% end %>
+
+</ul>

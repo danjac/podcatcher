@@ -42,33 +42,14 @@
     </form>
 
 
-<ul class="pagination text-center" role="navigation" aria-label="Pagination">
-
-  <%= if @page.page_number == 1 do %>
-  <li class="pagination-previous disabled" aria-label="Previous page">Previous</li>
-  <% else %>
-  <li class="pagination-previous" aria-label="Previous page">
-    <a href="?page=<%= @page.page_number - 1 %>">Previous</a>
-  </li>
-  <% end %>
-
-  <%= if @page.page_number == @page.total_pages do %>
-  <li class="pagination-next disabled" aria-label="Next page">Next</li>
-  <% else %>
-  <li class="pagination-next" aria-label="Next page">
-    <a href="?page=<%= @page.page_number + 1 %>">Next</a>
-  </li>
-  <% end %>
-
-</ul>
-
+<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
 
 <table class="stack hover unstriped">
   <tbody>
     <%= for episode <- @page.entries do %>
     <tr>
       <td>
-        <h4><%= link truncate(episode.title, 80), to: episodes_path(@conn, :episode, episode) %></h4>
+        <h5><%= link truncate(episode.title, 80), to: episodes_path(@conn, :episode, episode) %></h5>
         <div class="button-group">
           <button class="button" title="Download and listen"><i class="fa fa-download"></i></button>
           <button class="button" title="Bookmark this episode"><i class="fa fa-star-o"></i></button>
@@ -80,4 +61,4 @@
   </tbody>
 </table>
 
-
+<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>

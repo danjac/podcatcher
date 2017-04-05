@@ -97,6 +97,12 @@ defmodule Podcatcher.PodcastsTest do
     assert Podcasts.list_podcasts() == [podcast]
   end
 
+  test "search_podcasts/1 should return podcasts matching search term" do
+    fixture(:podcast)
+    page = Podcasts.search_podcasts("some description")
+    assert length(page.entries) == 1
+  end
+
   test "get_podcast! returns the podcast with given id" do
     podcast = fixture(:podcast)
     assert Podcasts.get_podcast!(podcast.id).id == podcast.id
