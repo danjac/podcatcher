@@ -24,6 +24,13 @@ defmodule Podcatcher.EpisodesTest do
     assert Episodes.latest_episodes().entries == [episode]
   end
 
+  test "latest_episodes_for_podcast/1 returns page of episodes for a podcast" do
+    podcast = fixture(:podcast)
+    episode = fixture(:episode, podcast)
+    [first | _ ] = Episodes.latest_episodes_for_podcast(podcast).entries
+    assert first.id == episode.id
+  end
+
   test "get_episode! returns the episode with given id" do
     episode = fixture(:episode)
     assert Episodes.get_episode!(episode.id).id == episode.id
