@@ -10,8 +10,8 @@ defmodule Podcatcher.PodcastsTest do
   alias Podcatcher.Podcasts.Image
   alias Podcatcher.Podcasts.Podcast
 
-  @create_attrs %{copyright: "some copyright", description: "some description", email: "some email", explicit: true, owner: "some owner", rss_feed: "some rss_feed", subtitle: "some subtitle", title: "some title", website: "some website"}
-  @update_attrs %{copyright: "some updated copyright", description: "some updated description", email: "some updated email", explicit: false, owner: "some updated owner", rss_feed: "some updated rss_feed", subtitle: "some updated subtitle", title: "some updated title", website: "some updated website"}
+  @create_attrs %{copyright: "some copyright", description: "some description", email: "some email", explicit: true, owner: "some owner", rss_feed: "some rss_feed", subtitle: "some subtitle", title: "some title", website: "some website", last_build_date: ~N[2011-05-18 15:01:01.000000]}
+  @update_attrs %{copyright: "some updated copyright", description: "some updated description", email: "some updated email", explicit: false, owner: "some updated owner", rss_feed: "some updated rss_feed", subtitle: "some updated subtitle", title: "some updated title", website: "some updated website", last_build_date: ~N[2011-05-18 15:01:01.000000]}
   @invalid_attrs %{copyright: nil, description: nil, email: nil, explicit: nil, image: nil, owner: nil, rss_feed: nil, subtitle: nil, title: nil, website: nil}
 
   def fetch_mock_rss_feed(_url, _headers, _options) do
@@ -95,6 +95,16 @@ defmodule Podcatcher.PodcastsTest do
   test "list_podcasts/1 returns all podcasts" do
     podcast = fixture(:podcast)
     assert Podcasts.list_podcasts() == [podcast]
+  end
+
+  test "latest_podcasts/1 should return a list of latest podcasts" do
+    podcast = fixture(:podcast)
+    assert Podcasts.latest_podcasts(10) == [podcast]
+  end
+
+  test "latest_podcasts/1 should filter podcasts without a last build date" do
+    Podcasts.create_podcast(%{ @create_attrs | last_build_date: nil })
+    assert Podcasts.latest_podcasts(10) == []
   end
 
   test "search_podcasts/1 should return podcasts matching search term" do

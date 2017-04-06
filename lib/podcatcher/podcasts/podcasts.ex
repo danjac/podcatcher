@@ -28,6 +28,25 @@ defmodule Podcatcher.Podcasts do
   end
 
   @doc """
+  Returns latest podcasts (by last_build_date). Podcasts missing
+  last_build_date are omitted.
+
+  ## Examples
+
+      iex> latest_podcasts(20)
+      [%Podcast{}, ...]
+  """
+
+  def latest_podcasts(limit) do
+    from(
+      p in Podcast,
+      where: not is_nil(p.last_build_date),
+      order_by: [desc: p.last_build_date],
+      limit: ^limit,
+    ) |> Repo.all
+  end
+
+  @doc """
   Searches for podcasts. Returns paginated result, ordered
   by relevance.
   """

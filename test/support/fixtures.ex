@@ -6,7 +6,7 @@ defmodule Podcatcher.Fixtures do
 
   @episode_attrs %{author: "some author", content_length: 42, content_type: "some content_type", content_url: "some content_url", description: "some description", duration: "some duration", explicit: true, guid: :random, link: "some link", pub_date: ~N[2010-04-17 14:00:00.000000], subtitle: "some subtitle", summary: "some summary", title: "some title"}
 
-  @podcast_attrs %{copyright: "some copyright", description: "some description", email: "some email", explicit: true, owner: "some owner", subtitle: "some subtitle", title: "some title", website: "some website"}
+  @podcast_attrs %{copyright: "some copyright", description: "some description", email: "some email", explicit: true, owner: "some owner", subtitle: "some subtitle", title: "some title", website: "some website", last_build_date: ~N[2011-05-18 15:01:01.000000]}
 
 
   def random_string(len) do
