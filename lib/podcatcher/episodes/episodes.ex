@@ -26,6 +26,17 @@ defmodule Podcatcher.Episodes do
   end
 
   @doc """
+  Returns paginated search result, ordered by pub_date.
+  """
+  def search_episodes(term, params \\ []) do
+    Episode
+    |> where(fragment("tsv @@ plainto_tsquery(?)", ^term))
+    |> order_by([desc: :pub_date])
+    |> preload(:podcast)
+    |> Repo.paginate(params)
+  end
+
+  @doc """
   Returns page of latest (by pub_date) episodes for a specific podcast.
   """
   def latest_episodes_for_podcast(podcast, params \\ []) do

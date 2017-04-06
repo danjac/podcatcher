@@ -32,14 +32,14 @@
     <div class="top-bar-left">
       <ul class="vertical medium-horizontal menu">
         <li class="menu-text"><i class="fa fa-headphones"></i> Podbaby</li>
+        <li><a href="#">
+            <i class="fa fa-search"></i> Discover
+        </a></li>
         <li><a href="<%= episodes_path @conn, :index %>">
-            <i class="fa fa-flash"></i> Latest
+            <i class="fa fa-flash"></i> New releases
         </a></li>
         <li><a href="#">
             <i class="fa fa-folder-open"></i> Browse
-        </a></li>
-        <li><a href="">
-            <i class="fa fa-search"></i> Search
         </a></li>
       </ul>
     </div>

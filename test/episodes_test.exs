@@ -19,6 +19,12 @@ defmodule Podcatcher.EpisodesTest do
     assert num_episodes == 10
   end
 
+  test "search_episodes/1 returns search results" do
+    fixture(:episode)
+    page = Episodes.search_episodes("some description")
+    assert length(page.entries) == 1
+  end
+
   test "latest_episodes/0 returns first page of episodes" do
     episode = fixture(:episode)
     assert Episodes.latest_episodes().entries == [episode]

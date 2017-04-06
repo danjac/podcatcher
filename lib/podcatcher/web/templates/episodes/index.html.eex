@@ -1,8 +1,14 @@
-<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
+<form method="GET" action="">
+  <div class="input-group">
+    <span class="input-group-label"><i class="fa fa-search"></i></span>
+    <input class="input-group-field" type="search" name="q" placeholder="Find an episode">
+  </div>
+</form>
+
 
 <table class="stack hover unstriped">
   <tbody>
-    <%= for episode <- @page.entries do %>
+    <%= for episode <- @episodes do %>
     <tr>
       <td>
         <div class="thumbnail">
@@ -25,6 +31,3 @@
     <% end %>
   </tbody>
 </table>
-
-<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
-

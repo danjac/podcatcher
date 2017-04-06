@@ -3,9 +3,10 @@ defmodule Podcatcher.Web.EpisodesController do
 
   alias Podcatcher.Episodes
 
-  def index(conn, params) do
-    page = Episodes.latest_episodes(params)
-    render conn, "index.html", %{page: page}
+  def index(conn, _params) do
+    # just first page needed
+    page = Episodes.latest_episodes(page: 1)
+    render conn, "index.html", %{episodes: page.entries}
   end
 
   def episode(conn, %{"id" => id}) do
