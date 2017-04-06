@@ -23,10 +23,9 @@
         <%= if @podcast.explicit do %>
         <span class="label alert"><i class="fa fa-warning"></i> Explicit</span><br>
         <% end %>
-        <strong>Episodes: <%= @page.total_entries %></strong><br>
-        <strong>Last updated: <%= @podcast.last_build_date |> format_date %></strong><br>
         <a href="<%= @podcast.website %>"><i class="fa fa-globe"></i> Website</a>&nbsp;
-        <a href="<%= @podcast.rss_feed %>"><i class="fa fa-rss"></i> RSS</a>&nbsp;
+        <a href="<%= @podcast.rss_feed %>"><i class="fa fa-rss"></i> RSS</a><br>
+        <strong>Episodes: <%= @page.total_entries %></strong>
         </p>
         </div>
       </div>

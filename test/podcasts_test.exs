@@ -97,14 +97,14 @@ defmodule Podcatcher.PodcastsTest do
     assert Podcasts.list_podcasts() == [podcast]
   end
 
-  test "latest_podcasts/1 should return a list of latest podcasts" do
+  test "latest_podcasts/0 should return a list of latest podcasts" do
     podcast = fixture(:podcast)
-    assert Podcasts.latest_podcasts(10) == [podcast]
+    assert Podcasts.latest_podcasts().entries == [podcast]
   end
 
-  test "latest_podcasts/1 should filter podcasts without a last build date" do
+  test "latest_podcasts/0 should filter podcasts without a last build date" do
     Podcasts.create_podcast(%{ @create_attrs | last_build_date: nil })
-    assert Podcasts.latest_podcasts(10) == []
+    assert Podcasts.latest_podcasts().entries == []
   end
 
   test "search_podcasts/1 should return podcasts matching search term" do

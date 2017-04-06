@@ -1,13 +1,24 @@
 <form method="GET" action="<%= episodes_path(@conn, :index) %>">
   <div class="input-group">
     <span class="input-group-label"><i class="fa fa-search"></i></span>
-    <input class="input-group-field" type="search" name="q" placeholder="Find an episode">
+    <input class="input-group-field" type="search" name="q" placeholder="Find an episode" value="<%= @search_term %>">
   </div>
+  <a class="button large secondary expanded" href="<%= episodes_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all episodes</a>
 </form>
+
+<h3>
+  <%= if @page.total_entries == 0 do %>
+    Sorry, no episodes found for "<%= @search_term %>"
+  <% else %>
+    <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+  <% end %>
+</h3>
+
+<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
 
 <table class="stack hover unstriped">
   <tbody>
-    <%= for episode <- @episodes do %>
+    <%= for episode <- @page.entries do %>
     <tr>
       <td>
         <div class="thumbnail">
@@ -30,3 +41,6 @@
     <% end %>
   </tbody>
 </table>
+
+<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
+

@@ -3,6 +3,11 @@ defmodule Podcatcher.Web.EpisodesController do
 
   alias Podcatcher.Episodes
 
+  def index(conn, %{"q" => search_term} = params) do
+    page = Episodes.search_episodes(search_term, params)
+    render conn, "search.html", %{page: page, search_term: search_term}
+  end
+
   def index(conn, _params) do
     episodes = Episodes.latest_episodes(20)
     render conn, "index.html", %{episodes: episodes}
