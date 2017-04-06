@@ -10,19 +10,20 @@ defmodule Podcatcher.Episodes do
   alias Podcatcher.Episodes.Episode
 
   @doc """
-  Returns page of latest episodes by pub_date. Filters any episodes without a pub_date.
+  Returns list of latest episodes by pub_date. Filters any episodes without a pub_date.
 
   # TBD : we shouldn't include episodes without a pub_date: this is an issue
   with date parsing certain formats. When fixed we can remove the filter.
   """
-  def latest_episodes(params \\ []) do
+  def latest_episodes(limit) do
     from(
       e in Episode,
       where: not is_nil(e.pub_date),
       order_by: [desc: :pub_date],
       preload: :podcast,
+      limit: ^limit,
     )
-    |> Repo.paginate(params)
+    |> Repo.all()
   end
 
   @doc """
@@ -39,7 +40,7 @@ defmodule Podcatcher.Episodes do
   @doc """
   Returns page of latest (by pub_date) episodes for a specific podcast.
   """
-  def latest_episodes_for_podcast(podcast, params \\ []) do
+  def episodes_for_podcast(podcast, params \\ []) do
 
     Episode
     |> where(podcast_id: ^podcast.id)

@@ -25,15 +25,20 @@ defmodule Podcatcher.EpisodesTest do
     assert length(page.entries) == 1
   end
 
-  test "latest_episodes/0 returns first page of episodes" do
+  test "latest_episodes/1 returns latest episodes" do
     episode = fixture(:episode)
-    assert Episodes.latest_episodes().entries == [episode]
+    assert Episodes.latest_episodes(10) == [episode]
   end
 
-  test "latest_episodes_for_podcast/1 returns page of episodes for a podcast" do
+  test "latest_episodes/1 filters out episodes without a pub date" do
+    Episodes.create_episode(fixture(:podcast), %{ @create_attrs | pub_date: nil })
+    assert Episodes.latest_episodes(10) == []
+  end
+
+  test "episodes_for_podcast/1 returns page of episodes for a podcast" do
     podcast = fixture(:podcast)
     episode = fixture(:episode, podcast)
-    [first | _ ] = Episodes.latest_episodes_for_podcast(podcast).entries
+    [first | _ ] = Episodes.episodes_for_podcast(podcast).entries
     assert first.id == episode.id
   end
 
