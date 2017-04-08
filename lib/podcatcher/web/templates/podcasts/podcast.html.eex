@@ -33,12 +33,12 @@
     </div>
   </div>
 
-    <form method="GET" action="">
-      <div class="input-group">
-        <span class="input-group-label"><i class="fa fa-search"></i></span>
-        <input class="input-group-field" type="search" name="q" placeholder="Search this podcast">
-      </div>
-    </form>
+  <form method="GET" action="<%= podcasts_path(@conn, :podcast, @podcast) %>">
+    <div class="input-group">
+      <span class="input-group-label"><i class="fa fa-search"></i></span>
+      <input class="input-group-field" type="search" name="q" placeholder="Search this podcast">
+    </div>
+  </form>
 
 
 <%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>

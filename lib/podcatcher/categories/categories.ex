@@ -18,7 +18,9 @@ defmodule Podcatcher.Categories do
 
   """
   def list_categories do
-    Repo.all(Category)
+    Category
+    |> order_by(:name)
+    |> Repo.all
   end
 
   @doc """

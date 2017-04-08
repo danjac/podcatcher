@@ -1,0 +1,39 @@
+<form method="GET" action="<%= podcasts_path(@conn, :podcast, @podcast) %>">
+  <div class="input-group">
+    <span class="input-group-label"><i class="fa fa-search"></i></span>
+    <input class="input-group-field" type="search" name="q" placeholder="Search this podcast" value="<%= @search_term%>">
+  </div>
+  <a class="button large secondary expanded" href="<%= podcasts_path(@conn, :podcast, @podcast) %>">
+    <i class="fa fa-refresh"></i> See all episodes in <%= truncate(@podcast.title, 30) %>
+  </a>
+</form>
+
+<h3>
+  <%= if @page.total_entries == 0 do %>
+    Sorry, no episodes found for "<%= @search_term %>"
+  <% else %>
+    <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+  <% end %>
+</h3>
+
+
+<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
+
+<table class="stack hover unstriped">
+  <tbody>
+    <%= for episode <- @page.entries do %>
+    <tr>
+      <td>
+        <h5><%= link truncate(episode.title, 80), to: episodes_path(@conn, :episode, episode) %></h5>
+        <div class="button-group">
+          <button class="button" title="Download and listen"><i class="fa fa-download"></i></button>
+          <button class="button" title="Bookmark this episode"><i class="fa fa-star-o"></i></button>
+        </div>
+      </td>
+      <td><%= format_date(episode.pub_date) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>

@@ -45,6 +45,7 @@ defmodule Podcatcher.Mixfile do
      {:earmark, "~> 1.2.0"},
      {:html_sanitize_ex, "~> 1.0.0"},
      {:scrivener_ecto, "~> 1.0"},
+     {:phoenix_active_link, "~> 0.1.1"},
      {:poolboy, "~> 1.5"},
      {:cowboy, "~> 1.0"}]
   end

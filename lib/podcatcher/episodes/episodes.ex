@@ -26,14 +26,27 @@ defmodule Podcatcher.Episodes do
     |> Repo.all()
   end
 
+  defp search(term) do
+    Episode |> where(fragment("tsv @@ plainto_tsquery(?)", ^term))
+  end
+
   @doc """
   Returns paginated search result, ordered by pub_date.
   """
   def search_episodes(term, params \\ []) do
-    Episode
-    |> where(fragment("tsv @@ plainto_tsquery(?)", ^term))
+    search(term)
     |> order_by([desc: :pub_date])
     |> preload(:podcast)
+    |> Repo.paginate(params)
+  end
+
+  @doc """
+  Returns paginated search result, ordered by pub_date.
+  """
+  def search_episodes_for_podcast(podcast, term, params \\ []) do
+    search(term)
+    |> where(podcast_id: ^podcast.id)
+    |> order_by([desc: :pub_date])
     |> Repo.paginate(params)
   end
 

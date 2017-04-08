@@ -32,15 +32,9 @@
     <div class="top-bar-left">
       <ul class="vertical medium-horizontal menu">
         <li class="menu-text"><i class="fa fa-headphones"></i> Podbaby</li>
-        <li><a href="<%= podcasts_path @conn, :index %>">
-            <i class="fa fa-search"></i> Discover
-        </a></li>
-        <li><a href="<%= episodes_path @conn, :index %>">
-            <i class="fa fa-flash"></i> New releases
-        </a></li>
-        <li><a href="#">
-            <i class="fa fa-folder-open"></i> Browse
-        </a></li>
+        <%= active_link(@conn, raw("<i class=\"fa fa-search\"></i> Discover"), to: podcasts_path(@conn, :index), wrap_tag: :li) %>
+        <%= active_link(@conn, raw("<i class=\"fa fa-flash\"></i> New releases"), to: episodes_path(@conn, :index), wrap_tag: :li) %>
+        <%= active_link(@conn, raw("<i class=\"fa fa-folder-open\"></i> Browse"), to: categories_path(@conn, :index), wrap_tag: :li) %>
       </ul>
     </div>
     <div class="top-bar-right">
