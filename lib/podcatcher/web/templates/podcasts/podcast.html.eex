@@ -13,7 +13,7 @@
       <div class="columns small-12 medium-8">
         <div class="button-group">
           <%= for category <- @podcast.categories do %>
-          <a class="button" href=""><%= category.name %></a>
+          <%= link category.name, to: categories_path(@conn, :category, category), class: "button" %>
           <% end %>
         </div>
         <div class="button-group">
