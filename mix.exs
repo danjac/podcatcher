@@ -17,7 +17,12 @@ defmodule Podcatcher.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Podcatcher.Application, []},
-     extra_applications: [:logger, :runtime_tools, :scrivener_ecto]]
+     extra_applications: [
+      :logger,
+      :runtime_tools,
+      :scrivener_ecto,
+      :comeonin
+    ]]
   end
 
   # Specifies which paths to compile per environment.
@@ -28,7 +33,7 @@ defmodule Podcatcher.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.3.0-rc"},
+    [{:phoenix, "~> 1.3.0-rc", override: true},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.2"},
      {:postgrex, ">= 0.0.0"},
@@ -46,6 +51,7 @@ defmodule Podcatcher.Mixfile do
      {:html_sanitize_ex, "~> 1.0.0"},
      {:scrivener_ecto, "~> 1.0"},
      {:phoenix_active_link, "~> 0.1.1"},
+     {:comeonin, "~> 3.0"},
      {:poolboy, "~> 1.5"},
      {:cowboy, "~> 1.0"}]
   end

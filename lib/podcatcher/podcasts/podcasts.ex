@@ -288,7 +288,7 @@ defmodule Podcatcher.Podcasts do
     end
   end
 
-  defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ [], images \\ []) do
+  defp podcast_changeset(%Podcast{} = podcast, attrs, categories, images \\ []) do
       podcast
       |> cast(attrs, [:rss_feed, :website, :last_build_date, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
       |> validate_required([:rss_feed, :title])
