@@ -9,10 +9,10 @@ defmodule Podcatcher.Web.CategoriesController do
     render conn, "index.html", %{categories: categories}
   end
 
-  def category(conn, %{"id" => id}) do
+  def category(conn, %{"id" => id} = params) do
     category = Categories.get_category!(id)
-    # page = Podcasts.latest_podcasts_for_category(category)
-    render conn, "category.html", %{category: category}
+    page = Podcasts.latest_podcasts_for_category(category, params)
+    render conn, "category.html", %{category: category, page: page}
   end
 
 end

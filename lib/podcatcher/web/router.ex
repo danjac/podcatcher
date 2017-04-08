@@ -22,6 +22,7 @@ defmodule Podcatcher.Web.Router do
     get "/latest/", EpisodesController, :index
 
     get "/browse/", CategoriesController, :index
+    get "/browse/:id/", CategoriesController, :category
 
     get "/episode/:id/", EpisodesController, :episode
 

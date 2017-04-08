@@ -1,0 +1,41 @@
+<nav aria-label="You are here:" role="navigation">
+  <ul class="breadcrumbs">
+    <li><%= link("All categories", to: categories_path(@conn, :index)) %>
+    <li><%= @category.name %></li>
+  </ul>
+</nav>
+
+<%= if @page.total_pages > 1 do %>
+<form method="GET" action="<%= podcasts_path(@conn, :index) %>">
+  <div class="input-group">
+    <span class="input-group-label"><i class="fa fa-search"></i></span>
+    <input class="input-group-field" type="search" name="q" placeholder="Find more <%= @category.name %> podcasts" value="">
+  </div>
+</form>
+<% end %>
+
+<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
+
+<table class="stack hover unstriped">
+  <tbody>
+    <%= for podcast <- @page.entries do %>
+    <tr>
+      <td>
+        <div class="thumbnail">
+          <a href="#"><img alt="<%= podcast.title %>" src="<%= podcast_image(@conn, podcast, :small) %>" height="100" width="100"></a>
+        </div>
+      </td><td>
+
+        <h4><%= link(truncate(podcast.title, 60), to: podcasts_path(@conn, :podcast, podcast))  %></a></h4>
+
+        <div class="button-group">
+          <button class="button" title="Subscribe to this podcast"><i class="fa fa-rss"></i> Subscribe</button>
+        </div>
+
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>

@@ -1,1 +1,5 @@
-Categories go here...
+<ul>
+  <%= for category <- @categories do %>
+  <li><%= link(category.name, to: categories_path(@conn, :category, category)) %></li>
+  <% end %>
+</ul>

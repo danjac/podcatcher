@@ -41,14 +41,33 @@ defmodule Podcatcher.Podcasts do
   end
 
   @doc """
+  Returns page of latest podcasts (by last_build_date) for a given category.
+  """
+  def latest_podcasts_for_category(category, params \\ []) do
+    Podcast
+    |> for_category(category)
+    |> order_by([desc: :last_build_date, asc: :title])
+    |> Repo.paginate(params)
+  end
+
+  @doc """
   Searches for podcasts. Returns paginated result, ordered
   by relevance.
   """
 
   def search_podcasts(term, params \\ []) do
     Podcast
-    |> where(fragment("tsv @@ plainto_tsquery(?)", ^term))
-    |> order_by(fragment("ts_rank(tsv, plainto_tsquery(?)) DESC", ^term))
+    |> search(term)
+    |> Repo.paginate(params)
+  end
+
+  @doc """
+  Searches for podcasts for a given category
+  """
+  def search_podcasts_for_category(category, term, params \\ []) do
+    Podcast
+    |> search(term)
+    |> for_category(category)
     |> Repo.paginate(params)
   end
 
@@ -218,8 +237,20 @@ defmodule Podcatcher.Podcasts do
       %Ecto.Changeset{source: %Podcast{}}
 
   """
-  def change_podcast(%Podcast{} = podcast) do
-    podcast_changeset(podcast, %{})
+  def change_podcast(%Podcast{} = podcast, categories \\ []) do
+    podcast_changeset(podcast, %{}, categories)
+  end
+
+  defp for_category(q, category) do
+    q
+    |> join(:left, [p], c in assoc(p, :categories))
+    |> where([_, c], c.id == ^category.id)
+  end
+
+  defp search(q, term) do
+    q
+    |> where(fragment("tsv @@ plainto_tsquery(?)", ^term))
+    |> order_by(fragment("ts_rank(tsv, plainto_tsquery(?)) DESC", ^term))
   end
 
   defp preload_categories(%Podcast{} = podcast, categories) do
@@ -257,7 +288,7 @@ defmodule Podcatcher.Podcasts do
     end
   end
 
-  defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ nil, images \\ []) do
+  defp podcast_changeset(%Podcast{} = podcast, attrs, categories \\ [], images \\ []) do
       podcast
       |> cast(attrs, [:rss_feed, :website, :last_build_date, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
       |> validate_required([:rss_feed, :title])
