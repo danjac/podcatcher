@@ -28,6 +28,26 @@ defmodule Podcatcher.PodcastsTest do
     {:ok, "test_image.jpg"}
   end
 
+  test "latest_podcasts_for_category/1 should return podcasts for a category" do
+    category = fixture(:category)
+
+    {_, podcast} = fixture(:podcast)
+    |> Podcasts.update_podcast(%{}, [category])
+
+    [result | _ ] = Podcasts.latest_podcasts_for_category(category).entries
+    assert result.id == podcast.id
+  end
+
+  test "search_podcasts_for_category/1 should return podcasts for a category" do
+    category = fixture(:category)
+
+    {_, podcast} = fixture(:podcast)
+    |> Podcasts.update_podcast(%{}, [category])
+
+    [result | _ ] = Podcasts.search_podcasts_for_category(category, podcast.title).entries
+    assert result.id == podcast.id
+  end
+
   test "update_podcast_from_rss_feed/0 shoud fetch new episodes" do
     podcast = fixture(:podcast)
 
