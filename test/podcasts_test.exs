@@ -32,7 +32,7 @@ defmodule Podcatcher.PodcastsTest do
     category = fixture(:category)
 
     {_, podcast} = fixture(:podcast)
-    |> Podcasts.update_podcast(%{}, [category])
+    |> Podcasts.update_podcast(%{categories: [category]})
 
     [result | _ ] = Podcasts.latest_podcasts_for_category(category).entries
     assert result.id == podcast.id
@@ -42,7 +42,7 @@ defmodule Podcatcher.PodcastsTest do
     category = fixture(:category)
 
     {_, podcast} = fixture(:podcast)
-    |> Podcasts.update_podcast(%{}, [category])
+    |> Podcasts.update_podcast(%{categories: [category]})
 
     [result | _ ] = Podcasts.search_podcasts_for_category(category, podcast.title).entries
     assert result.id == podcast.id
@@ -114,12 +114,14 @@ defmodule Podcatcher.PodcastsTest do
 
   test "list_podcasts/1 returns all podcasts" do
     podcast = fixture(:podcast)
-    assert Podcasts.list_podcasts() == [podcast]
+    [ first | _ ] = Podcasts.list_podcasts()
+    assert first.id == podcast.id
   end
 
   test "latest_podcasts/0 should return a list of latest podcasts" do
     podcast = fixture(:podcast)
-    assert Podcasts.latest_podcasts().entries == [podcast]
+    [ first | _ ] = Podcasts.latest_podcasts().entries
+    assert first.id == podcast.id
   end
 
   test "latest_podcasts/0 should filter podcasts without a last build date" do

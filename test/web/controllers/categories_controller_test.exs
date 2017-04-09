@@ -8,7 +8,7 @@ defmodule Podcatcher.Web.CategoriesControllerTest do
 
     for _ <- 1..10, do: fixture(:category)
     conn = get conn, "/browse/"
-    response = html_response(conn, 200)
+    html_response(conn, 200)
   end
 
   test "GET /browse/:id/", %{conn: conn} do
@@ -16,7 +16,7 @@ defmodule Podcatcher.Web.CategoriesControllerTest do
     podcast = fixture(:podcast)
 
     podcast
-    |> Podcasts.update_podcast(%{}, [category])
+    |> Podcasts.update_podcast(%{categories: [category]})
 
     conn = get conn, "/browse/#{category.id}/"
     response = html_response(conn, 200)

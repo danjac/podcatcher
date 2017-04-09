@@ -27,7 +27,8 @@ defmodule Podcatcher.EpisodesTest do
 
   test "latest_episodes/1 returns latest episodes" do
     episode = fixture(:episode)
-    assert Episodes.latest_episodes(10) == [episode]
+    [first | _] = Episodes.latest_episodes(10)
+    assert first.id == episode.id
   end
 
   test "latest_episodes/1 filters out episodes without a pub date" do

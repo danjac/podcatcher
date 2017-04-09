@@ -99,10 +99,9 @@ defmodule Podcatcher.Podcasts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_podcast(attrs \\ %{}, categories \\ nil, images \\ []) do
+  def create_podcast(attrs \\ %{}, images \\ []) do
     %Podcast{}
-    |> preload_categories(categories)
-    |> podcast_changeset(attrs, categories, images)
+    |> podcast_changeset(attrs, images)
     |> Repo.insert()
   end
 
@@ -143,8 +142,12 @@ defmodule Podcatcher.Podcasts do
       _ ->
 
         if should_update(podcast, feed) do
-          categories = Categories.get_or_create_categories(feed.categories)
-          podcast |> update_podcast(feed.podcast, categories, feed.images)
+
+          attrs =
+            feed.podcast
+            |> Map.put(:categories, Categories.get_or_create_categories(feed.categories))
+
+          podcast |> update_podcast(attrs, feed.images)
           Episodes.create_episodes(podcast, feed.episodes)
         else
           0
@@ -177,11 +180,10 @@ defmodule Podcatcher.Podcasts do
       _ ->
         Repo.transaction(fn ->
 
-          categories = Categories.get_or_create_categories(feed.categories)
-
           {:ok, %Podcast{} = podcast} = feed.podcast
           |> Map.put(:rss_feed, url)
-          |> create_podcast(categories, feed.images)
+          |> Map.put(:categories, Categories.get_or_create_categories(feed.categories))
+          |> create_podcast(feed.images)
 
           num_episodes = Episodes.create_episodes(podcast, feed.episodes)
           case num_episodes do
@@ -205,10 +207,9 @@ defmodule Podcatcher.Podcasts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_podcast(%Podcast{} = podcast, attrs, categories \\ nil, images \\ []) do
+  def update_podcast(%Podcast{} = podcast, attrs, images \\ []) do
     podcast
-    |> preload_categories(categories)
-    |> podcast_changeset(attrs, categories, images)
+    |> podcast_changeset(attrs, images)
     |> Repo.update()
   end
 
@@ -237,8 +238,8 @@ defmodule Podcatcher.Podcasts do
       %Ecto.Changeset{source: %Podcast{}}
 
   """
-  def change_podcast(%Podcast{} = podcast, categories \\ []) do
-    podcast_changeset(podcast, %{}, categories)
+  def change_podcast(%Podcast{} = podcast) do
+    podcast_changeset(podcast, %{})
   end
 
   defp for_category(q, category) do
@@ -253,20 +254,11 @@ defmodule Podcatcher.Podcasts do
     |> order_by(fragment("ts_rank(tsv, plainto_tsquery(?)) DESC", ^term))
   end
 
-  defp preload_categories(%Podcast{} = podcast, categories) do
-    # ensure we have preloaded if we're adding categories
-    case categories do
-      [] -> podcast
-      nil -> podcast
-      _ -> Repo.preload(podcast, :categories)
-    end
-  end
-
-  defp put_categories_assoc(%Ecto.Changeset{} = changeset, categories) do
-    case categories do
-      [] -> changeset
-      nil -> changeset
-      _  -> changeset |> put_assoc(:categories, categories)
+  defp put_categories_assoc(%Ecto.Changeset{} = changeset, attrs) do
+    case attrs do
+      %{categories: categories} ->
+        put_assoc(changeset, :categories, categories)
+      _  -> changeset
     end
   end
 
@@ -288,15 +280,16 @@ defmodule Podcatcher.Podcasts do
     end
   end
 
-  defp podcast_changeset(%Podcast{} = podcast, attrs, categories, images \\ []) do
+  defp podcast_changeset(%Podcast{} = podcast, attrs, images \\ []) do
       podcast
+      |> Repo.preload(:categories)
       |> cast(attrs, [:rss_feed, :website, :last_build_date, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
       |> validate_required([:rss_feed, :title])
       |> unique_constraint(:rss_feed)
       |> Slug.maybe_generate_slug
       |> Slug.unique_constraint
       |> maybe_save_image(images)
-      |> put_categories_assoc(categories)
+      |> put_categories_assoc(attrs)
  end
 
 end
