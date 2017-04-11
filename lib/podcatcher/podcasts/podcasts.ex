@@ -136,7 +136,6 @@ defmodule Podcatcher.Podcasts do
 
   def update_podcast_from_rss_feed(%Podcast{rss_feed: url} = podcast) do
     feed = FeedParser.fetch_and_parse(url)
-
     case feed do
       {:error, reason} -> {:error, reason}
       _ ->

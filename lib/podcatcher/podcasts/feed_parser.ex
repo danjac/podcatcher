@@ -9,7 +9,16 @@ defmodule Podcatcher.Podcasts.FeedParser do
   "Chrome/39.0.2171.95 Safari/537.36",
   ]
 
-  @date_formats ~w"{RFC1123} {RFC1123z} {RFC822} {RFC822z} {RFC3339} {RFC3339z} {ANSIC} {UNIX}"
+
+  @std_date_formats ~w"{RFC1123} {RFC1123z} {RFC822} {RFC822z} {RFC3339} {RFC3339z} {ANSIC} {UNIX} {ISO:Extended} {ISO:Extended:Z}"
+
+  @custom_date_formats [
+    "{WDshort}, {D} {Mshort} {YYYY} {h24}:{m}:{s}",
+    "{WDshort}, {D} {Mfull} {YYYY} {h24}:{m}:{s} {Z}",
+    "{WDshort}, {D} {Mfull} {YYYY} {h24}:{m}:{s} {Zabbr}",
+    "{WDshort}, {D} {Mshort} {YYYY} {h24}:{m}:{s} {Z}",
+    "{WDshort}, {D} {Mshort} {YYYY} {h24}:{m}:{s} {Zabbr}",
+  ]
 
   @default_options [
     # follow_redirect: true,
@@ -82,13 +91,26 @@ defmodule Podcatcher.Podcasts.FeedParser do
         content_length: ~x"./enclosure/@length[1]"s |> transform_by(&parse_integer/1),
       ]
     )
+    |> default_episode_guid
     |> filter_episodes
     |> add_images
     |> fix_last_build_date
   end
 
-  defp filter_episodes(feed) do
-    Map.put(feed, :episodes, Enum.filter(feed.episodes, &valid_episode?/1))
+  defp default_episode_guid(%{episodes: episodes} = feed) do
+    %{feed | episodes: Enum.map(episodes, &assign_default_guid/1)}
+  end
+
+  defp assign_default_guid(%{guid: "", pub_date: nil} = episode), do: episode
+
+  defp assign_default_guid(%{guid: "", pub_date: pub_date} = episode) do
+    %{episode | guid: pub_date |> to_string |> String.replace(" ", "-")}
+  end
+
+  defp assign_default_guid(%{} = episode), do: episode
+
+  defp filter_episodes(%{episodes: episodes} = feed) do
+    %{feed | episodes: Enum.filter(episodes, &valid_episode?/1)}
   end
 
   defp valid_episode?(%{pub_date: pub_date}) when is_nil(pub_date), do: false
@@ -130,9 +152,12 @@ defmodule Podcatcher.Podcasts.FeedParser do
     end
   end
 
+
   defp parse_date(value) do
-    do_parse_date(@date_formats, value)
+    do_parse_date(@std_date_formats ++ @custom_date_formats, String.trim(value))
   end
+
+  defp do_parse_date(_, value) when value == "", do: nil
 
   defp do_parse_date([], _), do: nil
 
