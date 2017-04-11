@@ -5,6 +5,44 @@
   </div>
 </form>
 
+<%= for episode <- @episodes do %>
+<div class="card">
+  <div class="card-divider">
+    <h5><%= link(episode.podcast.title, to: podcasts_path(@conn, :podcast, episode.podcast))  %></a></h5>
+    <h6><%= link(episode.title, to: episodes_path(@conn, :episode, episode)) %></h6>
+  </div>
+  <div class="card-section">
+    <div class="row">
+      <div class="small-6 large-2 columns">
+        <div class="thumbnail">
+          <a href="#"><img alt="<%= episode.podcast.title %>" src="<%= podcast_image(@conn, episode.podcast, :small) %>" height="100" width="100"></a>
+        </div>
+      </div>
+
+      <div class="small-6 large-10 columns">
+        <div class="button-group">
+          <a class="button" href="<%= episode.content_url %>" title="Download and listen"><i class="fa fa-download"></i></a>
+          <button class="button" title="Bookmark this episode"><i class="fa fa-star-o"></i></button>
+          <button class="button" title="Subscribe to this podcast"><i class="fa fa-rss"></i></button>
+        </div>
+        <%= if episode.pub_date do %>
+        <strong><%= format_date(episode.pub_date) %></strong>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+  <%= if episode.subtitle do %>
+  <div class="card-section">
+    <%= episode.subtitle %>
+  </div>
+  <% end %>
+
+</div>
+
+<% end %>
+
+<!--
 <table class="stack hover unstriped">
   <tbody>
     <%= for episode <- @episodes do %>
@@ -30,3 +68,4 @@
     <% end %>
   </tbody>
 </table>
+-->

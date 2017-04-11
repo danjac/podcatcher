@@ -16,6 +16,11 @@
 
 <%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
 
+<%= for podcast <- @page.entries do %>
+<%= render Podcatcher.Web.PodcastsView, "podcast_card.html", conn: @conn, podcast: podcast %>
+<% end %>
+
+<!--
 <table class="stack hover unstriped">
   <tbody>
     <%= for podcast <- @page.entries do %>
@@ -37,5 +42,6 @@
     <% end %>
   </tbody>
 </table>
+-->
 
 <%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>

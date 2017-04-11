@@ -43,21 +43,29 @@
 
 <%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
 
-<table class="stack hover unstriped">
-  <tbody>
-    <%= for episode <- @page.entries do %>
-    <tr>
-      <td>
-        <h5><%= link truncate(episode.title, 80), to: episodes_path(@conn, :episode, episode) %></h5>
-        <div class="button-group">
-          <button class="button" title="Download and listen"><i class="fa fa-download"></i></button>
-          <button class="button" title="Bookmark this episode"><i class="fa fa-star-o"></i></button>
-        </div>
-      </td>
-      <td><%= format_date(episode.pub_date) %></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+
+<%= for episode <- @page.entries do %>
+<div class="card">
+  <div class="card-divider">
+    <h5><%= link(episode.title, to: episodes_path(@conn, :episode, episode)) %></h5>
+  </div>
+  <div class="card-section">
+      <div class="button-group">
+        <a class="button" href="<%= episode.content_url %>" title="Download and listen"><i class="fa fa-download"></i></a>
+        <button class="button" title="Bookmark this episode"><i class="fa fa-star-o"></i></button>
+      </div>
+      <%= if episode.pub_date do %>
+      <strong><%= format_date(episode.pub_date) %></strong>
+      <% end %>
+  </div>
+  <%= if episode.subtitle do %>
+  <div class="card-section">
+    <%= episode.subtitle %>
+  </div>
+  <% end %>
+
+
+</div>
+<% end %>
 
 <%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>

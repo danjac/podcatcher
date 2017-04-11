@@ -21,26 +21,8 @@
 
 <%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
 
-<table class="stack hover unstriped">
-  <tbody>
-    <%= for podcast <- @page.entries do %>
-    <tr>
-      <td>
-        <div class="thumbnail">
-          <a href="#"><img alt="<%= podcast.title %>" src="<%= podcast_image(@conn, podcast, :small) %>" height="100" width="100"></a>
-        </div>
-      </td><td>
-
-        <h4><%= link(truncate(podcast.title, 60), to: podcasts_path(@conn, :podcast, podcast))  %></a></h4>
-
-        <div class="button-group">
-          <button class="button" title="Subscribe to this podcast"><i class="fa fa-rss"></i> Subscribe</button>
-        </div>
-
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= for podcast <- @page.entries do %>
+<%= render "podcast_card.html", conn: @conn, podcast: podcast %>
+<% end %>
 
 <%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
