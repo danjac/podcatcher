@@ -82,28 +82,31 @@ defmodule Podcatcher.Podcasts.FeedParser do
         content_length: ~x"./enclosure/@length[1]"s |> transform_by(&parse_integer/1),
       ]
     )
+    |> filter_episodes
     |> add_images
     |> fix_last_build_date
   end
 
-  # some feeds use pubDate instead of lastBuildDate; if either missing use most recent episode pubDate
+  defp filter_episodes(feed) do
+    Map.put(feed, :episodes, Enum.filter(feed.episodes, &valid_episode?/1))
+  end
 
-  defp fix_last_build_date(%{podcast: %{last_build_date: nil, pub_date: nil} = podcast, episodes: episodes} = feed) do
+  defp valid_episode?(%{pub_date: pub_date}) when is_nil(pub_date), do: false
+
+  defp valid_episode?(%{content_url: content_url}) when content_url == "", do: false
+
+  defp valid_episode?(%{guid: guid}) when guid == "", do: false
+
+  defp valid_episode?(%{}), do: true
+
+  defp fix_last_build_date(%{podcast: podcast, episodes: episodes} = feed) do
     # find most recent episode
     last_build_date =
     episodes
-    |> Enum.reject(fn(episode) -> is_nil(episode.pub_date) end)
     |> Enum.map(fn(episode) -> episode.pub_date end)
     |> Enum.max_by(&DateTime.to_unix/1, fn -> nil end)
     %{ feed | podcast: %{ podcast | last_build_date: last_build_date } }
   end
-
-  defp fix_last_build_date(%{podcast: %{last_build_date: nil, pub_date: pub_date} = podcast} = feed) do
-    # use the pub date of the channel
-    %{ feed | podcast: %{ podcast | last_build_date: pub_date } }
-  end
-
-  defp fix_last_build_date(feed), do: feed
 
   defp add_images(%{podcast: %{rss_image: rss_image, itunes_image: itunes_image}} = feed) do
     feed |> Map.put(:images, [rss_image, itunes_image])

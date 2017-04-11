@@ -99,9 +99,9 @@ defmodule Podcatcher.Podcasts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_podcast(attrs \\ %{}, images \\ []) do
+  def create_podcast(attrs \\ %{}) do
     %Podcast{}
-    |> podcast_changeset(attrs, images)
+    |> podcast_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -145,9 +145,13 @@ defmodule Podcatcher.Podcasts do
 
           attrs =
             feed.podcast
-            |> Map.put(:categories, Categories.get_or_create_categories(feed.categories))
+            |> Map.merge(%{
+              image: feed.images,
+              categories: Categories.get_or_create_categories(feed.categories)
+            })
 
-          podcast |> update_podcast(attrs, feed.images)
+          podcast |> update_podcast(attrs)
+
           Episodes.create_episodes(podcast, feed.episodes)
         else
           0
@@ -181,9 +185,11 @@ defmodule Podcatcher.Podcasts do
         Repo.transaction(fn ->
 
           {:ok, %Podcast{} = podcast} = feed.podcast
-          |> Map.put(:rss_feed, url)
-          |> Map.put(:categories, Categories.get_or_create_categories(feed.categories))
-          |> create_podcast(feed.images)
+          |> Map.merge(%{
+            rss_feed: url,
+            categories: Categories.get_or_create_categories(feed.categories),
+            image: feed.images
+          }) |> create_podcast
 
           num_episodes = Episodes.create_episodes(podcast, feed.episodes)
           case num_episodes do
@@ -207,9 +213,9 @@ defmodule Podcatcher.Podcasts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_podcast(%Podcast{} = podcast, attrs, images \\ []) do
+  def update_podcast(%Podcast{} = podcast, attrs) do
     podcast
-    |> podcast_changeset(attrs, images)
+    |> podcast_changeset(attrs)
     |> Repo.update()
   end
 
@@ -254,33 +260,36 @@ defmodule Podcatcher.Podcasts do
     |> order_by(fragment("ts_rank(tsv, plainto_tsquery(?)) DESC", ^term))
   end
 
-  defp put_categories_assoc(%Ecto.Changeset{} = changeset, attrs) do
-    case attrs do
-      %{categories: categories} ->
-        put_assoc(changeset, :categories, categories)
-      _  -> changeset
-    end
-  end
+  defp put_categories_assoc(%Ecto.Changeset{} = changeset, %{categories: categories}), do: put_assoc(changeset, :categories, categories)
+  defp put_categories_assoc(%Ecto.Changeset{} = changeset, _), do: changeset
 
-  defp maybe_save_image(%Ecto.Changeset{} = changeset, []), do: changeset
-  defp maybe_save_image(%Ecto.Changeset{} = changeset, [nil | images]), do: maybe_save_image(changeset, images)
-  defp maybe_save_image(%Ecto.Changeset{} = changeset, ["" | images]), do: maybe_save_image(changeset, images)
+  # feed has a list of image URLs; try each one until we get a working download
 
-  defp maybe_save_image(%Ecto.Changeset{} = changeset, [image | images]) do
+  def maybe_save_image(%Ecto.Changeset{} = changeset, %{image: images}) when is_list(images), do: do_save_image(changeset, images)
+  def maybe_save_image(%Ecto.Changeset{} = changeset, %{image: image}) , do: do_save_image(changeset, [image])
+  def maybe_save_image(%Ecto.Changeset{} = changeset, _) , do: changeset
+
+  defp do_save_image(%Ecto.Changeset{} = changeset, []), do: changeset
+  defp do_save_image(%Ecto.Changeset{} = changeset, [nil | images]), do: do_save_image(changeset, images)
+  defp do_save_image(%Ecto.Changeset{} = changeset, ["" | images]), do: do_save_image(changeset, images)
+
+  defp do_save_image(%Ecto.Changeset{} = changeset, [image | images]) do
     try do
+
       new_changeset = cast_attachments(changeset, %{image: image}, [:image], allow_paths: true)
       case new_changeset.valid? do
         true  -> new_changeset
-        false -> maybe_save_image(changeset, images)
+        false -> do_save_image(changeset, images)
       end
+
     rescue # some crapshoot with HTTPoison maybe?
       reason ->
         Logger.error("Image error: #{inspect reason}")
-        maybe_save_image(changeset, images)
+        do_save_image(changeset, images)
     end
   end
 
-  defp podcast_changeset(%Podcast{} = podcast, attrs, images \\ []) do
+  defp podcast_changeset(%Podcast{} = podcast, attrs) do
       podcast
       |> Repo.preload(:categories)
       |> cast(attrs, [:rss_feed, :website, :last_build_date, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
@@ -288,8 +297,8 @@ defmodule Podcatcher.Podcasts do
       |> unique_constraint(:rss_feed)
       |> Slug.maybe_generate_slug
       |> Slug.unique_constraint
-      |> maybe_save_image(images)
+      |> maybe_save_image(attrs)
       |> put_categories_assoc(attrs)
- end
+  end
 
 end

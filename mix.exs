@@ -21,7 +21,8 @@ defmodule Podcatcher.Mixfile do
       :logger,
       :runtime_tools,
       :scrivener_ecto,
-      :comeonin
+      :comeonin,
+      :quantum
     ]]
   end
 
@@ -52,6 +53,7 @@ defmodule Podcatcher.Mixfile do
      {:scrivener_ecto, "~> 1.0"},
      {:phoenix_active_link, "~> 0.1.1"},
      {:comeonin, "~> 3.0"},
+     {:quantum, "~> 1.9.1"},
      {:poolboy, "~> 1.5"},
      {:cowboy, "~> 1.0"}]
   end

@@ -10,11 +10,12 @@ defmodule Podcatcher.Web.EpisodesController do
 
   def index(conn, _params) do
     episodes = Episodes.latest_episodes(20)
-    render conn, "index.html", %{episodes: episodes}
+    render conn, "index.html", %{episodes: episodes, page_title: "New releases"}
   end
 
   def episode(conn, %{"id" => id}) do
     episode = Episodes.get_episode!(id)
-    render conn, "episode.html", %{episode: episode}
+    page_title = "#{episode.podcast.title} - #{episode.title}"
+    render conn, "episode.html", %{episode: episode, page_title: page_title}
   end
 end

@@ -18,7 +18,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/js/foundation.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/jplayer/jquery.jplayer.min.js"></script>
 
-  <title>Podbaby</title>
+  <title>Podbaby<%= if assigns[:page_title] do %> - <%= assigns[:page_title] %><% end %></title>
 
   <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
 </head>
