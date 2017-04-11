@@ -1,8 +1,13 @@
-defmodule Podcatcher.Web.URLViewTest do
+defmodule Podcatcher.Web.URLHelpersTest do
   use Podcatcher.Web.ConnCase, async: true
 
   import Podcatcher.Fixtures
-  import Podcatcher.Web.URLView
+  import Podcatcher.Web.URLHelpers
+
+  test "category_url/2 should return link to category", %{conn: conn} do
+    category = fixture(:category)
+    assert category_url(conn, category) == "/browse/#{category.id}/#{Slugger.slugify_downcase(category.name)}"
+  end
 
   test "episode_url/2 should return link to episode", %{conn: conn} do
     episode = fixture(:episode)

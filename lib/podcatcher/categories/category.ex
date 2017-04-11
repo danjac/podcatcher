@@ -11,3 +11,7 @@ defmodule Podcatcher.Categories.Category do
     timestamps()
   end
 end
+
+defimpl Slugify, for: Podcatcher.Categories.Category do
+  def slugify(category), do: Slugger.slugify_downcase(category.name)
+end

@@ -1,5 +1,5 @@
 <ul>
   <%= for category <- @categories do %>
-  <li><%= link(category.name, to: categories_path(@conn, :category, category)) %></li>
+  <li><%= link(category.name, to: category_url(@conn, category)) %></li>
   <% end %>
 </ul>

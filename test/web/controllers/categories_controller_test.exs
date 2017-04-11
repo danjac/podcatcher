@@ -11,14 +11,14 @@ defmodule Podcatcher.Web.CategoriesControllerTest do
     html_response(conn, 200)
   end
 
-  test "GET /browse/:id/", %{conn: conn} do
+  test "GET /browse/:id/:slug", %{conn: conn} do
     category = fixture(:category)
     podcast = fixture(:podcast)
 
     podcast
     |> Podcasts.update_podcast(%{categories: [category]})
 
-    conn = get conn, "/browse/#{category.id}/"
+    conn = get conn, "/browse/#{category.id}/something"
     response = html_response(conn, 200)
     assert response =~ category.name
     assert response =~ podcast.title
