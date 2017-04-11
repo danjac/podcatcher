@@ -4,6 +4,7 @@ defmodule Podcatcher.Web.PodcastsView do
   alias Podcatcher.Podcasts.Podcast
   alias Podcatcher.Podcasts.Image
 
+  import Podcatcher.Web.URLView, only: [episode_url: 2, podcast_url: 2]
   import Podcatcher.Web.Formatters
 
   def podcast_image(conn, %Podcast{image: image} = podcast, size) do
@@ -12,9 +13,4 @@ defmodule Podcatcher.Web.PodcastsView do
       _ -> Image.url {image, podcast}, size
     end
   end
-
-  def podcast_url(conn, %Podcast{} = podcast) do
-    podcasts_path(conn, :podcast, podcast.id, podcast.slug)
-  end
-
 end

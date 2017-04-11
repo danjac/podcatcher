@@ -46,6 +46,7 @@ defmodule Podcatcher.Mixfile do
      {:arc_ecto, "~> 0.6.0"},
      {:httpoison, "~> 0.11.1"},
      {:sweet_xml, "~> 0.6.5"},
+     {:slugger, "~> 0.1.0"},
      {:ecto_autoslug_field, "~> 0.2"},
      {:timex, "~> 3.0"},
      {:earmark, "~> 1.2.0"},

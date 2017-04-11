@@ -23,3 +23,7 @@ defmodule Podcatcher.Episodes.Episode do
     timestamps()
   end
 end
+
+defimpl Slugify, for: Podcatcher.Episodes.Episode do
+  def slugify(episode), do: Slugger.slugify_downcase(episode.title)
+end

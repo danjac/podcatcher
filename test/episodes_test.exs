@@ -105,4 +105,5 @@ defmodule Podcatcher.EpisodesTest do
     episode = fixture(:episode)
     assert %Ecto.Changeset{} = Episodes.change_episode(episode)
   end
+
 end

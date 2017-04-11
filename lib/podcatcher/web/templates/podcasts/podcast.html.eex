@@ -45,10 +45,10 @@
 
 <% end %>
 
-<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
+<%= render Podcatcher.Web.PaginationView, "pagination.html", conn: @conn, page: @page %>
 
 <%= for episode <- @page.entries do %>
 <%= render "episode_card.html", conn: @conn, episode: episode %>
 <% end %>
 
-<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
+<%= render Podcatcher.Web.PaginationView, "pagination.html", conn: @conn, page: @page %>

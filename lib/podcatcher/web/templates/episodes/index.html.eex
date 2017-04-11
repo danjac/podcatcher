@@ -9,7 +9,7 @@
 <div class="card">
   <div class="card-divider">
     <h5><%= link(episode.podcast.title, to: podcast_url(@conn, episode.podcast))  %></a></h5>
-    <h6><%= link(episode.title, to: episodes_path(@conn, :episode, episode)) %></h6>
+    <h6><%= link(episode.title, to: episode_url(@conn, episode)) %></h6>
   </div>
   <div class="card-section">
     <div class="row">

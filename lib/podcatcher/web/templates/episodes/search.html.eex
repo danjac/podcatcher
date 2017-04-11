@@ -14,7 +14,7 @@
   <% end %>
 </h3>
 
-<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
+<%= render Podcatcher.Web.PaginationView, "pagination.html", conn: @conn, page: @page %>
 
 <table class="stack hover unstriped">
   <tbody>
@@ -42,5 +42,5 @@
   </tbody>
 </table>
 
-<%= render Podcatcher.Web.SharedView, "pagination.html", conn: @conn, page: @page %>
+<%= render Podcatcher.Web.PaginationView, "pagination.html", conn: @conn, page: @page %>
 

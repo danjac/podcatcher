@@ -1,4 +1,4 @@
-defmodule Podcatcher.Web.SharedView do
+defmodule Podcatcher.Web.PaginationView do
   use Podcatcher.Web, :view
 
   @page_param "page"
@@ -66,6 +66,5 @@ defmodule Podcatcher.Web.SharedView do
     |> URI.encode_query
     "#{conn.request_path}?#{params}"
   end
-
 
 end

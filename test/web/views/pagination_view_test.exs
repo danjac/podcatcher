@@ -1,7 +1,7 @@
-defmodule Podcatcher.Web.SharedViewTest do
+defmodule Podcatcher.Web.PaginationViewTest do
   use Podcatcher.Web.ConnCase, async: true
 
-  import Podcatcher.Web.SharedView
+  import Podcatcher.Web.PaginationView
 
   test "has_next_page/1 should be false if no other pages" do
     page = %{page_number: 5, total_pages: 5}
