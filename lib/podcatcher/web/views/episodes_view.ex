@@ -2,7 +2,7 @@ defmodule Podcatcher.Web.EpisodesView do
   use Podcatcher.Web, :view
 
   import Podcatcher.Web.Formatters
-  import Podcatcher.Web.PodcastsView, only: [podcast_image: 3]
+  import Podcatcher.Web.PodcastsView, only: [podcast_image: 3, podcast_url: 2]
 
   def audio_ext(""), do: ""
   def audio_ext(nil), do: ""

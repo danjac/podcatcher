@@ -8,7 +8,7 @@
 <%= for episode <- @episodes do %>
 <div class="card">
   <div class="card-divider">
-    <h5><%= link(episode.podcast.title, to: podcasts_path(@conn, :podcast, episode.podcast))  %></a></h5>
+    <h5><%= link(episode.podcast.title, to: podcast_url(@conn, episode.podcast))  %></a></h5>
     <h6><%= link(episode.title, to: episodes_path(@conn, :episode, episode)) %></h6>
   </div>
   <div class="card-section">
@@ -41,31 +41,3 @@
 </div>
 
 <% end %>
-
-<!--
-<table class="stack hover unstriped">
-  <tbody>
-    <%= for episode <- @episodes do %>
-    <tr>
-      <td>
-        <div class="thumbnail">
-          <a href="#"><img alt="<%= episode.podcast.title %>" src="<%= podcast_image(@conn, episode.podcast, :small) %>" height="100" width="100"></a>
-        </div>
-      </td><td>
-
-        <h4><%= link(truncate(episode.podcast.title, 60), to: podcasts_path(@conn, :podcast, episode.podcast))  %></a></h4>
-        <h5><%= link(truncate(episode.title, 80), to: episodes_path(@conn, :episode, episode)) %></h5>
-
-        <div class="button-group">
-          <a class="button" href="<%= episode.content_url %>" title="Download and listen"><i class="fa fa-download"></i></a>
-          <button class="button" title="Bookmark this episode"><i class="fa fa-star-o"></i></button>
-          <button class="button" title="Subscribe to this podcast"><i class="fa fa-rss"></i></button>
-        </div>
-
-
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
--->

@@ -26,7 +26,7 @@ defmodule Podcatcher.Web.Router do
 
     get "/episode/:id/", EpisodesController, :episode
 
-    get "/podcast/:id/", PodcastsController, :podcast
+    get "/podcast/:id/:slug", PodcastsController, :podcast
 
   end
 

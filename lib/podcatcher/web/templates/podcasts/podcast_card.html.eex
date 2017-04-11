@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-divider">
-    <h4><%= link @podcast.title, to: podcasts_path(@conn, :podcast, @podcast) %></h4>
+    <h4><%= link @podcast.title, to: podcast_url(@conn, @podcast) %></h4>
   </div>
   <div class="card-section">
     <div class="row">

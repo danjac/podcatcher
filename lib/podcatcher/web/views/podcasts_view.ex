@@ -13,4 +13,8 @@ defmodule Podcatcher.Web.PodcastsView do
     end
   end
 
+  def podcast_url(conn, %Podcast{} = podcast) do
+    podcasts_path(conn, :podcast, podcast.id, podcast.slug)
+  end
+
 end

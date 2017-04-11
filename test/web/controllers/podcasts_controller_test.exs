@@ -7,7 +7,7 @@ defmodule Podcatcher.Web.PodcastsControllerTest do
 
     podcast = fixture(:podcast)
     episode = fixture(:episode, podcast)
-    conn = get conn, "/podcast/#{podcast.id}/"
+    conn = get conn, "/podcast/#{podcast.id}/#{podcast.slug}"
     response = html_response(conn, 200)
 
     assert response =~ podcast.title
