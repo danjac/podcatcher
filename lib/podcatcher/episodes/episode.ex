@@ -25,5 +25,10 @@ defmodule Podcatcher.Episodes.Episode do
 end
 
 defimpl Slugify, for: Podcatcher.Episodes.Episode do
-  def slugify(episode), do: Slugger.slugify_downcase(episode.title)
+  def slugify(episode) do
+    case Slugger.slugify_downcase(episode.title) do
+      "" -> Slugger.slugify(episode.guid)
+      value -> value
+    end
+  end
 end
