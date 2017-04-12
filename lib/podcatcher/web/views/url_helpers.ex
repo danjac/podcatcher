@@ -11,10 +11,6 @@ defmodule Podcatcher.Web.URLHelpers do
     categories_path(conn, :category, category.id, Slugify.slugify(category))
   end
 
-  def podcast_url(conn, %Podcast{slug: slug} = podcast) when slug == "" do
-    podcasts_path(conn, :podcast, podcast.id, podcast.id)
-  end
-
   def podcast_url(conn, podcast) do
     podcasts_path(conn, :podcast, podcast.id, podcast.slug)
   end
