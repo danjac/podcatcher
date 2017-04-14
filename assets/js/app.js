@@ -23,6 +23,8 @@ import "phoenix_html";
 //
 // import addEvents from './events';
 
+$("input[type='search']").on('click', event => $(event.currentTarget).select());
+
 $(function() {
   // addEvents();
   // foundation setup
