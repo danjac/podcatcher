@@ -102,8 +102,31 @@ defmodule Podcatcher.Accounts do
     user_changeset(user, %{})
   end
 
+  @doc """
+  Checks hashed password
+
+  ## Examples
+      iex> check_password("testpass", "some hash")
+      false
+  """
   def check_password(password, hash) do
     Comeonin.Bcrypt.checkpw(password, hash)
+  end
+
+  @doc """
+  Authenticates user name or email and password, and returns a user.
+  """
+  def authenticate(identifier, password) do
+    from(u in User, where: u.email==^identifier or u.name==^identifier) |> Repo.one |> do_authenticate(password)
+  end
+
+  defp do_authenticate(nil, _password), do: {:error, :user_not_found}
+
+  defp do_authenticate(%User{} = user, password) do
+    case check_password(password, user.password) do
+      true -> user
+      false -> {:error, :invalid_password}
+    end
   end
 
   defp encrypt_password(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do

@@ -56,4 +56,25 @@ defmodule Podcatcher.AccountsTest do
     user = fixture(:user)
     assert %Ecto.Changeset{} = Accounts.change_user(user)
   end
+
+  test "authenticate/2 returns a user with the correct name and password" do
+    user = fixture(:user)
+    assert Accounts.authenticate(user.name, "testpass") == user
+  end
+
+  test "authenticate/2 returns a user with the correct email and password" do
+    user = fixture(:user)
+    assert Accounts.authenticate(user.email, "testpass") == user
+  end
+
+  test "authenticate/2 returns :error if name or email not found" do
+    assert {:error, :user_not_found} = Accounts.authenticate("someone@gmail.com", "testpass")
+  end
+
+  test "authenticate/2 returns :error if password invalid" do
+    user = fixture(:user)
+    assert {:error, :invalid_password} = Accounts.authenticate(user.email, "testpass1")
+  end
+
 end
+
