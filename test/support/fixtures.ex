@@ -26,6 +26,7 @@ defmodule Podcatcher.Fixtures do
       name: random_string(6),
       email: "#{random_string(6)}@gmail.com",
       password: "testpass",
+      password_confirmation: "testpass",
     }
   end
 
@@ -40,7 +41,7 @@ defmodule Podcatcher.Fixtures do
   end
 
   def fixture(:user) do
-    {:ok, user} = Accounts.create_user(user_attrs)
+    {:ok, user} = Accounts.create_user(user_attrs())
     user
   end
 

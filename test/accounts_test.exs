@@ -6,18 +6,19 @@ defmodule Podcatcher.AccountsTest do
 
   import Podcatcher.Fixtures
 
-  @create_attrs %{email: "someone@gmail.com", name: "some name", password: "some password"}
-  @update_attrs %{email: "someone-else@gmail.com", name: "some updated name", password: "some updated password"}
+  @create_attrs %{email: "someone@gmail.com", name: "some name", password: "some password", password_confirmation: "some password"}
+  @update_attrs %{email: "someone-else@gmail.com", name: "some updated name", password: "some updated password", password_confirmation: "some updated password"}
   @invalid_attrs %{email: nil, name: nil, password: nil}
 
   test "list_users/1 returns all users" do
     user = fixture(:user)
-    assert Accounts.list_users() == [user]
+    [first | _] = Accounts.list_users()
+    assert first.id == user.id
   end
 
   test "get_user! returns the user with given id" do
     user = fixture(:user)
-    assert Accounts.get_user!(user.id) == user
+    assert Accounts.get_user!(user.id).id == user.id
   end
 
   test "create_user/1 with valid data creates a user" do
@@ -25,6 +26,11 @@ defmodule Podcatcher.AccountsTest do
     assert user.email == "someone@gmail.com"
     assert user.name == "some name"
     assert Accounts.check_password("some password", user.password)
+  end
+
+  test "create_user/1 with invalid confirmation returns error changeset" do
+    attrs = Map.put(@create_attrs, :password_confirmation, "something different")
+    assert {:error, %Ecto.Changeset{}} = Accounts.create_user(attrs)
   end
 
   test "create_user/1 with invalid data returns error changeset" do
@@ -43,7 +49,7 @@ defmodule Podcatcher.AccountsTest do
   test "update_user/2 with invalid data returns error changeset" do
     user = fixture(:user)
     assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-    assert user == Accounts.get_user!(user.id)
+    assert user.id == Accounts.get_user!(user.id).id
   end
 
   test "delete_user/1 deletes the user" do
@@ -59,12 +65,12 @@ defmodule Podcatcher.AccountsTest do
 
   test "authenticate/2 returns a user with the correct name and password" do
     user = fixture(:user)
-    assert Accounts.authenticate(user.name, "testpass") == user
+    assert Accounts.authenticate(user.name, "testpass").id == user.id
   end
 
   test "authenticate/2 returns a user with the correct email and password" do
     user = fixture(:user)
-    assert Accounts.authenticate(user.email, "testpass") == user
+    assert Accounts.authenticate(user.email, "testpass").id == user.id
   end
 
   test "authenticate/2 returns :error if name or email not found" do

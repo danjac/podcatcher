@@ -137,10 +137,11 @@ defmodule Podcatcher.Accounts do
 
   defp user_changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:name, :email, :password])
-    |> validate_required([:name, :email, :password])
+    |> cast(attrs, [:name, :email, :password, :password_confirmation])
+    |> validate_required([:name, :email, :password, :password_confirmation])
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 6)
+    |> validate_confirmation(:password)
     |> encrypt_password()
     |> unique_constraint(:name)
     |> unique_constraint(:email)
