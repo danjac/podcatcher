@@ -1,0 +1,10 @@
+<%= form_for @conn, auth_path(@conn, :login), [as: :login], fn f -> %>
+  <%= text_input f, :identifier, placeholder: "Username or email address" %>
+  <%= password_input f, :password, placeholder: "Password"  %>
+  <%= submit "Sign in", class: "button primary expanded" %>
+<% end %>
+<p>
+  <a href="">Not a member yet?</a><br>
+  <a href="">Forgot your password?</a>
+</p>
+

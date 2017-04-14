@@ -116,6 +116,10 @@ defmodule Podcatcher.Accounts do
   @doc """
   Authenticates user name or email and password, and returns a user.
   """
+
+  def authenticate(identifier, _password) when identifier == "" or is_nil(identifier), do: {:error, :invalid_params}
+  def authenticate(_identifier, password) when password == "" or is_nil(password), do: {:error, :invalid_params}
+
   def authenticate(identifier, password) do
     from(u in User, where: u.email==^identifier or u.name==^identifier) |> Repo.one |> do_authenticate(password)
   end

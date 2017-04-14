@@ -39,9 +39,7 @@
     </div>
     <div class="top-bar-right">
       <ul class="vertical medium-horizontal menu">
-       <li><a href="#">
-        <i class="fa fa-sign-in"></i> Login
-      </a></li>
+        <%= active_link(@conn, raw("<i class=\"fa fa-sign-in\"></i> Login"), to: auth_path(@conn, :login), wrap_tag: :li) %>
        <li><a href="#">
         <i class="fa fa-user-plus"></i> Sign up
       </a></li>
@@ -51,6 +49,16 @@
   </div>
 
   <div id="notifications" class="row column">
+    <%= if msg = get_flash(@conn, :warning) do %>
+    <div class="callout warning">
+      <p><%= msg %></p>
+    </div>
+    <% end %>
+    <%= if msg = get_flash(@conn, :success) do %>
+    <div class="callout success">
+      <p><%= msg %></p>
+    </div>
+    <% end %>
   </div>
 
   <div class="row column">
