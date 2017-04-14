@@ -1,8 +1,6 @@
 defmodule Podcatcher.Web.URLHelpers do
   import Podcatcher.Web.Router.Helpers
 
-  alias Podcatcher.Podcasts.Podcast
-
   def episode_url(conn, episode) do
     episodes_path(conn, :episode, episode.id, Slugify.slugify(episode))
   end

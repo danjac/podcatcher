@@ -102,10 +102,19 @@ defmodule Podcatcher.Accounts do
     user_changeset(user, %{})
   end
 
+  defp encrypt_password(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
+    put_change(changeset, :password, Comeonin.Bcrypt.hashpwsalt(password))
+  end
+
+  defp encrypt_password(%Ecto.Changeset{} = changeset), do: changeset
+
   defp user_changeset(%User{} = user, attrs) do
     user
     |> cast(attrs, [:name, :email, :password])
     |> validate_required([:name, :email, :password])
+    |> validate_format(:email, ~r/@/)
+    |> validate_length(:password, min: 6)
+    |> encrypt_password()
     |> unique_constraint(:name)
     |> unique_constraint(:email)
   end

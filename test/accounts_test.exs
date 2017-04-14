@@ -4,14 +4,11 @@ defmodule Podcatcher.AccountsTest do
   alias Podcatcher.Accounts
   alias Podcatcher.Accounts.User
 
-  @create_attrs %{email: "some email", name: "some name", password: "some password"}
-  @update_attrs %{email: "some updated email", name: "some updated name", password: "some updated password"}
-  @invalid_attrs %{email: nil, name: nil, password: nil}
+  import Podcatcher.Fixtures
 
-  def fixture(:user, attrs \\ @create_attrs) do
-    {:ok, user} = Accounts.create_user(attrs)
-    user
-  end
+  @create_attrs %{email: "someone@gmail.com", name: "some name", password: "some password"}
+  @update_attrs %{email: "someone-else@gmail.com", name: "some updated name", password: "some updated password"}
+  @invalid_attrs %{email: nil, name: nil, password: nil}
 
   test "list_users/1 returns all users" do
     user = fixture(:user)
@@ -25,9 +22,9 @@ defmodule Podcatcher.AccountsTest do
 
   test "create_user/1 with valid data creates a user" do
     assert {:ok, %User{} = user} = Accounts.create_user(@create_attrs)
-    assert user.email == "some email"
+    assert user.email == "someone@gmail.com"
     assert user.name == "some name"
-    assert user.password == "some password"
+    assert user.password != "some password"
   end
 
   test "create_user/1 with invalid data returns error changeset" do
@@ -38,9 +35,9 @@ defmodule Podcatcher.AccountsTest do
     user = fixture(:user)
     assert {:ok, user} = Accounts.update_user(user, @update_attrs)
     assert %User{} = user
-    assert user.email == "some updated email"
+    assert user.email == "someone-else@gmail.com"
     assert user.name == "some updated name"
-    assert user.password == "some updated password"
+    assert user.password != "some updated password"
   end
 
   test "update_user/2 with invalid data returns error changeset" do

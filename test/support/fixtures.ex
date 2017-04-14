@@ -1,8 +1,6 @@
 defmodule Podcatcher.Fixtures do
 
-  alias Podcatcher.Categories
-  alias Podcatcher.Episodes
-  alias Podcatcher.Podcasts
+  alias Podcatcher.{Accounts,Categories,Episodes,Podcasts}
 
   @episode_attrs %{author: "some author", content_length: 42, content_type: "some content_type", content_url: "some content_url", description: "some description", duration: "some duration", explicit: true, guid: :random, link: "some link", pub_date: ~N[2010-04-17 14:00:00.000000], subtitle: "some subtitle", summary: "some summary", title: "some title"}
 
@@ -23,6 +21,14 @@ defmodule Podcatcher.Fixtures do
     Map.merge(@episode_attrs, %{guid: random_string(20)})
   end
 
+  def user_attrs do
+    %{
+      name: random_string(6),
+      email: "#{random_string(6)}@gmail.com",
+      password: "testpass",
+    }
+  end
+
   def fixture(:podcast) do
     {:ok, podcast} = Podcasts.create_podcast(podcast_attrs())
     podcast
@@ -31,6 +37,11 @@ defmodule Podcatcher.Fixtures do
   def fixture(:category) do
     {:ok, category} = Categories.create_category %{name: random_string(10)}
     category
+  end
+
+  def fixture(:user) do
+    {:ok, user} = Accounts.create_user(user_attrs)
+    user
   end
 
   def fixture(:episode, podcast \\ nil) do
