@@ -40,9 +40,7 @@
     <div class="top-bar-right">
       <ul class="vertical medium-horizontal menu">
         <%= active_link(@conn, raw("<i class=\"fa fa-sign-in\"></i> Login"), to: auth_path(@conn, :login), wrap_tag: :li) %>
-       <li><a href="#">
-        <i class="fa fa-user-plus"></i> Sign up
-      </a></li>
+        <%= active_link(@conn, raw("<i class=\"fa fa-user-plus\"></i> Signup"), to: auth_path(@conn, :signup), wrap_tag: :li) %>
       </ul>
    </div>
 

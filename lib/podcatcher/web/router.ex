@@ -34,6 +34,9 @@ defmodule Podcatcher.Web.Router do
     get "/login/", AuthController, :login
     post "/login/", AuthController, :login
 
+    get "/signup/", AuthController, :signup
+    post "/signup/", AuthController, :signup
+
   end
 
   # Other scopes may use custom stacks.

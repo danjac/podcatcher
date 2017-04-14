@@ -98,7 +98,7 @@ defmodule Podcatcher.Accounts do
       %Ecto.Changeset{source: %User{}}
 
   """
-  def change_user(%User{} = user) do
+  def change_user(user \\ %User{}) do
     user_changeset(user, %{})
   end
 

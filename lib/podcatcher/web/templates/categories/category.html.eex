@@ -14,10 +14,10 @@
 </form>
 <% end %>
 
-<%= render Podcatcher.Web.PaginationView, "pagination.html", conn: @conn, page: @page %>
+<%= paginate @conn, @page, fn -> %>
 
-<%= for podcast <- @page.entries do %>
-<%= render Podcatcher.Web.PodcastsView, "podcast_card.html", conn: @conn, podcast: podcast %>
+  <%= for podcast <- @page.entries do %>
+  <%= render Podcatcher.Web.PodcastsView, "podcast_card.html", conn: @conn, podcast: podcast %>
+  <% end %>
+
 <% end %>
-
-<%= render Podcatcher.Web.PaginationView, "pagination.html", conn: @conn, page: @page %>

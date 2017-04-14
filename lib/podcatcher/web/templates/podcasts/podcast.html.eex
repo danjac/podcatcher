@@ -11,20 +11,27 @@
         </div>
       </div>
       <div class="columns small-12 medium-8">
-        <div class="button-group">
-          <%= for category <- @podcast.categories do %>
-          <%= link category.name, to: category_url(@conn, category), class: "button" %>
-          <% end %>
-        </div>
-        <div class="button-group">
-          <button class="button" title="Subscribe to this podcast"><i class="fa fa-rss"></i> Subscribe</button>
-        </div>
         <p>
+          <%= for category <- @podcast.categories do %>
+          <%= link category.name, to: category_url(@conn, category), class: "label" %>
+          <% end %>
+        </p>
+
+        <div class="expanded button-group">
+          <button class="button" title="Subscribe to this podcast"><i class="fa fa-pencil-square-o"></i> Subscribe</button>
+        </div>
+
+        <ul class="menu simple">
+          <li><a href="<%= @podcast.website %>">Website</i></a></li>
+          <li><a href="<%= @podcast.rss_feed %>">RSS feed</a></li>
+        </ul>
+
+        <p>
+
         <%= if @podcast.explicit do %>
         <span class="label alert"><i class="fa fa-warning"></i> Explicit</span><br>
         <% end %>
-        <a href="<%= @podcast.website %>"><i class="fa fa-globe"></i> Website</a>&nbsp;
-        <a href="<%= @podcast.rss_feed %>"><i class="fa fa-rss"></i> RSS</a><br>
+
         <strong>Last updated: <%= format_date(@podcast.last_build_date) %></strong><br>
         <strong>Episodes: <%= @page.total_entries %></strong>
         </p>

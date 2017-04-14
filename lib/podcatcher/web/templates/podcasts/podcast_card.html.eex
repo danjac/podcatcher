@@ -11,7 +11,7 @@
       </div>
       <div class="small-6 large-10 columns">
          <div class="button-group">
-          <button class="button" title="Subscribe to this podcast"><i class="fa fa-rss"></i> Subscribe</button>
+          <button class="button" title="Subscribe to this podcast"><i class="fa fa-pencil-square-o"></i> Subscribe</button>
         </div>
         <%= if @podcast.last_build_date do %>
         <strong>Last updated: <%= format_date(@podcast.last_build_date) %></strong>

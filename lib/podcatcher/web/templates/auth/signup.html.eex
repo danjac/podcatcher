@@ -1,0 +1,17 @@
+<%= form_for @changeset, auth_path(@conn, :signup), fn f -> %>
+
+  <%= text_input f, :name, placeholder: "Username" %>
+  <%= error_tag f, :name %>
+
+  <%= email_input f, :email, placeholder: "Email address" %>
+  <%= error_tag f, :email %>
+
+  <%= password_input f, :password, placeholder: "Password"  %>
+  <%= error_tag f, :password %>
+
+  <%= password_input f, :password_confirmation, placeholder: "Confirm your password"  %>
+  <%= error_tag f, :password_confirmation %>
+
+  <%= submit "Sign up", class: "button primary expanded" %>
+<% end %>
+
