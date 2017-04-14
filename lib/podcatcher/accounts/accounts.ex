@@ -102,6 +102,10 @@ defmodule Podcatcher.Accounts do
     user_changeset(user, %{})
   end
 
+  def check_password(password, hash) do
+    Comeonin.Bcrypt.checkpw(password, hash)
+  end
+
   defp encrypt_password(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
     put_change(changeset, :password, Comeonin.Bcrypt.hashpwsalt(password))
   end

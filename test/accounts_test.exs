@@ -24,7 +24,7 @@ defmodule Podcatcher.AccountsTest do
     assert {:ok, %User{} = user} = Accounts.create_user(@create_attrs)
     assert user.email == "someone@gmail.com"
     assert user.name == "some name"
-    assert user.password != "some password"
+    assert Accounts.check_password("some password", user.password)
   end
 
   test "create_user/1 with invalid data returns error changeset" do
@@ -37,7 +37,7 @@ defmodule Podcatcher.AccountsTest do
     assert %User{} = user
     assert user.email == "someone-else@gmail.com"
     assert user.name == "some updated name"
-    assert user.password != "some updated password"
+    assert Accounts.check_password("some updated password", user.password)
   end
 
   test "update_user/2 with invalid data returns error changeset" do
