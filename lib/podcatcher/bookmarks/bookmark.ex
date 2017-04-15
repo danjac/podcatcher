@@ -1,9 +1,13 @@
 defmodule Podcatcher.Bookmarks.Bookmark do
+
   use Ecto.Schema
 
+  alias Podcatcher.Episodes.Episode
+  alias Podcatcher.Accounts.User
+
   schema "bookmarks" do
-    field :user_id, :id
-    field :episode_id, :id
+    belongs_to :episode, Episode
+    belongs_to :user, User
 
     timestamps()
   end

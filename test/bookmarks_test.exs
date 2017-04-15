@@ -2,55 +2,48 @@ defmodule Podcatcher.BookmarksTest do
   use Podcatcher.DataCase
 
   alias Podcatcher.Bookmarks
-  alias Podcatcher.Bookmarks.Bookmark
 
-  @create_attrs %{}
-  @update_attrs %{}
-  @invalid_attrs %{}
+  import Podcatcher.Fixtures
 
-  def fixture(:bookmark, attrs \\ @create_attrs) do
-    {:ok, bookmark} = Bookmarks.create_bookmark(attrs)
-    bookmark
+  test "bookmarks_for_user/1 returns bookmarks for a user" do
+    user = fixture(:user)
+    episode = fixture(:episode)
+
+    Bookmarks.create_bookmark(user, episode)
+
+    page = Bookmarks.bookmarks_for_user(user)
+    [bookmark | _] = page.entries
+    assert bookmark.user_id == user.id
+    assert bookmark.episode.id == episode.id
+
   end
 
-  test "list_bookmarks/1 returns all bookmarks" do
-    bookmark = fixture(:bookmark)
-    assert Bookmarks.list_bookmarks() == [bookmark]
+  test "create_bookmark/2 creates a bookmark" do
+    user = fixture(:user)
+    episode = fixture(:episode)
+
+    {:ok, bookmark} = Bookmarks.create_bookmark(user, episode)
+
+    assert bookmark.user_id == user.id
+    assert bookmark.episode_id == episode.id
+
   end
 
-  test "get_bookmark! returns the bookmark with given id" do
-    bookmark = fixture(:bookmark)
-    assert Bookmarks.get_bookmark!(bookmark.id) == bookmark
+  test "delete_bookmark/2 deletes user bookmark" do
+
+    user = fixture(:user)
+    episode = fixture(:episode)
+
+    Bookmarks.create_bookmark(user, episode)
+
+    page = Bookmarks.bookmarks_for_user(user)
+    assert page.total_entries == 1
+
+    Bookmarks.delete_bookmark(user, episode)
+
+    page = Bookmarks.bookmarks_for_user(user)
+    assert page.total_entries == 0
+
   end
 
-  test "create_bookmark/1 with valid data creates a bookmark" do
-    assert {:ok, %Bookmark{} = bookmark} = Bookmarks.create_bookmark(@create_attrs)
-  end
-
-  test "create_bookmark/1 with invalid data returns error changeset" do
-    assert {:error, %Ecto.Changeset{}} = Bookmarks.create_bookmark(@invalid_attrs)
-  end
-
-  test "update_bookmark/2 with valid data updates the bookmark" do
-    bookmark = fixture(:bookmark)
-    assert {:ok, bookmark} = Bookmarks.update_bookmark(bookmark, @update_attrs)
-    assert %Bookmark{} = bookmark
-  end
-
-  test "update_bookmark/2 with invalid data returns error changeset" do
-    bookmark = fixture(:bookmark)
-    assert {:error, %Ecto.Changeset{}} = Bookmarks.update_bookmark(bookmark, @invalid_attrs)
-    assert bookmark == Bookmarks.get_bookmark!(bookmark.id)
-  end
-
-  test "delete_bookmark/1 deletes the bookmark" do
-    bookmark = fixture(:bookmark)
-    assert {:ok, %Bookmark{}} = Bookmarks.delete_bookmark(bookmark)
-    assert_raise Ecto.NoResultsError, fn -> Bookmarks.get_bookmark!(bookmark.id) end
-  end
-
-  test "change_bookmark/1 returns a bookmark changeset" do
-    bookmark = fixture(:bookmark)
-    assert %Ecto.Changeset{} = Bookmarks.change_bookmark(bookmark)
-  end
 end
