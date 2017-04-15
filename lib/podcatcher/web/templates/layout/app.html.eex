@@ -53,8 +53,8 @@
         </li>
         <%= active_link(@conn, raw("<i class=\"fa fa-sign-out\"></i> Sign out"), to: auth_path(@conn, :logout), wrap_tag: :li) %>
         <% else %>
-        <%= active_link(@conn, raw("<i class=\"fa fa-sign-in\"></i> Login"), to: auth_path(@conn, :login), wrap_tag: :li) %>
-        <%= active_link(@conn, raw("<i class=\"fa fa-user-plus\"></i> Signup"), to: auth_path(@conn, :signup), wrap_tag: :li) %>
+        <%= active_link(@conn, raw("<i class=\"fa fa-sign-in\"></i> Login"), to: auth_path(@conn, :login, next: @conn.request_path), wrap_tag: :li, active: ~r/\/login*/) %>
+        <%= active_link(@conn, raw("<i class=\"fa fa-user-plus\"></i> Signup"), to: auth_path(@conn, :signup,  next: @conn.request_path), wrap_tag: :li, active: ~r/\/signup*/) %>
         <% end %>
       </ul>
    </div>
