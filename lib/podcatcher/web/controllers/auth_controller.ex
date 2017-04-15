@@ -37,8 +37,15 @@ defmodule Podcatcher.Web.AuthController do
     render conn, "signup.html", changeset: changeset
   end
 
+  def logout(conn, _params) do
+    conn
+    |> configure_session(drop: true)
+    |> redirect(to: podcasts_path(conn, :index))
+  end
+
 
   defp redirect_after_login(conn) do
+    # TBD: check session for "next" and redirect there
     conn |> redirect(to: podcasts_path(conn, :index))
   end
 end
