@@ -45,7 +45,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
     conn = post conn, "/login/", params
     assert conn.status == 302
     assert get_session(conn, :user_id) == user.id
-    assert Map.new(conn.resp_headers)["location"] == "/discover"
+    assert get_resp_header(conn, "location") == ["/discover"]
 
   end
 
@@ -66,7 +66,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     assert conn.status == 302
     assert get_session(conn, :user_id) == user.id
-    assert Map.new(conn.resp_headers)["location"] == "/browse"
+    assert get_resp_header(conn, "location") == ["/browse"]
 
   end
 
@@ -88,7 +88,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     assert conn.status == 302
     assert get_session(conn, :user_id) == user.id
-    assert Map.new(conn.resp_headers)["location"] == "/discover"
+    assert get_resp_header(conn, "location") == ["/discover"]
 
   end
 
@@ -122,7 +122,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
     user = Repo.one!(User)
 
     assert get_session(conn, :user_id) == user.id
-    assert Map.new(conn.resp_headers)["location"] == "/discover"
+    assert get_resp_header(conn, "location") == ["/discover"]
 
   end
 
@@ -145,7 +145,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
     user = Repo.one!(User)
 
     assert get_session(conn, :user_id) == user.id
-    assert Map.new(conn.resp_headers)["location"] == "/browse"
+    assert get_resp_header(conn, "location") == ["/browse"]
 
   end
 
@@ -153,7 +153,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     conn = get conn, "/logout/"
     assert conn.status == 302
-    assert Map.new(conn.resp_headers)["location"] == "/discover"
+    assert get_resp_header(conn, "location") == ["/discover"]
 
   end
 

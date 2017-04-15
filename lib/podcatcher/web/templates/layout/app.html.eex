@@ -36,9 +36,7 @@
         <li>
           <a href="#"><i class="fa fa-rss"></i> My podcasts</a>
         </li>
-        <li>
-          <a href="#"><i class="fa fa-bookmark"></i> Bookmarks</a>
-        </li>
+        <%= active_link(@conn, raw("<i class=\"fa fa-bookmark\"></i> Bookmarks"), to: bookmarks_path(@conn, :index), wrap_tag: :li) %>
         <% end %>
         <%= active_link(@conn, raw("<i class=\"fa fa-flash\"></i> New releases"), to: episodes_path(@conn, :index), wrap_tag: :li) %>
         <%= active_link(@conn, raw("<i class=\"fa fa-search\"></i> Discover"), to: podcasts_path(@conn, :index), wrap_tag: :li) %>
@@ -67,8 +65,13 @@
       <p><%= msg %></p>
     </div>
     <% end %>
-     <%= if msg = get_flash(@conn, :warning) do %>
+    <%= if msg = get_flash(@conn, :warning) do %>
     <div class="callout warning">
+      <p><%= msg %></p>
+    </div>
+    <% end %>
+    <%= if msg = get_flash(@conn, :error) do %>
+    <div class="callout alert">
       <p><%= msg %></p>
     </div>
     <% end %>

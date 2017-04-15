@@ -7,7 +7,7 @@ defmodule Podcatcher.Web.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug Podcatcher.Plugs.Authenticate
+    plug Podcatcher.Web.Plugs.Authenticate
   end
 
   pipeline :api do
@@ -31,6 +31,8 @@ defmodule Podcatcher.Web.Router do
 
     get "/podcast/:id/:slug", PodcastsController, :podcast
     get "/podcast/:id/", PodcastsController, :podcast
+
+    get "/bookmarks/", BookmarksController, :index
 
     get "/login/", AuthController, :login
     post "/login/", AuthController, :login

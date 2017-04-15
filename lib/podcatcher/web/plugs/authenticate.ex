@@ -1,4 +1,4 @@
-defmodule Podcatcher.Plugs.Authenticate do
+defmodule Podcatcher.Web.Plugs.Authenticate do
   import Plug.Conn
 
   alias Podcatcher.Accounts
@@ -11,7 +11,9 @@ defmodule Podcatcher.Plugs.Authenticate do
 
     cond do
       user = user_id && Accounts.get_user!(user_id) ->
-        assign(conn, :user, user)
+        conn
+        |> assign(:user, user)
+        |> assign(:bookmarks, Enum.map(user.bookmarks, fn(bookmark) -> bookmark.episode_id end))
       true -> assign(conn, :user, nil)
     end
   end
