@@ -149,5 +149,13 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
   end
 
+  test "GET /logout/", %{conn: conn} do
+
+    conn = get conn, "/logout/"
+    assert conn.status == 302
+    assert Map.new(conn.resp_headers)["location"] == "/discover"
+
+  end
+
 end
 
