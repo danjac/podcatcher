@@ -7,12 +7,9 @@ defmodule Podcatcher.Podcasts do
 
   import Ecto.{Query, Changeset}, warn: false
 
-  alias Podcatcher.Repo
-  alias Podcatcher.Episodes
-  alias Podcatcher.Categories
-  alias Podcatcher.Podcasts.Podcast
-  alias Podcatcher.Podcasts.Slug
-  alias Podcatcher.Podcasts.FeedParser
+  alias Podcatcher.{Repo, Episodes, Categories}
+  alias Podcatcher.Podcasts.{Podcast, Slug, FeedParser}
+  alias Podcatcher.Categories.Category
 
   @doc """
   Returns the list of podcasts.
@@ -85,7 +82,10 @@ defmodule Podcatcher.Podcasts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_podcast!(id), do: Repo.get!(Podcast, id) |> Repo.preload(:categories)
+  def get_podcast!(id) do
+    Repo.get!(Podcast, id)
+    |> Repo.preload(categories: (from c in Category, order_by: :name))
+  end
 
   @doc """
   Creates a podcast.

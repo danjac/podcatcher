@@ -7,6 +7,7 @@ defmodule Podcatcher.Episodes do
 
   alias Podcatcher.Repo
 
+  alias Podcatcher.Categories.Category
   alias Podcatcher.Episodes.Episode
 
   @doc """
@@ -78,7 +79,7 @@ defmodule Podcatcher.Episodes do
   """
   def get_episode!(id) do
     Repo.get!(Episode, id)
-    |> Repo.preload([:podcast, [podcast: :categories]])
+    |> Repo.preload([:podcast, [podcast: [categories: (from c in Category, order_by: :name)]]])
   end
 
   @doc """
