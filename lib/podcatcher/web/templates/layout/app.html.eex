@@ -24,22 +24,33 @@
 </head>
 
 <body class="no-js">
-  <div class="title-bar" data-responsive-toggle="top-bar" data-hide-for="medium">
+  <div class="title-bar" data-responsive-toggle="top-bar" data-hide-for="large">
     <button class="menu-icon" type="button" data-toggle></button>
     <div class="title-bar-title">Menu</div>
   </div>
   <div class="top-bar" id="top-bar">
     <div class="top-bar-left">
-      <ul class="vertical medium-horizontal menu">
+      <ul class="vertical large-horizontal menu">
         <li class="menu-text"><i class="fa fa-headphones"></i> Podbaby</li>
-        <%= active_link(@conn, raw("<i class=\"fa fa-search\"></i> Discover"), to: podcasts_path(@conn, :index), wrap_tag: :li) %>
+        <%= if assigns[:user] do %>
+        <li>
+          <a href="#"><i class="fa fa-rss"></i> My podcasts</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-bookmark"></i> Bookmarks</a>
+        </li>
+        <% end %>
         <%= active_link(@conn, raw("<i class=\"fa fa-flash\"></i> New releases"), to: episodes_path(@conn, :index), wrap_tag: :li) %>
+        <%= active_link(@conn, raw("<i class=\"fa fa-search\"></i> Discover"), to: podcasts_path(@conn, :index), wrap_tag: :li) %>
         <%= active_link(@conn, raw("<i class=\"fa fa-folder-open\"></i> Browse"), to: categories_path(@conn, :index), wrap_tag: :li) %>
       </ul>
     </div>
     <div class="top-bar-right">
-      <ul class="vertical medium-horizontal menu">
+      <ul class="vertical large-horizontal menu">
         <%= if assigns[:user] do %>
+        <li>
+          <a href="#"><i class="fa fa-cog"></i> Settings</a>
+        </li>
         <%= active_link(@conn, raw("<i class=\"fa fa-sign-out\"></i> Sign out"), to: auth_path(@conn, :logout), wrap_tag: :li) %>
         <% else %>
         <%= active_link(@conn, raw("<i class=\"fa fa-sign-in\"></i> Login"), to: auth_path(@conn, :login), wrap_tag: :li) %>
