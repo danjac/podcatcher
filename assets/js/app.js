@@ -21,12 +21,10 @@ import "phoenix_html";
 // import socket from "./socket"
 //
 //
-// import addEvents from './events';
-
-$("input[type='search']").on('click', event => $(event.currentTarget).select());
+import initEvents from './events';
 
 $(function() {
-  // addEvents();
+  initEvents();
   // foundation setup
   $(document).foundation();
 

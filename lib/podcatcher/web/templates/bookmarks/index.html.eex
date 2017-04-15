@@ -1,1 +1,15 @@
-MUH BOOKMARKS GO HERE
+<%= if @page.total_entries == 0 do %>
+<div class="callout">
+  <h3>You don't have any bookmarks yet.</h3>
+  <p>
+  Click on the bookmark icon <i class="fa fa-bookmark-o"></i> under any podcast
+  episode to save it to your bookmarks.
+  </p>
+</div>
+<% end %>
+
+<%= paginate @conn, @page, fn -> %>
+  <%= for bookmark <- @page.entries do %>
+  <%= Podcatcher.Web.EpisodesView.render "episode_card.html", conn: @conn, episode: bookmark.episode %>
+  <% end %>
+<% end %>

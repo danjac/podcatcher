@@ -12,6 +12,10 @@ defmodule Podcatcher.Web.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug Podcatcher.Web.Plugs.Authenticate
   end
 
   scope "/", Podcatcher.Web do
@@ -45,7 +49,11 @@ defmodule Podcatcher.Web.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", Podcatcher.Web do
-  #   pipe_through :api
-  # end
+  scope "/api", Podcatcher.Web do
+     pipe_through :api
+
+     post "/bookmarks/:id/", BookmarksController, :add_bookmark
+     delete "/bookmarks/:id/", BookmarksController, :delete_bookmark
+
+  end
 end

@@ -14,7 +14,10 @@ defmodule Podcatcher.Web.Plugs.Authenticate do
         conn
         |> assign(:user, user)
         |> assign(:bookmarks, Enum.map(user.bookmarks, fn(bookmark) -> bookmark.episode_id end))
-      true -> assign(conn, :user, nil)
+      true ->
+        conn
+        |> assign(:user, nil)
+        |> assign(:bookmarks, [])
     end
   end
 
