@@ -23,6 +23,21 @@ defmodule Podcatcher.Web.ConnCase do
 
       # The default endpoint for testing
       @endpoint Podcatcher.Web.Endpoint
+
+      def session_conn do
+        opts =
+          Plug.Session.init(
+            store: :cookie,
+            key: "testing",
+            encryption_salt: "encrypted cookie salt",
+            signing_salt: "signing salt",
+            log: false,
+            encrypt: false
+          )
+        build_conn()
+        |> Plug.Session.call(opts)
+        |> fetch_session
+      end
     end
   end
 
