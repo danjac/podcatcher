@@ -70,6 +70,29 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
   end
 
+  test "POST /login/ if next url in session is dangerous" do
+
+    user = fixture(:user)
+
+    params = %{
+      "login" => %{
+        "identifier" => user.email,
+        "password" => "testpass",
+      }
+    }
+
+    conn =
+      session_conn()
+      |> put_session(:next, "http://my-scammy-site.com")
+      |> post("/login/", params)
+
+    assert conn.status == 302
+    assert get_session(conn, :user_id) == user.id
+    assert Map.new(conn.resp_headers)["location"] == "/discover"
+
+  end
+
+
   test "GET /signup/", %{conn: conn} do
     conn = get conn, "/signup/"
     refute get_session(conn, :next) == "/latest"
@@ -100,6 +123,29 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     assert get_session(conn, :user_id) == user.id
     assert Map.new(conn.resp_headers)["location"] == "/discover"
+
+  end
+
+  test "POST /signup/ if next url in session" do
+
+    params = %{
+      "user" => %{
+        "name" => "tester",
+        "email" => "tester@gmail.com",
+        "password" => "testpass",
+        "password_confirmation" => "testpass",
+      }
+    }
+
+    conn =
+      session_conn()
+      |> put_session(:next, "/browse")
+      |> post("/signup/", params)
+
+    user = Repo.one!(User)
+
+    assert get_session(conn, :user_id) == user.id
+    assert Map.new(conn.resp_headers)["location"] == "/browse"
 
   end
 
