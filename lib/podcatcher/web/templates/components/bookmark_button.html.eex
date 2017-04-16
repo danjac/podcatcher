@@ -21,7 +21,7 @@
 <% else %>
 
   <a class="button"
-     href="<%= auth_path(@conn, :login, next: @conn.request_path) %>"
+     href="<%= login_url(@conn) %>"
      title="Bookmark this episode">
     <i class="fa fa-bookmark-o"></i>
   </a>

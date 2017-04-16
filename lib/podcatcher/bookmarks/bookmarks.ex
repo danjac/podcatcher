@@ -19,7 +19,27 @@ defmodule Podcatcher.Bookmarks do
     |> Repo.paginate(params)
   end
 
- @doc """
+  @doc """
+  Search bookmarked episodes for a user
+  """
+
+  def search_bookmarks_for_user(user, term, params \\ []) do
+    from(
+      b in Bookmark,
+      join: e in assoc(b, :episode),
+      join: p in assoc(e, :podcast),
+      where: b.user_id == ^user.id,
+      where: (
+          fragment("? @@ plainto_tsquery(?)", p.tsv, ^term) or
+          fragment("? @@ plainto_tsquery(?)", e.tsv, ^term)
+      ),
+      order_by: [desc: b.inserted_at],
+      preload: [[:episode, [episode: :podcast]]]
+    )
+    |> Repo.paginate(params)
+  end
+
+  @doc """
   Creates a bookmark.
   """
   def create_bookmark(user, episode) do

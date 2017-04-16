@@ -16,6 +16,10 @@ defmodule Podcatcher.Web.URLHelpers do
     podcasts_path(conn, :podcast, podcast.id, podcast.slug)
   end
 
+  def login_url(conn) do
+    auth_path(conn, :login, next: conn.request_path)
+  end
+
   def paginate(%Plug.Conn{} = conn, page, fun) do
     pagination_html = PaginationView.render("pagination.html", conn: conn, page: page)
     html_escape [pagination_html, fun.(), pagination_html]

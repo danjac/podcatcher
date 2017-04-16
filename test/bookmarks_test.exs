@@ -5,6 +5,29 @@ defmodule Podcatcher.BookmarksTest do
 
   import Podcatcher.Fixtures
 
+  test "search_bookmarks_for_user/1 returns bookmarks for a user" do
+
+    user = fixture(:user)
+    episode = fixture(:episode)
+
+    Bookmarks.create_bookmark(user, episode)
+
+    page = Bookmarks.search_bookmarks_for_user(user, episode.title)
+    [bookmark | _] = page.entries
+    assert bookmark.user_id == user.id
+    assert bookmark.episode.id == episode.id
+
+    page = Bookmarks.search_bookmarks_for_user(user, episode.podcast.title)
+    [bookmark | _] = page.entries
+    assert bookmark.user_id == user.id
+    assert bookmark.episode.id == episode.id
+
+    page = Bookmarks.search_bookmarks_for_user(user, "something else")
+    assert page.total_entries == 0
+
+  end
+
+
   test "bookmarks_for_user/1 returns bookmarks for a user" do
     user = fixture(:user)
     episode = fixture(:episode)
