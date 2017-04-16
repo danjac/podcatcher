@@ -5,8 +5,8 @@ defmodule Podcatcher.Subscriptions.Subscription do
   alias Podcatcher.Podcasts.Podcast
 
   schema "subscriptions" do
-    belongs_to :user_id, User
-    belongs_to :podcast_id, Podcast
+    belongs_to :user, User
+    belongs_to :podcast, Podcast
 
     timestamps()
   end

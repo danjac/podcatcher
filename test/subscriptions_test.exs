@@ -2,55 +2,42 @@ defmodule Podcatcher.SubscriptionsTest do
   use Podcatcher.DataCase
 
   alias Podcatcher.Subscriptions
-  alias Podcatcher.Subscriptions.Subscription
 
-  @create_attrs %{}
-  @update_attrs %{}
-  @invalid_attrs %{}
+  import Podcatcher.Fixtures
 
-  def fixture(:subscription, attrs \\ @create_attrs) do
-    {:ok, subscription} = Subscriptions.create_subscription(attrs)
-    subscription
+  test "subscriptions_for_user/1 gets subscriptions" do
+
+    user = fixture(:user)
+    podcast = fixture(:podcast)
+
+    {:ok, sub} = Subscriptions.create_subscription(user, podcast)
+    page = Subscriptions.subscriptions_for_user(user)
+    [first | _] = page.entries
+    assert first.id == sub.id
+
   end
 
-  test "list_subscriptions/1 returns all subscriptions" do
-    subscription = fixture(:subscription)
-    assert Subscriptions.list_subscriptions() == [subscription]
+  test "create_subscription/2 inserts new subscription" do
+
+    user = fixture(:user)
+    podcast = fixture(:podcast)
+
+    {:ok, sub} = Subscriptions.create_subscription(user, podcast)
+    assert sub.user_id == user.id
+    assert sub.podcast_id == podcast.id
+
   end
 
-  test "get_subscription! returns the subscription with given id" do
-    subscription = fixture(:subscription)
-    assert Subscriptions.get_subscription!(subscription.id) == subscription
+  test "delete_subscription/2 deletes subscription" do
+    user = fixture(:user)
+    podcast = fixture(:podcast)
+
+    Subscriptions.create_subscription(user, podcast)
+    Subscriptions.delete_subscription(user, podcast)
+
+    page = Subscriptions.subscriptions_for_user(user)
+    assert page.total_entries == 0
+
   end
 
-  test "create_subscription/1 with valid data creates a subscription" do
-    assert {:ok, %Subscription{} = subscription} = Subscriptions.create_subscription(@create_attrs)
-  end
-
-  test "create_subscription/1 with invalid data returns error changeset" do
-    assert {:error, %Ecto.Changeset{}} = Subscriptions.create_subscription(@invalid_attrs)
-  end
-
-  test "update_subscription/2 with valid data updates the subscription" do
-    subscription = fixture(:subscription)
-    assert {:ok, subscription} = Subscriptions.update_subscription(subscription, @update_attrs)
-    assert %Subscription{} = subscription
-  end
-
-  test "update_subscription/2 with invalid data returns error changeset" do
-    subscription = fixture(:subscription)
-    assert {:error, %Ecto.Changeset{}} = Subscriptions.update_subscription(subscription, @invalid_attrs)
-    assert subscription == Subscriptions.get_subscription!(subscription.id)
-  end
-
-  test "delete_subscription/1 deletes the subscription" do
-    subscription = fixture(:subscription)
-    assert {:ok, %Subscription{}} = Subscriptions.delete_subscription(subscription)
-    assert_raise Ecto.NoResultsError, fn -> Subscriptions.get_subscription!(subscription.id) end
-  end
-
-  test "change_subscription/1 returns a subscription changeset" do
-    subscription = fixture(:subscription)
-    assert %Ecto.Changeset{} = Subscriptions.change_subscription(subscription)
-  end
 end
