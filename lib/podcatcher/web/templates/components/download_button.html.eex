@@ -1,0 +1,1 @@
+<a class="button" title="Right-click and 'Save as...' to download and listen to this episode" href="<%= @episode.content_url %>"><i class="fa fa-download"></i></a>

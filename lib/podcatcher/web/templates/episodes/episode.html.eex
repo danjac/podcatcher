@@ -22,9 +22,9 @@
         </p>
 
         <div class="stacked-for-small button-group">
-          <a class="button" title="Download and listen" href="<%= @episode.content_url %>"><i class="fa fa-download"></i> Download</a>
+          <%= Podcatcher.Web.ComponentsView.render "download_button.html", conn: @conn, episode: @episode %>
           <%= Podcatcher.Web.ComponentsView.render "bookmark_button.html", conn: @conn, episode: @episode %>
-          <button class="button" title="Subscribe to this podcast" data-subscribe href="/api/subscriptions/1/"><i class="fa fa-pencil-square-o"></i> Subscribe</button>
+          <%= Podcatcher.Web.ComponentsView.render "subscribe_button.html", conn: @conn, podcast: @episode.podcast %>
           </div>
 
         <ul class="menu simple">

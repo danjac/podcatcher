@@ -18,7 +18,7 @@
         </p>
 
         <div class="expanded button-group">
-          <button class="button" title="Subscribe to this podcast"><i class="fa fa-pencil-square-o"></i> Subscribe</button>
+          <%= Podcatcher.Web.ComponentsView.render "subscribe_button.html", conn: @conn, podcast: @podcast %>
         </div>
 
         <ul class="menu simple">

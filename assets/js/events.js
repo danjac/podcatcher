@@ -34,7 +34,8 @@ const initEvents = () => {
     $this
       .find('i.fa.fa-minus')
       .removeClass('fa-minus')
-      .addClass('fa-plus');
+      .addClass('fa-plus')
+      .attr('title', 'Subscribe to this podcast');
     info('You have stopped following this podcast');
   });
 

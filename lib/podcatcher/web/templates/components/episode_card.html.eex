@@ -17,11 +17,10 @@
         <% end %>
         <div class="button-group">
 
-          <a class="button" title="Download and listen" href="<%= @episode.content_url %>"><i class="fa fa-download"></i></a>
-
+          <%= render "download_button.html", conn: @conn, episode: @episode %>
           <%= render "bookmark_button.html", conn: @conn, episode: @episode %>
+          <%= render "subscribe_button.html", conn: @conn, podcast: @episode.podcast %>
 
-            <button class="button" title="Subscribe to this podcast" data-subscribe href="/api/subscriptions/1/"><i class="fa fa-pencil-square-o"></i></button>
         </div>
       </div>
     </div>
