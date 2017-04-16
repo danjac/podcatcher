@@ -1,0 +1,31 @@
+<%= if @conn.assigns[:user] do %>
+
+  <%= if subscribed?(@conn, @podcast) do %>
+  <button class="button"
+          title="Unsubscribe from this podcast"
+          data-unsubscribe
+          data-subscribe-url="<%= subscriptions_path(@conn, :subscribe, @podcast) %>"
+          data-unsubscribe-url="<%= subscriptions_path(@conn, :unsubscribe, @podcast) %>">
+    <i class="fa fa-minus"></i>
+  </button>
+  <% else %>
+  <button class="button"
+          title="Subscribe to this podcast"
+          data-subscribe
+          data-subscribe-url="<%= subscriptions_path(@conn, :subscribe, @podcast) %>"
+          data-unsubscribe-url="<%= subscriptions_path(@conn, :unsubscribe, @podcast) %>">
+    <i class="fa fa-plus"></i>
+  </button>
+  <% end %>
+
+<% else %>
+
+  <a class="button"
+     href="<%= login_url(@conn) %>"
+     title="subscribe to this podcast">
+    <i class="fa fa-plus"></i>
+  </a>
+
+<% end %>
+
+

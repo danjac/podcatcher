@@ -1,8 +1,11 @@
-import { info, success } from './notifications';
+import {
+  info,
+  success
+} from './notifications';
 
 const initEvents = () => {
 
-  var $document = $(document);
+  const $document = $(document);
 
   // add CSRF token to all AJAX requests
 
@@ -16,11 +19,47 @@ const initEvents = () => {
 
   $("input[type='search']").on('click', event => $(event.currentTarget).select());
 
+  // Subscriptions
+
+  $document.on('click', '[data-unsubscribe]', event => {
+    const $this = $(event.currentTarget);
+    const url = $this.attr('data-unsubscribe-url');
+    $.ajax(url, {
+      method: 'DELETE'
+    });
+    $this
+      .removeAttr('data-unsubscribe')
+      .attr('data-subscribe', true)
+      .attr('title', 'Subscribe to this podcast');
+    $this
+      .find('i.fa.fa-minus')
+      .removeClass('fa-minus')
+      .addClass('fa-plus');
+    info('You have stopped following this podcast');
+  });
+
+  $document.on('click', '[data-subscribe]', event => {
+    const $this = $(event.currentTarget);
+    const url = $this.attr('data-subscribe-url');
+    $.ajax(url, {
+      method: 'POST'
+    });
+    $this
+      .removeAttr('data-subscribe')
+      .attr('data-unsubscribe', true)
+      .attr('title', 'Unsubscribe from this podcast');
+    $this
+      .find('i.fa.fa-plus')
+      .removeClass('fa-plus')
+      .addClass('fa-minus');
+    success('You are now following this podcast');
+  });
+
   // Bookmarks
 
   $document.on('click', '[data-remove-bookmark]', event => {
-    var $this = $(event.currentTarget);
-    var url = $this.attr('data-remove-bookmark-url');
+    const $this = $(event.currentTarget);
+    const url = $this.attr('data-remove-bookmark-url');
     $.ajax(url, {
       method: 'DELETE'
     });
@@ -36,8 +75,8 @@ const initEvents = () => {
   });
 
   $document.on('click', '[data-add-bookmark]', event => {
-    var $this = $(event.currentTarget);
-    var url = $this.attr('data-add-bookmark-url');
+    const $this = $(event.currentTarget);
+    const url = $this.attr('data-add-bookmark-url');
     $.ajax(url, {
       method: 'POST'
     });

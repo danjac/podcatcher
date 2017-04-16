@@ -38,6 +38,8 @@ defmodule Podcatcher.Web.Router do
 
     get "/bookmarks/", BookmarksController, :index
 
+    get "/subscriptions/", SubscriptionsController, :index
+
     get "/login/", AuthController, :login
     post "/login/", AuthController, :login
 
@@ -54,6 +56,9 @@ defmodule Podcatcher.Web.Router do
 
      post "/bookmarks/:id/", BookmarksController, :add_bookmark
      delete "/bookmarks/:id/", BookmarksController, :delete_bookmark
+
+     post "/subscriptions/:id/", SubscriptionsController, :subscribe
+     delete "/subscriptions/:id/", SubscriptionsController, :unsubscribe
 
   end
 end

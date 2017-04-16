@@ -1,0 +1,25 @@
+<%= if @page.total_entries == 0 and !assigns[:search_term] do %>
+<div class="callout">
+  <h3>You are not following any podcasts yet</h3>
+  <p>
+  Click on the subscribe icon <i class="fa fa-plus"></i> under any podcast to subscribe and follow new episodes.
+  </p>
+</div>
+<% end %>
+
+<%= if @page.total_pages > 1 or assigns[:search_term] do %>
+
+<form method="GET" action="<%= subscriptions_path(@conn, :index) %>">
+  <div class="input-group">
+    <span class="input-group-label"><i class="fa fa-search"></i></span>
+    <input class="input-group-field" type="search" name="q" placeholder="Search your podcasts" value="<%= assigns[:search_term] %>">
+  </div>
+</form>
+
+<% end %>
+
+<%= paginate @conn, @page, fn -> %>
+  <%= for subscription <- @page.entries do %>
+  <%= Podcatcher.Web.ComponentsView.render "podcast_card.html", conn: @conn, podcast: subscription.podcast %>
+  <% end %>
+<% end %>

@@ -10,4 +10,11 @@ defmodule Podcatcher.Web.ComponentsView do
     end
   end
 
+  def subscribed?(conn, podcast) do
+    case conn.assigns[:subscriptions] do
+      nil -> false
+      subscriptions -> Enum.member?(subscriptions, podcast.id)
+    end
+  end
+
 end

@@ -34,9 +34,7 @@
       <ul class="vertical large-horizontal menu">
         <li class="menu-text"><i class="fa fa-headphones"></i> Podbaby</li>
         <%= if assigns[:user] do %>
-        <li>
-          <a href="#"><i class="fa fa-rss"></i> My podcasts</a>
-        </li>
+        <%= active_link(@conn, raw("<i class=\"fa fa-rss\"></i> My podcasts"), to: subscriptions_path(@conn, :index), wrap_tag: :li) %>
         <%= active_link(@conn, raw("<i class=\"fa fa-bookmark\"></i> Bookmarks"), to: bookmarks_path(@conn, :index), wrap_tag: :li) %>
         <% end %>
         <%= active_link(@conn, raw("<i class=\"fa fa-flash\"></i> New releases"), to: episodes_path(@conn, :index), wrap_tag: :li) %>
