@@ -21,7 +21,7 @@ defmodule Podcatcher.Podcasts.Podcast do
     field :website, :string
 
     has_many :episodes, Episode
-    many_to_many :categories, Category, join_through: "podcasts_categories"
+    many_to_many :categories, Category, join_through: "podcasts_categories", on_replace: :delete
 
     timestamps()
   end
