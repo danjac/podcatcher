@@ -6,5 +6,5 @@
 </form>
 
 <%= for episode <- @episodes do %>
-<%= render "episode_card.html", conn: @conn, episode: episode %>
+<%= Podcatcher.Web.ComponentsView.render "episode_card.html", conn: @conn, episode: episode %>
 <% end %>

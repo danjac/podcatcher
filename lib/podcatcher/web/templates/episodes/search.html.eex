@@ -16,6 +16,6 @@
 
 <%= paginate @conn, @page, fn -> %>
   <%= for episode <- @page.entries do %>
-  <%= render "episode_card.html", conn: @conn, episode: episode %>
+  <%= ComponentsView.render "episode_card.html", conn: @conn, episode: episode %>
   <% end %>
 <% end %>

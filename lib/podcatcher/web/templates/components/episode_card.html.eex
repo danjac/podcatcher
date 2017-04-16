@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-divider">
+    <h5><%= link(@episode.podcast.title, to: podcast_url(@conn, @episode.podcast))  %></a></h5>
+    <h6><%= link(@episode.title, to: episode_url(@conn, @episode)) %></h6>
+  </div>
+  <div class="card-section">
+    <div class="row">
+      <div class="small-6 large-2 columns">
+        <div class="thumbnail">
+          <a href="#"><img alt="<%= @episode.podcast.title %>" src="<%= podcast_image(@conn, @episode.podcast, :small) %>" height="100" width="100"></a>
+        </div>
+      </div>
+
+      <div class="small-6 large-10 columns">
+          <%= if @episode.pub_date do %>
+        <strong><%= format_date(@episode.pub_date) %></strong>
+        <% end %>
+        <div class="button-group">
+
+          <a class="button" title="Download and listen" href="<%= @episode.content_url %>"><i class="fa fa-download"></i></a>
+
+          <%= render "bookmark_button.html", conn: @conn, episode: @episode %>
+
+            <button class="button" title="Subscribe to this podcast" data-subscribe href="/api/subscriptions/1/"><i class="fa fa-pencil-square-o"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= if @episode.subtitle do %>
+  <div class="card-section">
+    <%= @episode.subtitle %>
+  </div>
+  <% end %>
+
+</div>
+
+

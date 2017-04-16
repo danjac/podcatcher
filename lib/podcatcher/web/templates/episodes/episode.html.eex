@@ -23,7 +23,7 @@
 
         <div class="stacked-for-small button-group">
           <a class="button" title="Download and listen" href="<%= @episode.content_url %>"><i class="fa fa-download"></i> Download</a>
-          <button class="button" title="Bookmark this episode" data-add-bookmark href="/api/bookmarks/1/"><i class="fa fa-star-o"></i> Bookmark</button>
+          <%= Podcatcher.Web.ComponentsView.render "bookmark_button.html", conn: @conn, episode: @episode %>
           <button class="button" title="Subscribe to this podcast" data-subscribe href="/api/subscriptions/1/"><i class="fa fa-pencil-square-o"></i> Subscribe</button>
           </div>
 

@@ -17,7 +17,7 @@
 <%= paginate @conn, @page, fn -> %>
 
   <%= for podcast <- @page.entries do %>
-  <%= render Podcatcher.Web.PodcastsView, "podcast_card.html", conn: @conn, podcast: podcast %>
+  <%= render Podcatcher.Web.ComponentsView, "podcast_card.html", conn: @conn, podcast: podcast %>
   <% end %>
 
 <% end %>

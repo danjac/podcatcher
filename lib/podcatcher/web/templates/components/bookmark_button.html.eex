@@ -1,0 +1,31 @@
+<%= if @conn.assigns[:user] do %>
+
+  <%= if bookmarked?(@conn, @episode) do %>
+  <button class="button"
+          title="Remove this bookmark"
+          data-remove-bookmark
+          data-add-bookmark-url="<%= bookmarks_path(@conn, :add_bookmark, @episode) %>"
+          data-remove-bookmark-url="<%= bookmarks_path(@conn, :delete_bookmark, @episode) %>">
+    <i class="fa fa-bookmark"></i>
+  </button>
+  <% else %>
+  <button class="button"
+          title="Bookmark this episode"
+          data-add-bookmark
+          data-add-bookmark-url="<%= bookmarks_path(@conn, :add_bookmark, @episode) %>"
+          data-remove-bookmark-url="<%= bookmarks_path(@conn, :delete_bookmark, @episode) %>">
+    <i class="fa fa-bookmark-o"></i>
+  </button>
+  <% end %>
+
+<% else %>
+
+  <a class="button"
+     href="<%= auth_path(@conn, :login, next: @conn.request_path) %>"
+     title="Bookmark this episode">
+    <i class="fa fa-bookmark-o"></i>
+  </a>
+
+<% end %>
+
+

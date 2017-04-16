@@ -10,6 +10,6 @@
 
 <%= paginate @conn, @page, fn -> %>
   <%= for bookmark <- @page.entries do %>
-  <%= Podcatcher.Web.EpisodesView.render "episode_card.html", conn: @conn, episode: bookmark.episode %>
+  <%= Podcatcher.Web.ComponentsView.render "episode_card.html", conn: @conn, episode: bookmark.episode %>
   <% end %>
 <% end %>
