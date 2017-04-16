@@ -27,6 +27,22 @@ defmodule Podcatcher.Episodes do
     |> Repo.all()
   end
 
+  @doc """
+  Returns list of latest episodes by pub_date that a user is subscribed to
+  """
+  def latest_episodes_for_user(user, limit) do
+    from(
+      e in Episode,
+      join: p in assoc(e, :podcast),
+      join: s in assoc(p, :subscriptions),
+      where: s.user_id == ^user.id,
+      order_by: [desc: e.pub_date],
+      limit: ^limit,
+      preload: [:podcast],
+    )
+    |> Repo.all
+  end
+
   defp search(term) do
     Episode |> where(fragment("tsv @@ plainto_tsquery(?)", ^term))
   end

@@ -85,7 +85,7 @@
 
 </div>
   <div class="card-section">
-    <%= @episode.description |> markdown %>
+    <%= (@episode.description || @episode.summary) |> markdown %>
   </div>
   <%= if @episode.podcast.copyright do %>
   <div class="card-section">

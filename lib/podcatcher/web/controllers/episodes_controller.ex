@@ -3,13 +3,18 @@ defmodule Podcatcher.Web.EpisodesController do
 
   alias Podcatcher.Episodes
 
+  @num_latest_episodes 20
+
   def index(conn, %{"q" => search_term} = params) do
     page = Episodes.search_episodes(search_term, params)
     render conn, "search.html", %{page: page, search_term: search_term}
   end
 
   def index(conn, _params) do
-    episodes = Episodes.latest_episodes(20)
+    episodes = case conn.assigns[:user] do
+      nil -> Episodes.latest_episodes(@num_latest_episodes)
+      user -> Episodes.latest_episodes_for_user(user, @num_latest_episodes)
+    end
     render conn, "index.html", %{episodes: episodes, page_title: "New releases"}
   end
 

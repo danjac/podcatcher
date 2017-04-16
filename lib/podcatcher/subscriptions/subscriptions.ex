@@ -7,15 +7,19 @@ defmodule Podcatcher.Subscriptions do
   alias Podcatcher.Repo
 
   alias Podcatcher.Subscriptions.Subscription
+  alias Podcatcher.Podcasts.Podcast
 
   @doc """
   Returns paginated list of subscriptions for a user
   """
   def subscriptions_for_user(user, params \\ []) do
-    Subscription
-    |> where(user_id: ^user.id)
-    |> order_by([desc: :inserted_at])
-    |> preload(:podcast)
+    from(
+      s in Subscription,
+      join: p in assoc(s, :podcast),
+      where: s.user_id == ^user.id,
+      order_by: [desc: p.last_build_date],
+      preload: [:podcast]
+    )
     |> Repo.paginate(params)
   end
 

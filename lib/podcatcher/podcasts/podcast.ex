@@ -5,6 +5,7 @@ defmodule Podcatcher.Podcasts.Podcast do
   alias Podcatcher.Episodes.Episode
   alias Podcatcher.Podcasts.Image
   alias Podcatcher.Podcasts.Slug
+  alias Podcatcher.Subscriptions.Subscription
 
   schema "podcasts" do
     field :title, :string
@@ -21,6 +22,7 @@ defmodule Podcatcher.Podcasts.Podcast do
     field :website, :string
 
     has_many :episodes, Episode
+    has_many :subscriptions, Subscription
     many_to_many :categories, Category, join_through: "podcasts_categories", on_replace: :delete
 
     timestamps()
