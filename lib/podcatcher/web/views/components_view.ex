@@ -4,7 +4,10 @@ defmodule Podcatcher.Web.ComponentsView do
   import Podcatcher.Web.PodcastsView, only: [podcast_image: 3]
 
   def bookmarked?(conn, episode) do
-    Enum.member?(conn.assigns[:bookmarks], episode.id)
+    case conn.assigns[:bookmarks] do
+      nil -> false
+      bookmarks -> Enum.member?(bookmarks, episode.id)
+    end
   end
 
 end

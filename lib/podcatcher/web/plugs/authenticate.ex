@@ -7,17 +7,15 @@ defmodule Podcatcher.Web.Plugs.Authenticate do
   end
 
   def call(conn, _params) do
-    user_id = get_session(conn, :user_id)
 
-    cond do
-      user = user_id && Accounts.get_user!(user_id) ->
-        conn
-        |> assign(:user, user)
-        |> assign(:bookmarks, Enum.map(user.bookmarks, fn(bookmark) -> bookmark.episode_id end))
-      true ->
-        conn
-        |> assign(:user, nil)
-        |> assign(:bookmarks, [])
+    user_id = get_session(conn, :user_id)
+    user = user_id && Accounts.get_user!(user_id)
+    if user do
+      conn
+      |> assign(:user, user)
+      |> assign(:bookmarks, Enum.map(user.bookmarks, fn(bookmark) -> bookmark.episode_id end))
+    else
+      conn
     end
   end
 
