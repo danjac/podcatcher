@@ -6,6 +6,9 @@ defmodule Podcatcher.Categories.Category do
   schema "categories" do
     field :name, :string
 
+    belongs_to :parent, Podcatcher.Categories.Category
+    has_many :children, Podcatcher.Categories.Category, foreign_key: :parent_id
+
     many_to_many :podcasts, Podcast, join_through: "podcasts_categories"
 
     timestamps()

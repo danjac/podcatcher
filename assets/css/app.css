@@ -1,59 +1,46 @@
 /* This file is for your main application css. */
+
 .no-js .top-bar {
   display: none;
 }
 
-@media screen and (min-width: 40em) {
+@media screen and (min-width: 10em) {
   .top-bar {
     margin-bottom: 1.875em;
-   }
-
+  }
+  .title-bar {
+    margin-bottom: 0.5em;
+  }
   .no-js .top-bar {
     display: block;
   }
-
   .no-js .title-bar {
     display: none;
   }
 }
 
-@media screen and (max-width: 500px) {
-
-    /* jplayer */
-    .jp-audio audio, .jp-audio, .jp-controls-holder {
-        width: 100% !important;
-    }
-
-   .jp-audio, .jp-audio > div, .jp-audio img {
-       height: auto !important;
-       width: 100% !important;
-   }
-
-   .jp-audio-360p {
-       max-width: 570px !important;
-   }
-
-   .jp-audio-270p {
-       max-width: 480px !important;
-   }
-
-   .jp-progress {
-       width: 130px;
-   }
+audio {
+  width: 100% !important;
 }
+
+/* category labels */
+
+.categories a.label {
+  background-color: #3f1c3a;
+  color: #fff;
+  padding: 0.6rem;
+  margin-top: 0.1rem;
+}
+
 
 /* center callouts */
-/*
-.callout {
-  position: absolute;
-  top: 50%;
-  width: 80%;
+
+#notifications .callout {
+  position: fixed;
+  width: 90%;
   text-align: center;
-  margin-top: -50px;
-  margin-bottom: -100px;
-  opacity: 0.8;
+  opacity: 0.9;
 }
-*/
 
 .splash-page {
   background: url(/images/headphones.jpg) no-repeat center center fixed;
@@ -63,4 +50,6 @@
   padding: 100px;
 }
 
-.splash-page a { color: #fff; }
+.splash-page a {
+  color: #fff;
+}

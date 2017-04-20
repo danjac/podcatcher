@@ -2,7 +2,7 @@
 <div class="callout">
   <h3>You are not following any podcasts yet</h3>
   <p>
-  Click on the subscribe icon <i class="fa fa-plus"></i> under any podcast to subscribe and follow new episodes.
+  Click on the subscribe icon <i class="fa fa-rss"></i> under any podcast to subscribe and follow new episodes.
   </p>
 </div>
 <% end %>
@@ -17,6 +17,17 @@
 </form>
 
 <% end %>
+
+<%= if assigns[:search_term] do %>
+<h3>
+  <%= if @page.total_entries == 0 do %>
+    Sorry, no podcasts found for "<%= @search_term %>"
+  <% else %>
+    <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+  <% end %>
+</h3>
+<% end %>
+
 
 <%= paginate @conn, @page, fn -> %>
   <%= for subscription <- @page.entries do %>

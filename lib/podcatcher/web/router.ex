@@ -23,8 +23,10 @@ defmodule Podcatcher.Web.Router do
 
     get "/", PageController, :index
 
-    get "/discover/", PodcastsController, :index
     get "/latest/", EpisodesController, :index
+
+    get "/discover/", PodcastsController, :index
+    get "/discover/episodes/", EpisodesController, :search
 
     get "/browse/", CategoriesController, :index
     get "/browse/:id/:slug", CategoriesController, :category
@@ -38,7 +40,7 @@ defmodule Podcatcher.Web.Router do
 
     get "/bookmarks/", BookmarksController, :index
 
-    get "/subscriptions/", SubscriptionsController, :index
+    get "/feed/", SubscriptionsController, :index
 
     get "/login/", AuthController, :login
     post "/login/", AuthController, :login

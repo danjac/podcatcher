@@ -21,6 +21,17 @@ defmodule Podcatcher.Categories do
     Category
     |> order_by(:name)
     |> Repo.all
+    |> Repo.preload(:parent)
+  end
+
+  def parent_categories do
+    from(
+      c in Category,
+      where: is_nil(c.parent_id),
+      order_by: :name,
+      preload: :children,
+    )
+    |> Repo.all
   end
 
   @doc """
@@ -37,7 +48,11 @@ defmodule Podcatcher.Categories do
       ** (Ecto.NoResultsError)
 
   """
-  def get_category!(id), do: Repo.get!(Category, id)
+  def get_category!(id) do
+    Category
+    |> Repo.get!(id)
+    |> Repo.preload([:parent, :children])
+  end
 
   @doc """
   Creates a category.
@@ -57,14 +72,23 @@ defmodule Podcatcher.Categories do
     |> Repo.insert()
   end
 
-  def get_or_create_categories(names) do
-    names |> Enum.map(&upsert_category/1)
-  end
+  @doc """
+  Fetches list of categories with matching names
+  """
+  def fetch_categories(names) do
+    names =
+      names
+      |> Enum.map(fn(name) ->
+        name
+        |> String.replace(" and ", " & ")
+        |> String.replace(" &amp; ", " & ")
+        |> String.downcase
+      end)
 
-  defp upsert_category(name) do
-    Repo.insert!(%Category{name: name},
-                on_conflict: [set: [name: name]],
-                conflict_target: :name)
+    Category
+    |> Repo.all
+    |> Enum.filter(&(String.downcase(&1.name) in names))
+
   end
 
   @doc """

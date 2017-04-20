@@ -28,6 +28,12 @@ defmodule Podcatcher.AccountsTest do
     assert Accounts.check_password("some password", user.password)
   end
 
+  test "create_user/1 with same username returns error changeset" do
+    attrs = %{ @create_attrs | name: "danjac" }
+    assert {:ok, %User{}} = Accounts.create_user(attrs)
+    assert {:error, %Ecto.Changeset{}} = Accounts.create_user(attrs)
+  end
+
   test "create_user/1 with invalid confirmation returns error changeset" do
     attrs = Map.put(@create_attrs, :password_confirmation, "something different")
     assert {:error, %Ecto.Changeset{}} = Accounts.create_user(attrs)

@@ -3,16 +3,35 @@ defmodule Podcatcher.Web.EpisodesViewTest do
 
   import Podcatcher.Web.EpisodesView
 
-  test "audio_ext/1 if nil returns empty string" do
-    assert audio_ext(nil) == ""
+  test "audio_mimetype/1 if nil returns empty string" do
+    assert audio_mimetype(nil) == ""
   end
 
-  test "audio_ext/1 if empty returns empty string" do
-    assert audio_ext(nil) == ""
+  test "audio_mimetype/1 if empty returns empty string" do
+    assert audio_mimetype(nil) == ""
   end
 
-  test "audio_ext/1 should return extension" do
-    assert audio_ext("http://some-site.com/sample-episode.mp3") == "mp3"
+  test "audio_mimetype/1 should return mime type" do
+    assert audio_mimetype("http://some-site.com/sample-episode.mp3") == "audio/mpeg"
   end
+
+  test "safe_protocol/1 if nil returns empty string" do
+    assert safe_protocol(nil) == ""
+  end
+
+  test "safe_protocol/1 if empty returns empty string" do
+    assert safe_protocol(nil) == ""
+  end
+
+  test "safe_protocol/1 should remove http" do
+    assert safe_protocol("http://some-site.com/sample-episode.mp3") == "//some-site.com/sample-episode.mp3"
+  end
+
+  test "safe_protocol/1 should remove https" do
+    assert safe_protocol("https://some-site.com/sample-episode.mp3") == "//some-site.com/sample-episode.mp3"
+  end
+
+
+
 
 end

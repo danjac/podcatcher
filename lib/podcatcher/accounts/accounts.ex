@@ -8,6 +8,9 @@ defmodule Podcatcher.Accounts do
 
   alias Podcatcher.Accounts.User
 
+  @min_password_length 6
+  @token_length 12
+
   @doc """
   Returns the list of users.
 
@@ -103,6 +106,30 @@ defmodule Podcatcher.Accounts do
   end
 
   @doc """
+  Returns `%Ecto.Changeset{}` for changing the user password.
+  """
+  def change_password(user \\ %User{}) do
+    password_changeset(user, %{})
+  end
+
+  @doc """
+  Generates and saves unique token for user
+  """
+  def generate_recovery_token(user) do
+    token = :crypto.strong_rand_bytes(@token_length)
+    |> Base.url_encode64
+    |> binary_part(0, @token_length)
+    # Repo.update(user, recovery_token: token)
+    token
+  end
+
+  def get_user_by_token!(token), do: Repo.get_by!(User, token: token)
+
+  def get_user_by_name_or_email(identifier) do
+    from(u in User, where: u.email==^identifier or u.name==^identifier) |> Repo.one
+  end
+
+  @doc """
   Checks hashed password
 
   ## Examples
@@ -121,7 +148,7 @@ defmodule Podcatcher.Accounts do
   def authenticate(_identifier, password) when password == "" or is_nil(password), do: {:error, :invalid_params}
 
   def authenticate(identifier, password) do
-    from(u in User, where: u.email==^identifier or u.name==^identifier) |> Repo.one |> do_authenticate(password)
+    get_user_by_name_or_email(identifier) |> do_authenticate(password)
   end
 
   defp do_authenticate(nil, _password), do: {:error, :user_not_found}
@@ -139,15 +166,25 @@ defmodule Podcatcher.Accounts do
 
   defp encrypt_password(%Ecto.Changeset{} = changeset), do: changeset
 
+  defp password_changeset(%User{} = user, attrs) do
+    user
+    |> cast(attrs, [:password, :password_confirmation])
+    |> validate_required([:password, :password_confirmation])
+    |> validate_length(:password, min: @min_password_length)
+    |> validate_confirmation(:password)
+    # |> put_change(token: nil)
+    |> encrypt_password()
+  end
+
   defp user_changeset(%User{} = user, attrs) do
     user
     |> cast(attrs, [:name, :email, :password, :password_confirmation])
     |> validate_required([:name, :email, :password, :password_confirmation])
     |> validate_format(:email, ~r/@/)
-    |> validate_length(:password, min: 6)
+    |> validate_length(:password, min: @min_password_length)
     |> validate_confirmation(:password)
+    |> unique_constraint(:name, name: :accounts_users_name_index)
+    |> unique_constraint(:email, name: :accounts_users_email_index)
     |> encrypt_password()
-    |> unique_constraint(:name)
-    |> unique_constraint(:email)
   end
 end

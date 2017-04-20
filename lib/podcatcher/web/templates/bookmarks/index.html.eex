@@ -15,9 +15,22 @@
     <span class="input-group-label"><i class="fa fa-search"></i></span>
     <input class="input-group-field" type="search" name="q" placeholder="Search your bookmarks" value="<%= assigns[:search_term] %>">
   </div>
+  <%= if assigns[:search_term] do %>
+  <a class="button large secondary expanded" href="<%= bookmarks_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all your bookmarks</a> <% end %>
 </form>
 
 <% end %>
+
+<%= if assigns[:search_term] do %>
+<h3>
+  <%= if @page.total_entries == 0 do %>
+    Sorry, no bookmarks found for "<%= @search_term %>"
+  <% else %>
+    <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+  <% end %>
+</h3>
+<% end %>
+
 
 <%= paginate @conn, @page, fn -> %>
   <%= for bookmark <- @page.entries do %>

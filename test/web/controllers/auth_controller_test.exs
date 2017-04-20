@@ -45,7 +45,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
     conn = post conn, "/login/", params
     assert conn.status == 302
     assert get_session(conn, :user_id) == user.id
-    assert get_resp_header(conn, "location") == ["/discover"]
+    assert get_resp_header(conn, "location") == ["/feed"]
 
   end
 
@@ -88,9 +88,32 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     assert conn.status == 302
     assert get_session(conn, :user_id) == user.id
-    assert get_resp_header(conn, "location") == ["/discover"]
+    assert get_resp_header(conn, "location") == ["/feed"]
 
   end
+
+  test "POST /login/ if next url in blacklist" do
+
+    user = fixture(:user)
+
+    params = %{
+      "login" => %{
+        "identifier" => user.email,
+        "password" => "testpass",
+      }
+    }
+
+    conn =
+      session_conn()
+      |> put_session(:next, "/signup/")
+      |> post("/login/", params)
+
+    assert conn.status == 302
+    assert get_session(conn, :user_id) == user.id
+    assert get_resp_header(conn, "location") == ["/feed"]
+
+  end
+
 
 
   test "GET /signup/", %{conn: conn} do
@@ -122,7 +145,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
     user = Repo.one!(User)
 
     assert get_session(conn, :user_id) == user.id
-    assert get_resp_header(conn, "location") == ["/discover"]
+    assert get_resp_header(conn, "location") == ["/feed"]
 
   end
 

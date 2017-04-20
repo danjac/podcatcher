@@ -11,11 +11,8 @@
         </div>
       </div>
       <div class="columns small-12 medium-8">
-        <p>
-          <%= for category <- @podcast.categories do %>
-          <%= link category.name, to: category_url(@conn, category), class: "label" %>
-          <% end %>
-        </p>
+
+        <%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: @podcast.categories %>
 
         <div class="expanded button-group">
           <%= Podcatcher.Web.ComponentsView.render "subscribe_button.html", conn: @conn, podcast: @podcast %>

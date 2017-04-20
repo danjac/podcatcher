@@ -10,24 +10,18 @@ defmodule Podcatcher.CategoriesTest do
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
 
-  test "get_or_create_categories/1 should create new categories if not already present" do
-    names = ["TV & Film", "Comedy", "Arts"]
-    categories = Categories.get_or_create_categories(names)
+  test "fetch_categories/1 should fetch categories" do
+    categories = Categories.fetch_categories(["TV and film", "comedy", "Arts"])
     assert length(categories) == 3
-
-    new_categories = Categories.get_or_create_categories(["History" | names])
-    assert length(new_categories) == 4
-
   end
 
   test "list_categories/1 returns all categories" do
-    category = fixture(:category)
-    assert Categories.list_categories() == [category]
+    assert length(Categories.list_categories()) == 58
   end
 
   test "get_category! returns the category with given id" do
     category = fixture(:category)
-    assert Categories.get_category!(category.id) == category
+    assert Categories.get_category!(category.id).id == category.id
   end
 
   test "create_category/1 with valid data creates a category" do
@@ -49,7 +43,7 @@ defmodule Podcatcher.CategoriesTest do
   test "update_category/2 with invalid data returns error changeset" do
     category = fixture(:category)
     assert {:error, %Ecto.Changeset{}} = Categories.update_category(category, @invalid_attrs)
-    assert category == Categories.get_category!(category.id)
+    assert category.id == Categories.get_category!(category.id).id
   end
 
   test "delete_category/1 deletes the category" do

@@ -146,7 +146,7 @@ defmodule Podcatcher.Podcasts do
             feed.podcast
             |> Map.merge(%{
               image: feed.images,
-              categories: Categories.get_or_create_categories(feed.categories)
+              categories: Categories.fetch_categories(feed.categories)
             })
 
           podcast |> update_podcast(attrs)
@@ -186,7 +186,7 @@ defmodule Podcatcher.Podcasts do
           {:ok, %Podcast{} = podcast} = feed.podcast
           |> Map.merge(%{
             rss_feed: url,
-            categories: Categories.get_or_create_categories(feed.categories),
+            categories: Categories.fetch_categories(feed.categories),
             image: feed.images
           }) |> create_podcast
 

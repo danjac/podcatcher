@@ -15,6 +15,12 @@ const initEvents = () => {
     xhr.setRequestHeader('X-CSRF-Token', csrfToken);
   });
 
+  // Remove any notifications
+
+  window.setTimeout(() => {
+    $('#notifications .callout').remove();
+  }, 3000);
+
   // Highlight search text on click
 
   $("input[type='search']").on('click', event => $(event.currentTarget).select());
@@ -32,9 +38,9 @@ const initEvents = () => {
       .attr('data-subscribe', true)
       .attr('title', 'Subscribe to this podcast');
     $this
-      .find('i.fa.fa-minus')
-      .removeClass('fa-minus')
-      .addClass('fa-plus')
+      .find('i.fa.fa-trash')
+      .removeClass('fa-trash')
+      .addClass('fa-rss')
       .attr('title', 'Subscribe to this podcast');
     info('You have stopped following this podcast');
   });
@@ -50,9 +56,9 @@ const initEvents = () => {
       .attr('data-unsubscribe', true)
       .attr('title', 'Unsubscribe from this podcast');
     $this
-      .find('i.fa.fa-plus')
-      .removeClass('fa-plus')
-      .addClass('fa-minus');
+      .find('i.fa.fa-rss')
+      .removeClass('fa-rss')
+      .addClass('fa-trash');
     success('You are now following this podcast');
   });
 

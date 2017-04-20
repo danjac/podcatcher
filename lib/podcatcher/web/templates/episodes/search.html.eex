@@ -1,21 +1,29 @@
-<form method="GET" action="<%= episodes_path(@conn, :index) %>">
+<ul class="menu">
+  <li><%= link "Podcasts", to: podcasts_path(@conn, :index, q: assigns[:search_term] || "") %></li>
+  <li class="active"><a href="#">Episodes</a></li>
+</ul>
+
+<hr />
+
+<form method="GET" action="<%= episodes_path(@conn, :search) %>">
   <div class="input-group">
     <span class="input-group-label"><i class="fa fa-search"></i></span>
-    <input class="input-group-field" type="search" name="q" placeholder="Find an episode" value="<%= @search_term %>">
+    <input class="input-group-field" type="search" name="q" placeholder="Find an episode" value="<%= assigns[:search_term] %>">
   </div>
-  <a class="button large secondary expanded" href="<%= episodes_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all episodes</a>
 </form>
 
-<h3>
-  <%= if @page.total_entries == 0 do %>
-    Sorry, no episodes found for "<%= @search_term %>"
-  <% else %>
-    <%= @page.total_entries %> result(s) for "<%= @search_term %>"
-  <% end %>
-</h3>
+<%= if assigns[:page] && assigns[:search_term] do %>
+  <h3>
+    <%= if @page.total_entries == 0 do %>
+      Sorry, no episodes found for "<%= @search_term %>"
+    <% else %>
+      <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+    <% end %>
+  </h3>
 
-<%= paginate @conn, @page, fn -> %>
-  <%= for episode <- @page.entries do %>
-  <%= Podcatcher.Web.ComponentsView.render "episode_card.html", conn: @conn, episode: episode %>
+  <%= paginate @conn, @page, fn -> %>
+    <%= for episode <- @page.entries do %>
+    <%= Podcatcher.Web.ComponentsView.render "episode_card.html", conn: @conn, episode: episode %>
+    <% end %>
   <% end %>
-<% end %>
+  <% end %>

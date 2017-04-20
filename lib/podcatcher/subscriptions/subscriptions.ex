@@ -7,7 +7,6 @@ defmodule Podcatcher.Subscriptions do
   alias Podcatcher.Repo
 
   alias Podcatcher.Subscriptions.Subscription
-  alias Podcatcher.Podcasts.Podcast
 
   @doc """
   Returns paginated list of subscriptions for a user
@@ -17,6 +16,22 @@ defmodule Podcatcher.Subscriptions do
       s in Subscription,
       join: p in assoc(s, :podcast),
       where: s.user_id == ^user.id,
+      order_by: [desc: p.last_build_date],
+      preload: [:podcast]
+    )
+    |> Repo.paginate(params)
+  end
+
+  @doc """
+  Search subscriptions for a user, returning
+  paginated result
+  """
+  def search_subscriptions_for_user(user, term, params \\ []) do
+     from(
+      s in Subscription,
+      join: p in assoc(s, :podcast),
+      where: s.user_id == ^user.id,
+      where: fragment("? @@ plainto_tsquery(?)", p.tsv, ^term),
       order_by: [desc: p.last_build_date],
       preload: [:podcast]
     )

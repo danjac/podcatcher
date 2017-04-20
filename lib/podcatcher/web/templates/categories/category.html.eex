@@ -1,17 +1,32 @@
 <nav aria-label="You are here:" role="navigation">
   <ul class="breadcrumbs">
     <li><%= link("All categories", to: categories_path(@conn, :index)) %>
+    <%= if @category.parent do %>
+    <li><%= link(@category.parent.name, to: category_url(@conn, @category.parent)) %>
+    <% end %>
     <li><%= @category.name %></li>
   </ul>
 </nav>
 
-<%= if @page.total_pages > 1 do %>
-<form method="GET" action="<%= podcasts_path(@conn, :index) %>">
+<%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: @category.children %>
+
+<%= if @page.total_pages > 1 || assigns[:search_term] do %>
+<form method="GET" action="<%= category_url(@conn, @category) %>">
   <div class="input-group">
     <span class="input-group-label"><i class="fa fa-search"></i></span>
-    <input class="input-group-field" type="search" name="q" placeholder="Find more <%= @category.name %> podcasts" value="">
+    <input class="input-group-field" type="search" name="q" placeholder="Find more <%= @category.name %> podcasts" value="<%= assigns[:search_term] %>">
   </div>
 </form>
+<% end %>
+
+<%= if assigns[:search_term] do %>
+<h3>
+  <%= if @page.total_entries == 0 do %>
+    Sorry, no episodes found for "<%= @search_term %>"
+  <% else %>
+    <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+  <% end %>
+</h3>
 <% end %>
 
 <%= paginate @conn, @page, fn -> %>

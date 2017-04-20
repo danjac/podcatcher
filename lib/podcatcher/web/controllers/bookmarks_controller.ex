@@ -10,7 +10,7 @@ defmodule Podcatcher.Web.BookmarksController do
 
   def index(conn, %{"q" => search_term} = params) do
     page = Bookmarks.search_bookmarks_for_user(conn.assigns[:user], search_term, params)
-    render conn, "index.html", page: page, search_term: search_term
+    render conn, "index.html", page: page, search_term: search_term, page_title: "Bookmarks"
   end
 
   def index(conn, params), do: list_bookmarks(conn, params)
@@ -29,7 +29,7 @@ defmodule Podcatcher.Web.BookmarksController do
 
   defp list_bookmarks(conn, params) do
     page = Bookmarks.bookmarks_for_user(conn.assigns[:user], params)
-    render conn, "index.html", page: page
+    render conn, "index.html", page: page, page_title: "Bookmarks"
   end
 
 end

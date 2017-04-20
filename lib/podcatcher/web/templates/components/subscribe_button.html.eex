@@ -6,7 +6,7 @@
           data-unsubscribe
           data-subscribe-url="<%= subscriptions_path(@conn, :subscribe, @podcast) %>"
           data-unsubscribe-url="<%= subscriptions_path(@conn, :unsubscribe, @podcast) %>">
-    <i class="fa fa-minus"></i>
+    <i class="fa fa-trash"></i>
   </button>
   <% else %>
   <button class="button"
@@ -14,7 +14,7 @@
           data-subscribe
           data-subscribe-url="<%= subscriptions_path(@conn, :subscribe, @podcast) %>"
           data-unsubscribe-url="<%= subscriptions_path(@conn, :unsubscribe, @podcast) %>">
-    <i class="fa fa-plus"></i>
+    <i class="fa fa-rss"></i>
   </button>
   <% end %>
 
@@ -23,7 +23,7 @@
   <a class="button"
      href="<%= login_url(@conn) %>"
      title="subscribe to this podcast">
-    <i class="fa fa-plus"></i>
+    <i class="fa fa-rss"></i>
   </a>
 
 <% end %>

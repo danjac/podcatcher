@@ -17,6 +17,18 @@ defmodule Podcatcher.SubscriptionsTest do
 
   end
 
+  test "search_subscriptions_for_user/2 gets subscriptions" do
+
+    user = fixture(:user)
+    podcast = fixture(:podcast)
+
+    {:ok, sub} = Subscriptions.create_subscription(user, podcast)
+    page = Subscriptions.search_subscriptions_for_user(user, podcast.title)
+    [first | _] = page.entries
+    assert first.id == sub.id
+
+  end
+
   test "create_subscription/2 inserts new subscription" do
 
     user = fixture(:user)
