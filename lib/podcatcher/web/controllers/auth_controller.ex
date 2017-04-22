@@ -81,12 +81,12 @@ defmodule Podcatcher.Web.AuthController do
   def change_password(conn, %{"token" => token}) do
     user = Accounts.get_user_by_token!(token)
     changeset = Accounts.change_password(user)
-    render conn, "change_password.html", user: user, changeset: changeset
+    render conn, "change_password.html", token: token, changeset: changeset
   end
 
   def change_password(%Plug.Conn{assigns: %{user: user}} = conn, _params) do
     changeset = Accounts.change_password(user)
-    render conn, "change_password.html", user: user, changeset: changeset
+    render conn, "change_password.html", changeset: changeset
   end
 
   def change_password(conn, _params) do
@@ -95,16 +95,22 @@ defmodule Podcatcher.Web.AuthController do
     |> redirect(to: auth_path(conn, :login))
   end
 
-  def update_password(conn, %{"token" => token, "user" => params}) do
+  def update_password(conn, %{"user" => %{"token" => token} = params}) do
     user = Accounts.get_user_by_token!(token)
-    do_update_password(conn, user, params)
+    do_update_password(conn, user, params, token)
   end
 
   def update_password(%Plug.Conn{assigns: %{user: user}} = conn, %{"user" => params}) do
     do_update_password(conn, user, params)
   end
 
-  defp do_update_password(conn, user, params) do
+  def update_password(conn, _params) do
+    conn
+    |> put_flash(:warning, "You must be logged in")
+    |> redirect(to: auth_path(conn, :login))
+  end
+
+  defp do_update_password(conn, user, params, token \\ nil) do
 
     case Accounts.update_password(user, params) do
 
@@ -119,7 +125,7 @@ defmodule Podcatcher.Web.AuthController do
           |> redirect(to: auth_path(conn, :login))
         end
       {:error, changeset} ->
-        render conn, "change_password.html", user: user, changeset: changeset
+        render conn, "change_password.html", token: token, changeset: changeset
 
     end
 

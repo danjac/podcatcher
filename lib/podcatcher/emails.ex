@@ -1,8 +1,6 @@
 defmodule Podcatcher.Emails do
   use Bamboo.Phoenix, view: Podcatcher.Web.EmailView
 
-  alias Podcatcher.Accounts.User
-
   @default_sender "support@podbaby.me"
 
   def reset_password_email(conn, user, token) do

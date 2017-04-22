@@ -216,6 +216,85 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
   end
 
+  test "GET /changepass if no token or not logged in", %{conn: conn} do
+    conn = get conn, "/changepass/"
+    assert redirected_to(conn) =~ "/login"
+  end
+
+  test "GET /changepass if valid token and not logged in", %{conn: conn} do
+    user = fixture(:user)
+    token = Accounts.generate_recovery_token!(user)
+    conn = get conn, "/changepass/", %{"token" => token}
+    assert conn.status == 200
+  end
+
+  test "GET /changepass if  logged in", %{conn: conn} do
+    user = fixture(:user)
+
+    conn =
+      conn
+      |> assign(:user, user)
+      |> get("/changepass/")
+
+    assert conn.status == 200
+  end
+
+  test "PUT /changepass if no token or not logged in", %{conn: conn} do
+
+    params = %{
+      "user" => %{
+        "password" => "testpass",
+        "password_confirmation" => "testpass",
+      }
+    }
+
+    conn = put conn, "/changepass/", params
+    assert redirected_to(conn) =~ "/login"
+
+  end
+
+  test "PUT /changepass if valid token and not logged in", %{conn: conn} do
+    user = fixture(:user)
+    token = Accounts.generate_recovery_token!(user)
+
+    params = %{
+      "user" => %{
+        "token" => token,
+        "password" => "testpass_new",
+        "password_confirmation" => "testpass_new",
+      }
+    }
+
+    conn = put conn, "/changepass/", params
+    assert redirected_to(conn) =~ "/login"
+
+    user = Accounts.get_user!(user.id)
+    assert Accounts.check_password("testpass_new", user.password)
+
+  end
+
+  test "PUT /changepass if logged in", %{conn: conn} do
+    user = fixture(:user)
+
+    params = %{
+      "user" => %{
+        "password" => "testpass_new",
+        "password_confirmation" => "testpass_new",
+      }
+    }
+
+    conn =
+      conn
+      |> assign(:user, user)
+      |> put("/changepass/", params)
+
+    assert redirected_to(conn) =~ "/feed"
+
+    user = Accounts.get_user!(user.id)
+    assert Accounts.check_password("testpass_new", user.password)
+
+  end
+
 
 end
 

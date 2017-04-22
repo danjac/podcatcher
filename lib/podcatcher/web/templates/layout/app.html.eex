@@ -43,17 +43,23 @@
       </ul>
     </div>
     <div class="top-bar-right">
-      <ul class="vertical large-horizontal menu">
-        <%= if assigns[:user] do %>
+
+      <%= if assigns[:user] do %>
+      <ul class="dropdown menu" data-dropdown-menu>
         <li>
-          <a href="#"><i class="fa fa-cog"></i> Settings</a>
+          <a href="#"><%= assigns[:user].name %></a>
+          <ul class="menu vertical">
+            <li><%= link(raw("<i class=\"fa fa-cog\"></i> Change password"), to: auth_path(@conn, :change_password)) %></li>
+            <li><%= link(raw("<i class=\"fa fa-sign-out\"></i> Sign out"), to: auth_path(@conn, :logout)) %></li>
+          </ul>
         </li>
-        <%= active_link(@conn, raw("<i class=\"fa fa-sign-out\"></i> Sign out"), to: auth_path(@conn, :logout), wrap_tag: :li) %>
-        <% else %>
+      </ul>
+      <% else %>
+      <ul class="vertical large-horizontal menu">
         <%= active_link(@conn, raw("<i class=\"fa fa-sign-in\"></i> Login"), to: login_url(@conn), wrap_tag: :li, active: ~r/\/login*/) %>
         <%= active_link(@conn, raw("<i class=\"fa fa-user-plus\"></i> Signup"), to: auth_path(@conn, :signup,  next: @conn.request_path), wrap_tag: :li, active: ~r/\/signup*/) %>
-        <% end %>
       </ul>
+      <% end %>
    </div>
 
   </div>
