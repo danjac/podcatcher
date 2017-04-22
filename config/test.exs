@@ -9,6 +9,9 @@ config :podcatcher, Podcatcher.Web.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
+config :podcatcher, Podcatcher.Mailer,
+  adapter: Bamboo.TestAdapter
+
 # Configure your database
 config :podcatcher, Podcatcher.Repo,
   adapter: Ecto.Adapters.Postgres,

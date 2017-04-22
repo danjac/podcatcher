@@ -1,10 +1,13 @@
 defmodule Podcatcher.Web.AuthControllerTest do
   use Podcatcher.Web.ConnCase
+  use Bamboo.Test
 
   import Podcatcher.Fixtures
 
   alias Podcatcher.Repo
+  alias Podcatcher.Accounts
   alias Podcatcher.Accounts.User
+  alias Podcatcher.Emails
 
   test "GET /login/", %{conn: conn} do
     conn = get conn, "/login/"
@@ -179,6 +182,44 @@ defmodule Podcatcher.Web.AuthControllerTest do
     assert get_resp_header(conn, "location") == ["/discover"]
 
   end
+
+  test "GET /recoverpass/", %{conn: conn} do
+    conn = get conn, "/recoverpass/"
+    html_response(conn, 200)
+  end
+
+  test "POST /recoverpass/ if invalid identifier", %{conn: conn} do
+    params = %{
+      "recover_password" => %{
+        "identifier" => "tester"
+      }
+    }
+
+    conn = post conn, "/recoverpass/", params
+    assert conn.status == 200
+
+  end
+
+  test "POST /recoverpass/ if valid identifier", %{conn: conn} do
+
+    user = fixture(:user)
+    params = %{
+      "recover_password" => %{
+        "identifier" => user.email
+      }
+    }
+
+    conn = post conn, "/recoverpass/", params
+
+    assert conn.status == 302
+    assert get_resp_header(conn, "location") == ["/recoverpassdone"]
+
+    token = Accounts.get_user!(user.id).recovery_token
+
+    assert_delivered_email Emails.reset_password_email(user, token)
+
+  end
+
 
 end
 

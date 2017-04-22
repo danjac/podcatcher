@@ -177,7 +177,7 @@ defmodule Podcatcher.Accounts do
     |> validate_required([:password, :password_confirmation])
     |> validate_length(:password, min: @min_password_length)
     |> validate_confirmation(:password)
-    # |> put_change(token: nil)
+    |> put_change(:recovery_token, nil)
     |> encrypt_password()
   end
 

@@ -70,7 +70,7 @@ defmodule Podcatcher.Web.AuthController do
         |> put_flash(:warning, "Sorry could not find your account")
         |> render("recover_password.html")
       user ->
-        token = "some token" # Accounts.generate_recovery_token(user)
+        token = Accounts.generate_recovery_token(user)
         Emails.reset_password_email(user, token) |> Mailer.deliver_later
         redirect conn, to: auth_path(conn, :recover_password_done)
     end
