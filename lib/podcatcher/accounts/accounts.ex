@@ -115,7 +115,7 @@ defmodule Podcatcher.Accounts do
   @doc """
   Generates and saves unique token for user
   """
-  def generate_recovery_token(user) do
+  def generate_recovery_token!(user) do
     token = :crypto.strong_rand_bytes(@token_length)
     |> Base.url_encode64
     |> binary_part(0, @token_length)
@@ -125,10 +125,9 @@ defmodule Podcatcher.Accounts do
     |> Repo.update!
 
     token
-
   end
 
-  def get_user_by_token!(token), do: Repo.get_by!(User, token: token)
+  def get_user_by_token!(token), do: Repo.get_by!(User, recovery_token: token)
 
   def get_user_by_name_or_email(identifier) do
     from(u in User, where: u.email==^identifier or u.name==^identifier) |> Repo.one

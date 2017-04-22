@@ -6,8 +6,8 @@ defmodule Podcatcher.AccountsTest do
 
   import Podcatcher.Fixtures
 
-  @create_attrs %{email: "someone@gmail.com", name: "some name", password: "some password", password_confirmation: "some password"}
-  @update_attrs %{email: "someone-else@gmail.com", name: "some updated name", password: "some updated password", password_confirmation: "some updated password"}
+  @create_attrs %{email: "someone@gmail.com", name: "some name", password: "some password", password_confirmation: "some password", recovery_token: nil}
+  @update_attrs %{email: "someone-else@gmail.com", name: "some updated name", password: "some updated password", password_confirmation: "some updated password", recovery_token: nil}
   @invalid_attrs %{email: nil, name: nil, password: nil}
 
   test "list_users/1 returns all users" do
@@ -88,11 +88,17 @@ defmodule Podcatcher.AccountsTest do
     assert {:error, :invalid_password} = Accounts.authenticate(user.email, "testpass1")
   end
 
-  test "generate_recovery_token/2 should create a new random token for a user" do
+  test "generate_recovery_token!/2 should create a new random token for a user" do
     user = fixture(:user)
-    token = Accounts.generate_recovery_token(user)
+    token = Accounts.generate_recovery_token!(user)
     user = Accounts.get_user!(user.id)
     assert user.recovery_token == token
+  end
+
+  test "get_user_by_token!/1 should return a user" do
+    user = fixture(:user)
+    token = Accounts.generate_recovery_token!(user)
+    assert Accounts.get_user_by_token!(token).id == user.id
   end
 
 end

@@ -59,6 +59,9 @@ defmodule Podcatcher.Web.Router do
 
     get "/recoverpassdone/", AuthController, :recover_password_done
 
+    get "/changepass/", AuthController, :change_password
+    post "/changepass/", AuthController, :update_password
+
     get "/logout/", AuthController, :logout
 
   end

@@ -48,7 +48,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
     conn = post conn, "/login/", params
     assert conn.status == 302
     assert get_session(conn, :user_id) == user.id
-    assert get_resp_header(conn, "location") == ["/feed"]
+    assert redirected_to(conn) =~ "/feed"
 
   end
 
@@ -69,7 +69,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     assert conn.status == 302
     assert get_session(conn, :user_id) == user.id
-    assert get_resp_header(conn, "location") == ["/browse"]
+    assert redirected_to(conn) =~ "/browse"
 
   end
 
@@ -91,7 +91,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     assert conn.status == 302
     assert get_session(conn, :user_id) == user.id
-    assert get_resp_header(conn, "location") == ["/feed"]
+    assert redirected_to(conn) =~ "/feed"
 
   end
 
@@ -113,11 +113,9 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     assert conn.status == 302
     assert get_session(conn, :user_id) == user.id
-    assert get_resp_header(conn, "location") == ["/feed"]
+    assert redirected_to(conn) =~ "/feed"
 
   end
-
-
 
   test "GET /signup/", %{conn: conn} do
     conn = get conn, "/signup/"
@@ -148,7 +146,8 @@ defmodule Podcatcher.Web.AuthControllerTest do
     user = Repo.one!(User)
 
     assert get_session(conn, :user_id) == user.id
-    assert get_resp_header(conn, "location") == ["/feed"]
+
+    assert redirected_to(conn) =~ "/feed"
 
   end
 
@@ -171,16 +170,14 @@ defmodule Podcatcher.Web.AuthControllerTest do
     user = Repo.one!(User)
 
     assert get_session(conn, :user_id) == user.id
-    assert get_resp_header(conn, "location") == ["/browse"]
+    assert redirected_to(conn) =~ "/browse"
 
   end
 
   test "GET /logout/", %{conn: conn} do
 
     conn = get conn, "/logout/"
-    assert conn.status == 302
-    assert get_resp_header(conn, "location") == ["/discover"]
-
+    assert redirected_to(conn) =~ "/discover"
   end
 
   test "GET /recoverpass/", %{conn: conn} do
@@ -211,8 +208,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     conn = post conn, "/recoverpass/", params
 
-    assert conn.status == 302
-    assert get_resp_header(conn, "location") == ["/recoverpassdone"]
+    assert redirected_to(conn) =~ "/recoverpassdone"
 
     token = Accounts.get_user!(user.id).recovery_token
 

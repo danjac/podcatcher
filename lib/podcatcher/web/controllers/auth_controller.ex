@@ -70,22 +70,13 @@ defmodule Podcatcher.Web.AuthController do
         |> put_flash(:warning, "Sorry could not find your account")
         |> render("recover_password.html")
       user ->
-        token = Accounts.generate_recovery_token(user)
+        token = Accounts.generate_recovery_token!(user)
         Emails.reset_password_email(user, token) |> Mailer.deliver_later
         redirect conn, to: auth_path(conn, :recover_password_done)
     end
   end
 
   def recover_password_done(conn, _params), do: render conn, "recover_password_done.html"
-
-  def change_password(conn, %{"token" => token, "user" => params}) do
-    user = Accounts.get_user_by_token!(token)
-    do_change_password(conn, user, params)
-  end
-
-  def change_password(%Plug.Conn{assigns: %{user: user}} = conn, %{"user" => params}) do
-    do_change_password(conn, user, params)
-  end
 
   def change_password(conn, %{"token" => token}) do
     user = Accounts.get_user_by_token!(token)
@@ -104,7 +95,16 @@ defmodule Podcatcher.Web.AuthController do
     |> redirect(to: auth_path(conn, :login))
   end
 
-  defp do_change_password(conn, user, params) do
+  def update_password(conn, %{"token" => token, "user" => params}) do
+    user = Accounts.get_user_by_token!(token)
+    do_update_password(conn, user, params)
+  end
+
+  def update_password(%Plug.Conn{assigns: %{user: user}} = conn, %{"user" => params}) do
+    do_update_password(conn, user, params)
+  end
+
+  defp do_update_password(conn, user, params) do
 
     case Accounts.change_password(user, params) |> Accounts.update_user do
 
