@@ -4,7 +4,8 @@
   <%= submit "Sign in", class: "button primary expanded" %>
 <% end %>
 <p>
-  <a href="">Not a member yet?</a><br>
+  <%= link "Not a member yet?", to: auth_path(@conn, :signup) %>
+</p><p>
   <%= link "Forgot your password?", to: auth_path(@conn, :recover_password) %>
 </p>
 

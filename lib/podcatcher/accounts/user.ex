@@ -9,6 +9,7 @@ defmodule Podcatcher.Accounts.User do
     field :name, :string
     field :password, :string
     field :password_confirmation, :string, virtual: true
+    field :recovery_token, :string
 
     has_many :bookmarks, Bookmark
     has_many :subscriptions, Subscription

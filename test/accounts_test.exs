@@ -88,5 +88,12 @@ defmodule Podcatcher.AccountsTest do
     assert {:error, :invalid_password} = Accounts.authenticate(user.email, "testpass1")
   end
 
+  test "generate_recovery_token/2 should create a new random token for a user" do
+    user = fixture(:user)
+    token = Accounts.generate_recovery_token(user)
+    user = Accounts.get_user!(user.id)
+    assert user.recovery_token == token
+  end
+
 end
 

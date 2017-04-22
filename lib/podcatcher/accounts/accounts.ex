@@ -119,8 +119,13 @@ defmodule Podcatcher.Accounts do
     token = :crypto.strong_rand_bytes(@token_length)
     |> Base.url_encode64
     |> binary_part(0, @token_length)
-    # Repo.update(user, recovery_token: token)
+
+    user
+    |> cast(%{recovery_token: token}, [:recovery_token])
+    |> Repo.update!
+
     token
+
   end
 
   def get_user_by_token!(token), do: Repo.get_by!(User, token: token)
