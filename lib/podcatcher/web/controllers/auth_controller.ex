@@ -5,6 +5,8 @@ defmodule Podcatcher.Web.AuthController do
   alias Podcatcher.Mailer
   alias Podcatcher.Emails
 
+  plug Podcatcher.Web.Plugs.RequireAuth when action in [:change_email, :update_email]
+
   @blacklisted_urls ["login", "signup", "recoverpass", "changepass"]
 
   def login(conn, %{"next" => next}) do
@@ -118,7 +120,7 @@ defmodule Podcatcher.Web.AuthController do
         if conn.assigns[:user] do
           conn
           |> put_flash(:success, "Your password has been updated")
-          |> redirect(to: subscriptions_path(conn, :index))
+          |> redirect(to: default_user_path(conn))
         else
           conn
           |> put_flash(:success, "Your password has been updated, please sign in to continue")
@@ -131,6 +133,24 @@ defmodule Podcatcher.Web.AuthController do
 
   end
 
+  def change_email(conn, _params) do
+    changeset = Accounts.change_email(conn.assigns[:user])
+    render conn, "change_email.html", changeset: changeset
+  end
+
+  def update_email(conn, %{"user" => params}) do
+
+    case Accounts.update_email(conn.assigns[:user], params) do
+      {:ok, _} ->
+      conn
+      |> put_flash(:success, "Your email address has been updated")
+      |> redirect(to: default_user_path(conn))
+      {:error, changeset} ->
+      render conn, "change_email.html", changeset: changeset
+    end
+
+  end
+
   defp redirect_after_login(conn) do
     next = get_session(conn, :next)
     cond do
@@ -138,7 +158,7 @@ defmodule Podcatcher.Web.AuthController do
         conn
         |> delete_session(:next)
         |> redirect(to: next)
-      true -> redirect(conn, to: subscriptions_path(conn, :index))
+      true -> redirect(conn, to: default_user_path(conn))
     end
   end
 
@@ -150,6 +170,8 @@ defmodule Podcatcher.Web.AuthController do
   defp is_blacklisted(url) do
     Enum.any?(@blacklisted_urls, fn(blacklisted) -> String.contains?(url, blacklisted) end)
   end
+
+  defp default_user_path(conn), do: subscriptions_path(conn, :index)
 
 end
 

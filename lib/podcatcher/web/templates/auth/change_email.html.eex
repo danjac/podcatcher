@@ -1,0 +1,10 @@
+<h3>Change your email address</h3>
+
+<%= form_for @changeset, auth_path(@conn, :update_email), fn f -> %>
+
+  <%= email_input f, :email, placeholder: "Change your email address"  %>
+  <%= error_tag f, :email %>
+
+  <%= submit "Continue", class: "button primary expanded" %>
+<% end %>
+

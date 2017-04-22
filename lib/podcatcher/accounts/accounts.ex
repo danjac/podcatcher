@@ -86,6 +86,15 @@ defmodule Podcatcher.Accounts do
   end
 
   @doc """
+  Updates user email address.
+  """
+  def update_email(%User{} = user, attrs) do
+    user
+    |> email_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Deletes a User.
 
   ## Examples
@@ -119,6 +128,13 @@ defmodule Podcatcher.Accounts do
   """
   def change_password(user \\ %User{}) do
     password_changeset(user, %{})
+  end
+
+  @doc """
+  Returns `%Ecto.Changeset{}` for changing the user email address.
+  """
+  def change_email(user \\ %User{}) do
+    email_changeset(user, %{})
   end
 
   @doc """
@@ -178,6 +194,14 @@ defmodule Podcatcher.Accounts do
   end
 
   defp encrypt_password(%Ecto.Changeset{} = changeset), do: changeset
+
+  defp email_changeset(%User{} = user, attrs) do
+    user
+    |> cast(attrs, [:email])
+    |> validate_required([:email])
+    |> validate_format(:email, ~r/@/)
+    |> unique_constraint(:email, name: :accounts_users_email_index)
+  end
 
   defp password_changeset(%User{} = user, attrs) do
     user

@@ -5,6 +5,12 @@
 
 <hr />
 
+<%= if !assigns[:search_term] do %>
+<div class="callout">
+  Search for individual podcast episodes
+</div>
+<% end %>
+
 <form method="GET" action="<%= episodes_path(@conn, :search) %>">
   <div class="input-group">
     <span class="input-group-label"><i class="fa fa-search"></i></span>
@@ -26,4 +32,5 @@
     <%= Podcatcher.Web.ComponentsView.render "episode_card.html", conn: @conn, episode: episode %>
     <% end %>
   <% end %>
-  <% end %>
+
+<% end %>

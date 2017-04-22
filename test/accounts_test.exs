@@ -101,5 +101,23 @@ defmodule Podcatcher.AccountsTest do
     assert Accounts.get_user_by_token!(token).id == user.id
   end
 
+  test "update_password/2 should change user password" do
+    user = fixture(:user)
+    original_pass = user.password
+
+    params = %{ password: "testing", password_confirmation: "testing"}
+
+    {:ok, user} = Accounts.update_password(user, params)
+    assert user.password != original_pass
+  end
+
+  test "update_email/2 should change user email" do
+    user = fixture(:user)
+    params = %{ email: "new@gmail.com" }
+
+    {:ok, user} = Accounts.update_email(user, params)
+    assert user.email == "new@gmail.com"
+
+  end
 end
 

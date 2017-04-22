@@ -295,6 +295,38 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
   end
 
+  test "GET /changemail", %{conn: conn}  do
+    user = fixture(:user)
+
+    conn =
+      conn
+      |> assign(:user, user)
+      |> get("/changemail")
+
+    assert conn.status == 200
+
+  end
+
+  test "PUT /changemail", %{conn: conn}  do
+    user = fixture(:user)
+
+    params = %{
+      "user" => %{
+        "email" => "new@gmail.com"
+      }
+    }
+
+    conn =
+      conn
+      |> assign(:user, user)
+      |> put("/changemail", params)
+
+    assert redirected_to(conn) =~ "/feed"
+
+    user = Accounts.get_user!(user.id)
+    assert user.email == "new@gmail.com"
+
+  end
 
 end
 
