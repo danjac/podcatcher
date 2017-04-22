@@ -18,6 +18,10 @@ defmodule Podcatcher.Web.Router do
     plug Podcatcher.Web.Plugs.Authenticate
   end
 
+  if Mix.env == :dev do
+    forward "/sent_emails", Bamboo.EmailPreviewPlug
+  end
+
   scope "/", Podcatcher.Web do
     pipe_through :browser # Use the default browser stack
 
@@ -42,11 +46,18 @@ defmodule Podcatcher.Web.Router do
 
     get "/feed/", SubscriptionsController, :index
 
+    # authentication routes
+
     get "/login/", AuthController, :login
-    post "/login/", AuthController, :login
+    post "/login/", AuthController, :handle_login
 
     get "/signup/", AuthController, :signup
-    post "/signup/", AuthController, :signup
+    post "/signup/", AuthController, :handle_signup
+
+    get "/recoverpass/", AuthController, :recover_password
+    post "/recoverpass/", AuthController, :handle_recover_password
+
+    get "/recoverpassdone/", AuthController, :recover_password_done
 
     get "/logout/", AuthController, :logout
 

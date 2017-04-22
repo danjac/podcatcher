@@ -2,10 +2,20 @@ defmodule Podcatcher.Web.AuthController do
   use Podcatcher.Web, :controller
 
   alias Podcatcher.Accounts
+  alias Podcatcher.Mailer
+  alias Podcatcher.Emails
 
   @blacklisted_urls ["login", "signup"]
 
-  def login(%Plug.Conn{method: "POST"} = conn, %{"login" => %{"identifier" => identifier, "password" => password}}) do
+  def login(conn, %{"next" => next}) do
+    conn
+    |> put_session(:next, next)
+    |> render("login.html")
+  end
+
+  def login(conn, _params), do: render(conn, "login.html")
+
+  def handle_login(conn, %{"login" => %{"identifier" => identifier, "password" => password}}) do
     case Accounts.authenticate(identifier, password) do
       {:error, _} ->
         conn
@@ -16,26 +26,6 @@ defmodule Podcatcher.Web.AuthController do
         |> put_session(:user_id, user.id)
         |> put_flash(:success, "Welcome back, #{user.name}!")
         |> redirect_after_login
-    end
-  end
-
-  def login(conn, %{"next" => next}) do
-    conn
-    |> put_session(:next, next)
-    |> render("login.html")
-  end
-
-  def login(conn, _params), do: render(conn, "login.html")
-
-  def signup(%Plug.Conn{method: "POST"} = conn, %{"user" => params}) do
-    case Accounts.create_user(params) do
-      {:ok, user} ->
-      conn
-      |> put_session(:user_id, user.id)
-      |> put_flash(:success, "Welcome, #{user.name}")
-      |> redirect_after_login
-      {:error, changeset} ->
-      render conn, "signup.html", changeset: changeset
     end
   end
 
@@ -51,6 +41,18 @@ defmodule Podcatcher.Web.AuthController do
     render conn, "signup.html", changeset: changeset
   end
 
+  def handle_signup(conn, %{"user" => params}) do
+    case Accounts.create_user(params) do
+      {:ok, user} ->
+      conn
+      |> put_session(:user_id, user.id)
+      |> put_flash(:success, "Welcome, #{user.name}")
+      |> redirect_after_login
+      {:error, changeset} ->
+      render conn, "signup.html", changeset: changeset
+    end
+  end
+
   def logout(conn, _params) do
     conn
     |> configure_session(drop: true)
@@ -58,18 +60,19 @@ defmodule Podcatcher.Web.AuthController do
   end
 
   def recover_password(conn, _params) do
-    render conn, "recover_password.html", user_not_found: false
+    render conn, "recover_password.html"
   end
 
-  def recover_password(conn, %{"identifier" => identifier}) do
+  def handle_recover_password(conn, %{"recover_password" => %{"identifier" => identifier}}) do
     case Accounts.get_user_by_name_or_email(identifier) do
-      {:ok, user} ->
-        token = Accounts.generate_recovery_token(user)
-        IO.puts token
-        # send token...
-        redirect conn, to: auth_path(:recover_password_done)
-      {:error, _} ->
-        render conn, "recover_password.html", user_not_found: true
+      nil ->
+        conn
+        |> put_flash(:warning, "Sorry could not find your account")
+        |> render("recover_password.html")
+      user ->
+        token = "some token" # Accounts.generate_recovery_token(user)
+        Emails.reset_password_email(user, token) |> Mailer.deliver_later
+        redirect conn, to: auth_path(conn, :recover_password_done)
     end
   end
 

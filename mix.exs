@@ -56,6 +56,7 @@ defmodule Podcatcher.Mixfile do
      {:comeonin, "~> 3.0"},
      {:quantum, "~> 1.9.1"},
      {:poolboy, "~> 1.5"},
+     {:bamboo, "~> 0.8.0"},
      {:cowboy, "~> 1.0"}]
   end
 

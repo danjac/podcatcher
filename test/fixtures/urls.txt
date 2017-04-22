@@ -216,10 +216,6 @@ http://feeds.feedburner.com/ProgrammingThrowdown
 http://feeds.feedburner.com/Punchdrunksports
 http://feeds.feedburner.com/PunkyRadio
 http://feeds.feedburner.com/randomchatter
-http://feeds.feedburner.com/reactjspodcast
-http://feeds.feedburner.com/realsimplepodcast
-http://feeds.feedburner.com/reasonabledoubts/
-http://feeds.feedburner.com/ReasonablySound
 http://feeds.feedburner.com/RebelsRoundtable
 http://feeds.feedburner.com/Recode-Decode
 http://feeds.feedburner.com/Recode-Media

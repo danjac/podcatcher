@@ -48,6 +48,9 @@ config :logger, :console, format: "[$level] $message\n"
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
 
+config :podcatcher, Podcatcher.Mailer,
+  adapter: Bamboo.LocalAdapter
+
 # Configure your database
 config :podcatcher, Podcatcher.Repo,
   adapter: Ecto.Adapters.Postgres,
