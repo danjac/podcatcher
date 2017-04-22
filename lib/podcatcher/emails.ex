@@ -5,12 +5,12 @@ defmodule Podcatcher.Emails do
 
   @default_sender "support@podbaby.me"
 
-  def reset_password_email(%User{} = user, token) do
+  def reset_password_email(conn, user, token) do
     new_email(
       to: user.email,
       from: @default_sender,
       subject: "Reset your password",
     )
-    |> render("recover_password.text", user: user, token: token)
+    |> render("recover_password.text", conn: conn, user: user, token: token)
   end
 end

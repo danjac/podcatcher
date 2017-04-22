@@ -212,7 +212,7 @@ defmodule Podcatcher.Web.AuthControllerTest do
 
     token = Accounts.get_user!(user.id).recovery_token
 
-    assert_delivered_email Emails.reset_password_email(user, token)
+    assert_delivered_email Emails.reset_password_email(conn, user, token)
 
   end
 

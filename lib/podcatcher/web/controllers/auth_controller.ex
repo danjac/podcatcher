@@ -5,7 +5,7 @@ defmodule Podcatcher.Web.AuthController do
   alias Podcatcher.Mailer
   alias Podcatcher.Emails
 
-  @blacklisted_urls ["login", "signup"]
+  @blacklisted_urls ["login", "signup", "recoverpass", "changepass"]
 
   def login(conn, %{"next" => next}) do
     conn
@@ -71,7 +71,7 @@ defmodule Podcatcher.Web.AuthController do
         |> render("recover_password.html")
       user ->
         token = Accounts.generate_recovery_token!(user)
-        Emails.reset_password_email(user, token) |> Mailer.deliver_later
+        Emails.reset_password_email(conn, user, token) |> Mailer.deliver_later
         redirect conn, to: auth_path(conn, :recover_password_done)
     end
   end
@@ -81,12 +81,12 @@ defmodule Podcatcher.Web.AuthController do
   def change_password(conn, %{"token" => token}) do
     user = Accounts.get_user_by_token!(token)
     changeset = Accounts.change_password(user)
-    render conn, "change_password.html", changeset: changeset
+    render conn, "change_password.html", user: user, changeset: changeset
   end
 
   def change_password(%Plug.Conn{assigns: %{user: user}} = conn, _params) do
     changeset = Accounts.change_password(user)
-    render conn, "change_password.html", changeset: changeset
+    render conn, "change_password.html", user: user, changeset: changeset
   end
 
   def change_password(conn, _params) do
@@ -106,7 +106,7 @@ defmodule Podcatcher.Web.AuthController do
 
   defp do_update_password(conn, user, params) do
 
-    case Accounts.change_password(user, params) |> Accounts.update_user do
+    case Accounts.update_password(user, params) do
 
       {:ok, _} ->
         if conn.assigns[:user] do
@@ -119,7 +119,7 @@ defmodule Podcatcher.Web.AuthController do
           |> redirect(to: auth_path(conn, :login))
         end
       {:error, changeset} ->
-        render conn, "change_password.html", changeset: changeset
+        render conn, "change_password.html", user: user, changeset: changeset
 
     end
 

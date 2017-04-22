@@ -77,6 +77,15 @@ defmodule Podcatcher.Accounts do
   end
 
   @doc """
+  Updates user password.
+  """
+  def update_password(%User{} = user, attrs) do
+    user
+    |> password_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Deletes a User.
 
   ## Examples
