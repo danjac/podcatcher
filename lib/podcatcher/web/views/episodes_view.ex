@@ -1,8 +1,6 @@
 defmodule Podcatcher.Web.EpisodesView do
   use Podcatcher.Web, :view
 
-  import Podcatcher.Web.PodcastsView, only: [podcast_image: 3]
-
   @mime_types [
     {".aa", "audio/audible"},
     {".aac", "audio/aac"},

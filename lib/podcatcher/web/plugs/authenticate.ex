@@ -13,6 +13,7 @@ defmodule Podcatcher.Web.Plugs.Authenticate do
     if user do
       conn
       |> assign(:user, user)
+      |> assign(:is_admin, user.is_admin)
       |> assign(:bookmarks, Enum.map(user.bookmarks, fn(bookmark) -> bookmark.episode_id end))
       |> assign(:subscriptions, Enum.map(user.subscriptions, fn(sub) -> sub.podcast_id end))
     else

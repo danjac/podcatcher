@@ -10,6 +10,7 @@ defmodule Podcatcher.Accounts.User do
     field :password, :string
     field :password_confirmation, :string, virtual: true
     field :recovery_token, :string
+    field :is_admin, :boolean
 
     has_many :bookmarks, Bookmark
     has_many :subscriptions, Subscription

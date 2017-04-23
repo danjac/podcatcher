@@ -1,5 +1,5 @@
 import {
-  info,
+  warning,
   success
 } from './notifications';
 
@@ -35,8 +35,7 @@ const initEvents = () => {
       dataType: 'text',
     });
 
-    var $elements = $(`[data-unsubscribe-url="${url}"]`);
-    $elements
+    $(`[data-unsubscribe-url="${url}"]`)
       .removeAttr('data-unsubscribe')
       .attr('data-subscribe', true)
       .attr('title', 'Subscribe to this podcast')
@@ -44,7 +43,7 @@ const initEvents = () => {
       .removeClass('fa-trash')
       .addClass('fa-rss')
       .attr('title', 'Subscribe to this podcast');
-    info('You have stopped following this podcast');
+    warning('You have stopped following this podcast');
   });
 
   $document.on('click', '[data-subscribe]', event => {
@@ -54,8 +53,7 @@ const initEvents = () => {
       method: 'POST',
       dataType: 'text',
     });
-    var $elements = $(`[data-subscribe-url="${url}"]`);
-    $elements
+    $(`[data-subscribe-url="${url}"]`)
       .removeAttr('data-subscribe')
       .attr('data-unsubscribe', true)
       .attr('title', 'Unsubscribe from this podcast')
@@ -81,7 +79,7 @@ const initEvents = () => {
       .find('i.fa.fa-bookmark')
       .removeClass('fa-bookmark')
       .addClass('fa-bookmark-o');
-    info('Bookmark removed');
+    warning('Bookmark removed');
   });
 
   $document.on('click', '[data-add-bookmark]', event => {

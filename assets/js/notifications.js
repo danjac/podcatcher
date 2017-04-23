@@ -10,3 +10,4 @@ export const notify = (msg, style) => {
 
 export const success = (msg) => notify(msg, "success");
 export const info = (msg) => notify(msg, "info");
+export const warning = (msg) => notify(msg, "alert");

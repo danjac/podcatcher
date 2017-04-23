@@ -69,6 +69,14 @@ defmodule Podcatcher.Web.Router do
 
   end
 
+  scope "/admin", as: :admin do
+    pipe_through :browser
+
+    get "/podcasts", Podcatcher.Web.Admin.PodcastsController, :index
+    delete "/podcast/:id/", Podcatcher.Web.Admin.PodcastsController, :delete_podcast
+
+  end
+
   # Other scopes may use custom stacks.
   scope "/api", Podcatcher.Web do
      pipe_through :api

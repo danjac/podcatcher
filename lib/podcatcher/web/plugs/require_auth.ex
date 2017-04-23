@@ -17,7 +17,7 @@ defmodule Podcatcher.Web.Plugs.RequireAuth do
   defp handle_unauthenticated(conn) do
     if is_xhr?(conn) do
       conn
-      |> put_status(:unauthenticated)
+      |> put_status(401)
       |> halt()
     else
       conn
