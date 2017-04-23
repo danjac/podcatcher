@@ -1,0 +1,8 @@
+<div class="callout">
+  Enter the URL of the podcast's RSS feed. To find a URL from an iTunes or Soundcloud link, try <a href="http://getrssfeed.com/">getrssfeed.com</a>.
+</div>
+
+<%= form_for @conn, admin_podcasts_path(@conn, :create), [as: :podcast], fn f -> %>
+  <%= url_input f, :url, placeholder: "URL of podcast RSS feed" %>
+  <%= submit "Continue", class: "button primary expanded" %>
+<% end %>

@@ -129,7 +129,6 @@ defmodule Podcatcher.Podcasts do
   @doc """
   Refreshes content of a podcast.
   Pulls latest rss feed and updates podcast, episodes and categories as appropriate.
-  NOTE: episodes and categories should be preloaded!!
 
   Returns number of new episodes or {:error, reason}
   """

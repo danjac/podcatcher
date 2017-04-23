@@ -61,41 +61,48 @@ defmodule Podcatcher.Podcasts.FeedParser do
   end
 
   def parse(xml_string) do
-    xml_string |> xmap(
-      categories: ~x"//itunes:category/@text"l |> transform_by(&parse_categories/1),
-      podcast: [
-        ~x"./channel",
-        title: ~x"./title/text()"s |> transform_by(&String.trim/1),
-        website: ~x"./link/text()"s |> transform_by(&String.trim/1),
-        last_build_date: ~x"./lastBuildDate/text()"s |> transform_by(&parse_date/1),
-        pub_date: ~x"./pubDate/text()"s |> transform_by(&parse_date/1),
-        description: ~x"./description/text()"s |> transform_by(&String.trim/1),
-        subtitle: ~x"./itunes:subtitle/text()"s |> transform_by(&String.trim/1),
-        explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
-        rss_image: ~x"./image/url/text()"l |> transform_by(&to_string/1),
-        itunes_image: ~x"./itunes:image/@href"l |> transform_by(&to_string/1),
-      ],
-      episodes: [
-        ~x"./channel/item"l,
-        title: ~x"./title/text()"s |> transform_by(&String.trim/1),
-        link: ~x"./link/text()"s |> transform_by(&String.trim/1),
-        guid: ~x"./guid/text()"s |> transform_by(&String.trim/1),
-        description: ~x"./description/text()"s |> transform_by(&String.trim/1),
-        summary: ~x"./itunes:summary/text()"s |> transform_by(&String.trim/1),
-        subtitle: ~x"./itunes:subtitle/text()"s |> transform_by(&String.trim/1),
-        duration: ~x"./itunes:duration/text()"s |> transform_by(&String.trim/1),
-        explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
-        pub_date: ~x"./pubDate/text()"s |> transform_by(&parse_date/1),
-        content_url: ~x"./enclosure/@url[1]"s |> transform_by(&String.trim/1),
-        content_type: ~x"./enclosure/@type[1]"s |> transform_by(&String.trim/1),
-        content_length: ~x"./enclosure/@length[1]"s |> transform_by(&parse_integer/1),
-      ]
-    )
-    |> default_episode_guid
-    |> filter_episodes
-    |> add_images
-    |> fix_last_build_date
+    try do
+      xml_string |> xmap(
+        categories: ~x"//itunes:category/@text"l |> transform_by(&parse_categories/1),
+        podcast: [
+          ~x"./channel",
+          title: ~x"./title/text()"s |> transform_by(&String.trim/1),
+          website: ~x"./link/text()"s |> transform_by(&String.trim/1),
+          last_build_date: ~x"./lastBuildDate/text()"s |> transform_by(&parse_date/1),
+          pub_date: ~x"./pubDate/text()"s |> transform_by(&parse_date/1),
+          description: ~x"./description/text()"s |> transform_by(&String.trim/1),
+          subtitle: ~x"./itunes:subtitle/text()"s |> transform_by(&String.trim/1),
+          explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
+          rss_image: ~x"./image/url/text()"l |> transform_by(&to_string/1),
+          itunes_image: ~x"./itunes:image/@href"l |> transform_by(&to_string/1),
+        ],
+        episodes: [
+          ~x"./channel/item"l,
+          title: ~x"./title/text()"s |> transform_by(&String.trim/1),
+          link: ~x"./link/text()"s |> transform_by(&String.trim/1),
+          guid: ~x"./guid/text()"s |> transform_by(&String.trim/1),
+          description: ~x"./description/text()"s |> transform_by(&String.trim/1),
+          summary: ~x"./itunes:summary/text()"s |> transform_by(&String.trim/1),
+          subtitle: ~x"./itunes:subtitle/text()"s |> transform_by(&String.trim/1),
+          duration: ~x"./itunes:duration/text()"s |> transform_by(&String.trim/1),
+          explicit: ~x"./itunes:explicit/text()"s |> transform_by(&parse_boolean/1),
+          pub_date: ~x"./pubDate/text()"s |> transform_by(&parse_date/1),
+          content_url: ~x"./enclosure/@url[1]"s |> transform_by(&String.trim/1),
+          content_type: ~x"./enclosure/@type[1]"s |> transform_by(&String.trim/1),
+          content_length: ~x"./enclosure/@length[1]"s |> transform_by(&parse_integer/1),
+        ]
+      )
+      |> default_episode_guid
+      |> filter_episodes
+      |> add_images
+      |> fix_last_build_date
+
+    catch
+      :exit, _ -> {:error, :invalid_xml}
+    end
+
   end
+
 
   defp default_episode_guid(%{episodes: episodes} = feed) do
     %{feed | episodes: Enum.map(episodes, &assign_default_guid/1)}

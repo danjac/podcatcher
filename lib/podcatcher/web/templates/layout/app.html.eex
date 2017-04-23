@@ -40,6 +40,10 @@
         <%= active_link(@conn, raw("<i class=\"fa fa-flash\"></i> New releases"), to: episodes_path(@conn, :index), wrap_tag: :li) %>
         <%= active_link(@conn, raw("<i class=\"fa fa-search\"></i> Discover"), to: podcasts_path(@conn, :index), wrap_tag: :li) %>
         <%= active_link(@conn, raw("<i class=\"fa fa-folder-open\"></i> Browse"), to: categories_path(@conn, :index), wrap_tag: :li) %>
+        <%= if assigns[:is_admin] do %>
+        <%= active_link(@conn, raw("<i class=\"fa fa-plus\"></i> Add new"), to: admin_podcasts_path(@conn, :new), wrap_tag: :li) %>
+        <% end %>
+
       </ul>
     </div>
     <div class="top-bar-right">

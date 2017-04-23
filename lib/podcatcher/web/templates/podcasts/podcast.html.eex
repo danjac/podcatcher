@@ -18,7 +18,7 @@
         </div>
 
           <%= if assigns[:is_admin] do %>
-          <%= link raw("<i class=\"fa fa-trash\"></i> Delete this podcast"), to: admin_podcasts_path(@conn, :delete_podcast, @podcast), method: :delete, data: [confirm: "Are you sure?"], class: "button alert" %>
+          <%= link raw("<i class=\"fa fa-trash\"></i> Delete this podcast"), to: admin_podcasts_path(@conn, :delete, @podcast), method: :delete, data: [confirm: "Are you sure?"], class: "button alert" %>
           <% end %>
 
         <ul class="menu simple">

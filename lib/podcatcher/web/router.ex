@@ -72,8 +72,10 @@ defmodule Podcatcher.Web.Router do
   scope "/admin", as: :admin do
     pipe_through :browser
 
-    get "/podcasts", Podcatcher.Web.Admin.PodcastsController, :index
-    delete "/podcast/:id/", Podcatcher.Web.Admin.PodcastsController, :delete_podcast
+    get "/podcasts/new", Podcatcher.Web.Admin.PodcastsController, :new
+    post "/podcasts/", Podcatcher.Web.Admin.PodcastsController, :create
+
+    delete "/podcasts/:id/", Podcatcher.Web.Admin.PodcastsController, :delete
 
   end
 
