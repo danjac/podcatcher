@@ -1,14 +1,1 @@
-<%= for episode <- @episodes do %>
-<%= Podcatcher.Web.ComponentsView.render "episode_card.html", conn: @conn, episode: episode %>
-<% end %>
-
-<%= if length(@episodes) == 0 && assigns[:user] do %>
-<div class="callout">
-  <h3>You are not following any podcasts yet</h3>
-  <p>
-  Click on the subscribe icon <i class="fa fa-rss"></i> under any podcast to subscribe and follow new episodes.
-  </p>
-</div>
-<% end %>
-
-
+<%= Podcatcher.Web.ComponentsView.render "episodes.html", conn: @conn, episodes: @episodes %>

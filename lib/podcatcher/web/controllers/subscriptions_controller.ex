@@ -10,7 +10,8 @@ defmodule Podcatcher.Web.SubscriptionsController do
 
   def index(conn, %{"q" => search_term} = params) do
     page = Subscriptions.search_subscriptions_for_user(conn.assigns[:user], search_term, params)
-    render conn, "index.html", page: page, search_term: search_term, page_title: "My podcasts"
+    podcasts = Enum.map(page.entries, &(&1.podcast))
+    render conn, "index.html", podcasts: podcasts, page: page, search_term: search_term, page_title: "My podcasts"
   end
 
   def index(conn, params), do: list_subscriptions(conn, params)
@@ -29,7 +30,8 @@ defmodule Podcatcher.Web.SubscriptionsController do
 
   defp list_subscriptions(conn, params) do
     page = Subscriptions.subscriptions_for_user(conn.assigns[:user], params)
-    render conn, "index.html", page: page, page_title: "My podcasts"
+    podcasts = Enum.map(page.entries, &(&1.podcast))
+    render conn, "index.html", podcasts: podcasts, page: page, page_title: "My podcasts"
   end
 
 end

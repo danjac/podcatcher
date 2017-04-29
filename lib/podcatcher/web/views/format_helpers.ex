@@ -1,4 +1,4 @@
-defmodule Podcatcher.Web.Formatters do
+defmodule Podcatcher.Web.FormatHelpers do
 
   import Phoenix.HTML, only: [raw: 1]
 
@@ -23,10 +23,23 @@ defmodule Podcatcher.Web.Formatters do
   def markdown(content) do
     content
     |> String.trim
-    |> Earmark.as_html!
-    |> HtmlSanitizeEx.basic_html
+    |> HtmlSanitizeEx.markdown_html
     |> raw
   end
+
+  def strip_tags(nil), do: ""
+  def strip_tags(""), do: ""
+
+  def strip_tags(content) do
+    content
+    |> String.trim
+    |> HtmlSanitizeEx.strip_tags
+    |> raw
+  end
+
+  def pluralize(count, singular), do: pluralize(count, singular, singular <> "s")
+  def pluralize(count, singular, _plural) when count == 1, do: singular
+  def pluralize(_count, _singular, plural), do: plural
 
 end
 

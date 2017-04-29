@@ -22,7 +22,8 @@ defmodule Podcatcher.Mixfile do
       :runtime_tools,
       :scrivener_ecto,
       :comeonin,
-      :quantum
+      :quantum,
+      :timex
     ]]
   end
 
@@ -49,15 +50,15 @@ defmodule Podcatcher.Mixfile do
      {:slugger, "~> 0.1.0"},
      {:ecto_autoslug_field, "~> 0.2"},
      {:timex, "~> 3.0"},
-     {:earmark, "~> 1.2.0"},
-     {:html_sanitize_ex, "~> 1.0.0"},
+     {:html_sanitize_ex, "~> 1.2.0"},
      {:scrivener_ecto, "~> 1.0"},
      {:phoenix_active_link, "~> 0.1.1"},
      {:comeonin, "~> 3.0"},
      {:quantum, "~> 1.9.1"},
      {:poolboy, "~> 1.5"},
      {:bamboo, "~> 0.8.0"},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:distillery, "~> 1.3.5"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

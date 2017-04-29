@@ -17,6 +17,7 @@ defmodule Podcatcher.Episodes.Episode do
     field :pub_date, :naive_datetime
     field :subtitle, :string
     field :summary, :string
+    field :keywords, :string
 
     belongs_to :podcast, Podcast
 

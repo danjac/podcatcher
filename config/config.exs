@@ -27,8 +27,10 @@ config :arc,
 
 config :quantum, :podcatcher,
   cron: [
-    "@daily": &Podcatcher.Updater.run/0
-  ]
+    "30 7 * * *": &Podcatcher.Updater.run/0,
+  ],
+  timeout: :infinity
+  # timezone: "Europe/Helsinki"
 
 
 # Import environment specific config. This must remain at the bottom

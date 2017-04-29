@@ -1,10 +1,16 @@
+  <table class="stack">
+  <tbody>
   <%= for category <- @categories do %>
-  <div class="card">
-    <div class="card-divider">
-      <h3><%= link(category.name, to: category_url(@conn, category)) %></h3>
-    </div>
-    <div class="card-section">
+  <tr>
+    <td>
+      <h4>
+      <%= link category.name, to: category_url(@conn, category) %>
+      </h4>
+    </td>
+    <td>
     <%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: category.children %>
-    </div>
-  </div>
+    </td>
+  </tr>
   <% end %>
+  </tbody>
+  </table>

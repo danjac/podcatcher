@@ -290,7 +290,7 @@ defmodule Podcatcher.Podcasts do
   defp podcast_changeset(%Podcast{} = podcast, attrs) do
       podcast
       |> Repo.preload(:categories)
-      |> cast(attrs, [:rss_feed, :website, :last_build_date, :title, :description, :subtitle, :explicit, :owner, :email, :copyright])
+      |> cast(attrs, [:rss_feed, :website, :last_build_date, :title, :description, :subtitle, :explicit, :owner, :email, :copyright, :keywords])
       |> validate_required([:rss_feed, :title])
       |> unique_constraint(:rss_feed)
       |> Slug.maybe_generate_slug

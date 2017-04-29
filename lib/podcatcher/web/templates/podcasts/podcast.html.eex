@@ -2,58 +2,84 @@
   <div class="card-divider">
     <h3><%= @podcast.title %></h3>
   </div>
+
   <div class="card-section">
-
     <div class="row">
-      <div class="columns small-12 medium-4">
+
+    <div class="columns small-12 medium-4 large-3">
         <div class="thumbnail">
-          <img src="<%= podcast_image(@conn, @podcast, :large) %>" height="300" width="300">
+          <a href="#"><img alt="<%= @podcast.title %>" src="<%= podcast_image(@conn, @podcast, :large) %>" height="300" width="300"></a>
         </div>
-      </div>
-      <div class="columns small-12 medium-8">
-
-        <%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: @podcast.categories %>
-        <div class="button-group">
-          <%= Podcatcher.Web.ComponentsView.render "subscribe_button.html", conn: @conn, podcast: @podcast %>
-        </div>
-
-          <%= if assigns[:is_admin] do %>
-          <%= link raw("<i class=\"fa fa-trash\"></i> Delete this podcast"), to: admin_podcasts_path(@conn, :delete, @podcast), method: :delete, data: [confirm: "Are you sure?"], class: "button alert" %>
-          <% end %>
-
-        <ul class="menu simple">
-          <li><a href="<%= @podcast.website %>">Website</i></a></li>
-          <li><a href="<%= @podcast.rss_feed %>">RSS feed</a></li>
-        </ul>
-
-        <p>
-
-        <%= if @podcast.explicit do %>
-        <span class="label alert"><i class="fa fa-warning"></i> Explicit</span><br>
-        <% end %>
-
-        <strong>Last updated: <%= format_date(@podcast.last_build_date) %></strong><br>
-        <strong>Episodes: <%= @page.total_entries %></strong>
-        </p>
-        </div>
-      </div>
-        <p><%= @podcast.description |> markdown %></p>
     </div>
+
+    <div class="columns small-12 medium-8 large-9">
+      <%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: @podcast.categories %>
+
+      <div class="button-group">
+        <%= Podcatcher.Web.ComponentsView.render "subscribe_button.html", conn: @conn, podcast: @podcast %>
+      </div>
+
+     <%= if @podcast.explicit do %>
+      <p><span class="label alert"><i class="fa fa-warning"></i> Explicit</span></p>
+      <% end %>
+
+      <p>Last updated: <b><%= format_date(@podcast.last_build_date) %></b></p>
+      <p>Episodes: <b><%= @page.total_entries %></b></p>
+
+      <div class="links">
+        <a class="label" href="<%= @podcast.website %>"><i class="fa fa-globe"></i> Website</a>
+        <a class="label" href="<%= @podcast.rss_feed %>"><i class="fa fa-rss"></i> RSS</a>
+      </div>
+
+    </div>
+  </div>
+
+  </div>
+  <div class="card-section">
+    <%= @podcast.description |> markdown %>
+  </div>
+
+  <%= if assigns[:is_admin] do %>
+  <div class="card-section">
+  <%= link raw("<i class=\"fa fa-trash\"></i> Delete podcast"), to: admin_podcasts_path(@conn, :delete, @podcast), method: :delete, data: [confirm: "Are you sure?"], class: "button alert expanded" %>
+  </div>
+  <% end %>
+
   </div>
 
 <%= if @page.total_pages > 1 or assigns[:search_term] do %>
 
-<form method="GET" action="<%= podcast_url(@conn, @podcast) %>">
-  <div class="input-group">
-    <span class="input-group-label"><i class="fa fa-search"></i></span>
-    <input class="input-group-field" type="search" name="q" placeholder="Search this podcast" value="<%= assigns[:search_term] %>">
+<div class="card">
+  <div class="card-section">
+  <form method="GET" action="<%= podcast_url(@conn, @podcast) %>">
+    <div class="input-group">
+      <span class="input-group-label"><i class="fa fa-search"></i></span>
+      <input class="input-group-field" type="search" name="q" placeholder="Search this podcast" value="<%= assigns[:search_term] %>">
+    </div>
+    <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Search this podcast</button>
+    <%= if assigns[:search_term] do %>
+    <a class="button large secondary expanded" href="<%= podcast_url(@conn, @podcast) %>"><i class="fa fa-refresh"></i> See all episodes</a>
+    <% end %>
+  </form>
   </div>
-</form>
 
-<% end %>
+  <% end %>
+  <%= if assigns[:search_term] do %>
+  <div class="card-section">
+  <h3 class="search-results text-center">
+    <%= if @page.total_entries == 0 do %>
+      Sorry, no podcasts found for "<%= @search_term %>"
+    <% else %>
+      <%= @page.total_entries %> <%= pluralize(@page.total_entries, "result") %> for "<%= @search_term %>"
+    <% end %>
+  </h3>
+  </div>
+  <% end %>
+</div>
 
 <%= paginate @conn, @page, fn -> %>
-  <%= for episode <- @page.entries do %>
-  <%= Podcatcher.Web.ComponentsView.render "episode_card_no_podcast.html", conn: @conn, episode: episode %>
-  <% end %>
+
+  <%= Podcatcher.Web.ComponentsView.render "episodes_without_podcast.html", conn: @conn, episodes: @page.entries %>
+
 <% end %>
+</div>

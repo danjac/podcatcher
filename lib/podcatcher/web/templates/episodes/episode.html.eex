@@ -7,12 +7,12 @@
   </div>
   <div class="card-section">
     <div class="row">
-      <div class="columns small-12 medium-4">
+      <div class="columns small-12 medium-6 large-3">
         <div class="thumbnail">
           <img src="<%= podcast_image(@conn, @episode.podcast, :large) %>" height="300" width="300">
         </div>
       </div>
-      <div class="columns small-12 medium-8">
+      <div class="columns small-12 medium-6 large-9">
 
         <%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: @episode.podcast.categories %>
         <div class="button-group">
@@ -22,19 +22,18 @@
           </div>
         <strong><%= @episode.pub_date |> format_date %></strong><br>
 
-        <ul class="menu simple">
-          <li><a href="<%= @episode.link %>">Link</i></a></li>
-          <li><a href="<%= @episode.podcast.website %>">Website</a></li>
-          <li><a href="<%= @episode.podcast.rss_feed %>">RSS feed</a></li>
-        </ul>
-
-        <p>
-
         <%= if @episode.explicit or @episode.podcast.explicit do %>
-        <span class="label alert"><i class="fa fa-warning"></i> Explicit</span><br>
+        <p>
+        <span class="label alert"><i class="fa fa-warning"></i> Explicit</span>
+        </p>
         <% end %>
 
-        </p>
+        <div class="links">
+          <%= unless @episode.link == "" do %><a class="label" href="<%= @episode.link %>"><i class="fa fa-link"></i> Link</a></li><% end %>
+          <a class="label" href="<%= @episode.podcast.website %>"><i class="fa fa-globe"></i> Website</a>
+          <a class="label" href="<%= @episode.podcast.rss_feed %>"><i class="fa fa-rss"></i> RSS</a>
+        </div>
+
           </div>
         </div>
       </div>
@@ -54,13 +53,24 @@
   <% end %>
 <% end %>
 </div>
-  <div class="card-section">
-    <%= (@episode.description || @episode.summary) |> markdown %>
+<div class="card-section">
+  <%= (@episode.description || @episode.summary) |> markdown %>
+</div>
+<%= if @episode.podcast.copyright do %>
+<div class="card-section">
+  <small><em>&copy; <%= @episode.podcast.copyright %></em></small>
+</div>
+<% end %>
+
+<div class="card-section">
+<form method="GET" action="<%= podcast_url(@conn, @episode.podcast) %>">
+  <div class="input-group">
+    <span class="input-group-label"><i class="fa fa-search"></i></span>
+    <input class="input-group-field" type="search" name="q" placeholder="Find other episodes in this podcast">
   </div>
-  <%= if @episode.podcast.copyright do %>
-  <div class="card-section">
-    <small><em>&copy; <%= @episode.podcast.copyright %></em></small>
-  </div>
-  <% end %>
+  <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Search this podcast</button>
+</form>
+</div>
+
 </div>
 

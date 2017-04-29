@@ -1,11 +1,19 @@
-<%= form_for @conn, auth_path(@conn, :handle_login), [as: :login], fn f -> %>
-  <%= text_input f, :identifier, placeholder: "Username or email address" %>
-  <%= password_input f, :password, placeholder: "Password"  %>
-  <%= submit "Sign in", class: "button primary expanded" %>
-<% end %>
-<p>
-  <%= link "Not a member yet?", to: auth_path(@conn, :signup) %>
-</p><p>
-  <%= link "Forgot your password?", to: auth_path(@conn, :recover_password) %>
-</p>
+<div class="card">
+  <div class="card-section">
+  <%= form_for @conn, auth_path(@conn, :handle_login), [as: :login], fn f -> %>
+    <%= label f, :identifier, "Username or email address" %>
+    <%= text_input f, :identifier %>
+    <%= label f, :password, "Password" %>
+    <%= password_input f, :password %>
+    <%= submit "Sign in", class: "button primary expanded" %>
+  <% end %>
+  </div>
+  <div class="card-section">
+  <p>
+    <%= link "Not a member yet?", to: auth_path(@conn, :signup) %>
+  </p><p>
+    <%= link "Forgot your password?", to: auth_path(@conn, :recover_password) %>
+  </p>
+  </div>
+</div>
 

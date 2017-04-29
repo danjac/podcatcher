@@ -1,6 +1,8 @@
+<%= if length(@categories) > 0 do %>
 <p class="categories">
   <%= for category <- @categories do %>
   <%= link category.name, to: category_url(@conn, category), class: "label" %>
   <% end %>
 </p>
+<% end %>
 

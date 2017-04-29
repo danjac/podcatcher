@@ -32,17 +32,15 @@ const initEvents = () => {
     const url = $this.attr('data-unsubscribe-url');
     $.ajax(url, {
       method: 'DELETE',
-      dataType: 'text',
+      dataType: 'json',
     });
 
     $(`[data-unsubscribe-url="${url}"]`)
       .removeAttr('data-unsubscribe')
       .attr('data-subscribe', true)
       .attr('title', 'Subscribe to this podcast')
-      .find('i.fa.fa-trash')
-      .removeClass('fa-trash')
-      .addClass('fa-rss')
-      .attr('title', 'Subscribe to this podcast');
+      .removeClass('secondary')
+      .html('<i class="fa fa-podcast"></i>');
     warning('You have stopped following this podcast');
   });
 
@@ -51,15 +49,14 @@ const initEvents = () => {
     const url = $this.attr('data-subscribe-url');
     $.ajax(url, {
       method: 'POST',
-      dataType: 'text',
+      dataType: 'json',
     });
     $(`[data-subscribe-url="${url}"]`)
       .removeAttr('data-subscribe')
       .attr('data-unsubscribe', true)
       .attr('title', 'Unsubscribe from this podcast')
-      .find('i.fa.fa-rss')
-      .removeClass('fa-rss')
-      .addClass('fa-trash');
+      .addClass('secondary')
+      .html('<i class="fa fa-podcast"></i>');
     success('You are now following this podcast');
   });
 
@@ -70,15 +67,14 @@ const initEvents = () => {
     const url = $this.attr('data-remove-bookmark-url');
     $.ajax(url, {
       method: 'DELETE',
-      dataType: 'text',
+      dataType: 'json',
     });
     $this
       .removeAttr('data-remove-bookmark')
       .attr('data-add-bookmark', true)
       .attr('title', 'Bookmark this episode')
-      .find('i.fa.fa-bookmark')
-      .removeClass('fa-bookmark')
-      .addClass('fa-bookmark-o');
+      .removeClass('secondary')
+      .html('<i class="fa fa-bookmark-o"></i>');
     warning('Bookmark removed');
   });
 
@@ -87,15 +83,14 @@ const initEvents = () => {
     const url = $this.attr('data-add-bookmark-url');
     $.ajax(url, {
       method: 'POST',
-      dataType: 'text',
+      dataType: 'json',
     });
     $this
       .removeAttr('data-add-bookmark')
       .attr('data-remove-bookmark', true)
       .attr('title', 'Remove this bookmark')
-      .find('i.fa.fa-bookmark-o')
-      .removeClass('fa-bookmark-o')
-      .addClass('fa-bookmark');
+      .addClass('secondary')
+      .html('<i class="fa fa-bookmark"></i>');
     success('Bookmark added');
   });
 }

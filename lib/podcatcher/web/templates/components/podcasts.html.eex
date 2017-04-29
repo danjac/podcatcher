@@ -1,0 +1,34 @@
+<div class="row small-up-1 medium-up-2 large-up-3" data-equalizer data-equalize-on="medium">
+  <%= for podcast <- @podcasts do %>
+  <div class="column">
+  <div class="card" data-equalizer-watch>
+
+  <div class="card-divider">
+    <h5><%= link truncate(podcast.title, 70), to: podcast_url(@conn, podcast), title: strip_tags(podcast.subtitle) %></h5>
+  </div>
+
+  <div class="card-section">
+
+  <div class="media-object">
+    <div class="media-object-section">
+        <div class="thumbnail">
+          <a href="#"><img alt="<%= podcast.title %>" src="<%= podcast_image(@conn, podcast, :small) %>" height="100" width="100"></a>
+        </div>
+    </div>
+    <div class="media-object-section">
+      <%= format_date(podcast.last_build_date) %>
+      <%= if podcast.explicit do %>
+      <p><span class="label alert"><i class="fa fa-warning"></i> Explicit</span></p>
+      <% end %>
+      <div class="button-group">
+        <%= Podcatcher.Web.ComponentsView.render "subscribe_button.html", conn: @conn, podcast: podcast %>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+<% end %>
+</div>
+
+

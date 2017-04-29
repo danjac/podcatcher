@@ -1,33 +1,31 @@
-<ul class="menu">
+<header>
+<ul class="menu discover-menu">
   <li class="active"><a href="#">Podcasts</a></li>
   <li><%= link('Episodes', to: episodes_path(@conn, :search, q: assigns[:search_term] || "")) %></li>
 </ul>
-
-<hr />
 
 <form method="GET" action="<%= podcasts_path(@conn, :index) %>">
   <div class="input-group">
     <span class="input-group-label"><i class="fa fa-search"></i></span>
     <input class="input-group-field" type="search" name="q" placeholder="Find a podcast" value="<%= @search_term %>">
   </div>
+  <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Find a podcast</button>
   <%= if @search_term do %>
-  <a class="button large secondary expanded" href="<%= podcasts_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all podcasts</a>
+  <a class="button secondary expanded" href="<%= podcasts_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all podcasts</a>
   <% end %>
 </form>
 
 <%= if @search_term do %>
-<h3>
+<h3 class="search-results text-center">
   <%= if @page.total_entries == 0 do %>
     Sorry, no podcasts found for "<%= @search_term %>"
   <% else %>
-    <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+    <%= @page.total_entries %> <%= pluralize(@page.total_entries, "result") %> for "<%= @search_term %>"
   <% end %>
 </h3>
 <% end %>
-
+</header>
 
 <%= paginate @conn, @page, fn -> %>
-  <%= for podcast <- @page.entries do %>
-    <%= Podcatcher.Web.ComponentsView.render "podcast_card.html", conn: @conn, podcast: podcast %>
-  <% end %>
+<%= Podcatcher.Web.ComponentsView.render "podcasts.html", conn: @conn, podcasts: @page.entries %>
 <% end %>

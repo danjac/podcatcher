@@ -1,38 +1,44 @@
-<nav aria-label="You are here:" role="navigation">
-  <ul class="breadcrumbs">
-    <li><%= link("All categories", to: categories_path(@conn, :index)) %>
-    <%= if @category.parent do %>
-    <li><%= link(@category.parent.name, to: category_url(@conn, @category.parent)) %>
+<header>
+  <nav aria-label="You are here:" role="navigation">
+    <ul class="breadcrumbs">
+      <li><%= link("All categories", to: categories_path(@conn, :index)) %>
+      <%= if @category.parent do %>
+      <li><%= link(@category.parent.name, to: category_url(@conn, @category.parent)) %>
+      <% end %>
+      <li><%= @category.name %></li>
+    </ul>
+  </nav>
+
+  <%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: @category.children %>
+
+  <%= if @page.total_pages > 1 || assigns[:search_term] do %>
+  <form method="GET" action="<%= category_url(@conn, @category) %>">
+    <div class="input-group">
+      <span class="input-group-label"><i class="fa fa-search"></i></span>
+      <input class="input-group-field" type="search" name="q" placeholder="Search <%= @category.name %> podcasts" value="<%= assigns[:search_term] %>">
+    </div>
+    <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Search <%= @category.name %> podcasts</button>
+    <%= if assigns[:search_term] do %>
+    <a class="button secondary expanded" href="<%= category_url(@conn, @category) %>">
+      <i class="fa fa-refresh"></i> See all <%= @category.name %> podcasts
+    </a>
     <% end %>
-    <li><%= @category.name %></li>
-  </ul>
-</nav>
-
-<%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: @category.children %>
-
-<%= if @page.total_pages > 1 || assigns[:search_term] do %>
-<form method="GET" action="<%= category_url(@conn, @category) %>">
-  <div class="input-group">
-    <span class="input-group-label"><i class="fa fa-search"></i></span>
-    <input class="input-group-field" type="search" name="q" placeholder="Find more <%= @category.name %> podcasts" value="<%= assigns[:search_term] %>">
-  </div>
-</form>
-<% end %>
-
-<%= if assigns[:search_term] do %>
-<h3>
-  <%= if @page.total_entries == 0 do %>
-    Sorry, no episodes found for "<%= @search_term %>"
-  <% else %>
-    <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+  </form>
   <% end %>
-</h3>
-<% end %>
+
+  <%= if assigns[:search_term] do %>
+  <h3 class="search-results text-center">
+    <%= if @page.total_entries == 0 do %>
+      Sorry, no episodes found for "<%= @search_term %>"
+    <% else %>
+      <%= @page.total_entries %> <%= pluralize(@page.total_entries, "result") %> for "<%= @search_term %>"
+    <% end %>
+  </h3>
+  <% end %>
+</header>
 
 <%= paginate @conn, @page, fn -> %>
 
-  <%= for podcast <- @page.entries do %>
-  <%= render Podcatcher.Web.ComponentsView, "podcast_card.html", conn: @conn, podcast: podcast %>
-  <% end %>
+  <%= render Podcatcher.Web.ComponentsView, "podcasts.html", conn: @conn, podcasts: @page.entries %>
 
 <% end %>

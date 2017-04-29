@@ -10,14 +10,11 @@
   <meta name="csrf-token" content="<%= get_csrf_token() %>">
 
   <!-- Compressed CSS -->
-  <link href="//cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation.min.css" rel="stylesheet" >
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
-  <link href="//cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css">
 
   <!-- Compressed JavaScript -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/js/foundation.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/jplayer/jquery.jplayer.min.js"></script>
 
   <title>Podbaby<%= if assigns[:page_title] do %> - <%= assigns[:page_title] %><% end %></title>
 
@@ -25,16 +22,18 @@
 </head>
 
 <body class="no-js">
+
   <div class="title-bar" data-responsive-toggle="top-bar" data-hide-for="large">
     <button class="menu-icon" type="button" data-toggle></button>
     <div class="title-bar-title">Menu</div>
   </div>
-  <div class="top-bar" id="top-bar">
+
+  <div class="top-bar stacked-for-medium" id="top-bar">
     <div class="top-bar-left">
       <ul class="vertical large-horizontal menu">
-        <li class="menu-text"><i class="fa fa-headphones"></i> Podbaby</li>
+        <li><a id="index-link" href="<%= if assigns[:user] do subscriptions_path(@conn, :index) else page_path(@conn, :index) end %>"><i class="fa fa-headphones"></i> Podbaby</a></li>
         <%= if assigns[:user] do %>
-        <%= active_link(@conn, raw("<i class=\"fa fa-rss\"></i> My podcasts"), to: subscriptions_path(@conn, :index), wrap_tag: :li) %>
+        <%= active_link(@conn, raw("<i class=\"fa fa-podcast\"></i> My podcasts"), to: subscriptions_path(@conn, :index), wrap_tag: :li) %>
         <%= active_link(@conn, raw("<i class=\"fa fa-bookmark\"></i> Bookmarks"), to: bookmarks_path(@conn, :index), wrap_tag: :li) %>
         <% end %>
         <%= active_link(@conn, raw("<i class=\"fa fa-flash\"></i> New releases"), to: episodes_path(@conn, :index), wrap_tag: :li) %>
@@ -43,9 +42,10 @@
         <%= if assigns[:is_admin] do %>
         <%= active_link(@conn, raw("<i class=\"fa fa-plus\"></i> Add new"), to: admin_podcasts_path(@conn, :new), wrap_tag: :li) %>
         <% end %>
-
       </ul>
+
     </div>
+
     <div class="top-bar-right">
 
       <%= if assigns[:user] do %>
@@ -60,10 +60,12 @@
         </li>
       </ul>
       <% else %>
+
       <ul class="vertical large-horizontal menu">
         <%= active_link(@conn, raw("<i class=\"fa fa-sign-in\"></i> Login"), to: login_url(@conn), wrap_tag: :li, active: ~r/\/login*/) %>
         <%= active_link(@conn, raw("<i class=\"fa fa-user-plus\"></i> Signup"), to: auth_path(@conn, :signup,  next: @conn.request_path), wrap_tag: :li, active: ~r/\/signup*/) %>
       </ul>
+
       <% end %>
    </div>
 
@@ -92,9 +94,9 @@
     <% end %>
   </div>
 
-  <div class="row column">
+  <main class="row column">
     <%= render @view_module, @view_template, assigns %>
-  </div>
+  </main>
 
   <!-- /container -->
   <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

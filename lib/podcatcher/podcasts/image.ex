@@ -2,6 +2,8 @@ defmodule Podcatcher.Podcasts.Image do
   use Arc.Definition
   use Arc.Ecto.Definition
 
+  alias Podcatcher.Podcasts.Podcast
+
   # To add a thumbnail version:
   @versions [:large, :small]
 
@@ -24,8 +26,15 @@ defmodule Podcatcher.Podcasts.Image do
     version
   end
 
-  def storage_dir(_version, {_file, scope}) do
-    "uploads/podcasts/#{scope.slug}"
+  def storage_dir(_version, {_file, %Podcast{slug: slug, website: website}}) when slug == "" do
+    host = URI.parse(website).host |> String.downcase
+    |> URI.parse
+
+    "uploads/podcasts/#{host}"
+  end
+
+  def storage_dir(_version, {_file, %Podcast{slug: slug}}) do
+    "uploads/podcasts/#{slug}"
   end
 
   # Override the storage directory:

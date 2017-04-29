@@ -1,11 +1,44 @@
-<div class="text-center splash-page">
-  <h1>Podcast lover happiness.</h1>
-  <p>
-  PodBaby makes it easy to find and listen to your favorite podcasts, and to discover new sources of podcasting nirvana.
-  </p>
-  <p>
-    <%= link("Browse podcasts", to: podcasts_path(@conn, :index), class: "button primary large") %><br>
-    <%= link("Login", to: auth_path(@conn, :login), class: "button secondary large") %>
-    <%= link("Not a member yet? Join  today!", to: auth_path(@conn, :signup)) %>
-  </p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="csrf-token" content="<%= get_csrf_token() %>">
+
+  <!-- Compressed CSS -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+
+  <!-- Compressed JavaScript -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/js/foundation.min.js"></script>
+
+  <title>Podbaby</title>
+
+  <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+</head>
+
+<body class="no-js splash-page">
+  <div class="blurb text-center">
+    <header>
+    <h1>For every podcast fan</h1>
+    <h2>Follow your favorite podcasts</h2>
+    <h3>Find new and exciting content</h3>
+    </header>
+    <p>
+      <%= link("Get started", to: podcasts_path(@conn, :index), class: "button primary large") %><br>
+      <%= unless assigns[:user] do %>
+      <%= link("Already a member? Sign in here", to: auth_path(@conn, :login)) %>
+      <% end %>
+    </p>
+    </div>
+
+
+  <!-- /container -->
+  <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+</body>
+
+</html>

@@ -13,6 +13,12 @@ defmodule Podcatcher.Web.PodcastsController do
 
   def index(conn, params), do: latest_podcasts(conn, params)
 
+  def podcast(conn, %{"id" => id, "q" => search_term} = params) when search_term == "" do
+    podcast = Podcasts.get_podcast!(id)
+    page = Episodes.episodes_for_podcast(podcast, params)
+    render conn, "podcast.html", %{podcast: podcast, page: page, page_title: podcast.title}
+  end
+
   def podcast(conn, %{"id" => id, "q" => search_term} = params) do
     podcast = Podcasts.get_podcast!(id)
     page = Episodes.search_episodes_for_podcast(podcast, search_term, params)

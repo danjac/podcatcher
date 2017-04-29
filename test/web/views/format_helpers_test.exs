@@ -1,7 +1,23 @@
-defmodule Podcatcher.Web.FormattersTest do
+defmodule Podcatcher.Web.FormatHelpersTest do
   use Podcatcher.Web.ConnCase, async: true
 
-  import Podcatcher.Web.Formatters
+  import Podcatcher.Web.FormatHelpers
+
+  test "pluralize with default plural ending" do
+    assert pluralize(2, "result") == "results"
+  end
+
+  test "pluralize singular with default plural ending" do
+    assert pluralize(1, "result") == "result"
+  end
+
+  test "pluralize plural" do
+    assert pluralize(2, "category", "categories") == "categories"
+  end
+
+  test "pluralize singular" do
+    assert pluralize(1, "category", "categories") == "category"
+  end
 
   test "truncate/2 should just return string if length less than max_length" do
     assert truncate("hello world", 30) == "hello world"

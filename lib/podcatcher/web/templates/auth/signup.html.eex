@@ -1,17 +1,24 @@
+<div class="card">
+  <div class="card-section">
 <%= form_for @changeset, auth_path(@conn, :signup), fn f -> %>
 
-  <%= text_input f, :name, placeholder: "Username" %>
+  <%= label f, :name, "Username" %>
+  <%= text_input f, :name %>
   <%= error_tag f, :name %>
 
-  <%= email_input f, :email, placeholder: "Email address" %>
+  <%= label f, :email, "Email address" %>
+  <%= email_input f, :email %>
   <%= error_tag f, :email %>
 
-  <%= password_input f, :password, placeholder: "Password"  %>
+  <%= label f, :password, "Password" %>
+  <%= password_input f, :password %>
   <%= error_tag f, :password %>
 
-  <%= password_input f, :password_confirmation, placeholder: "Confirm your password"  %>
+  <%= label f, :password_confirmation, "Confirm password" %>
+  <%= password_input f, :password_confirmation %>
   <%= error_tag f, :password_confirmation %>
 
   <%= submit "Sign up", class: "button primary expanded" %>
 <% end %>
-
+  </div>
+</div>

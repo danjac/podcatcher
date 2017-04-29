@@ -40,7 +40,7 @@ defmodule Podcatcher.Web do
       import Podcatcher.Web.ErrorHelpers
       import Podcatcher.Web.Gettext
       import Podcatcher.Web.URLHelpers
-      import Podcatcher.Web.Formatters
+      import Podcatcher.Web.FormatHelpers
       import PhoenixActiveLink
     end
   end

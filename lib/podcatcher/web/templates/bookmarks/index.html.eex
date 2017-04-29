@@ -9,31 +9,32 @@
 <% end %>
 
 <%= if @page.total_pages > 1 or assigns[:search_term] do %>
+<header>
 
 <form method="GET" action="<%= bookmarks_path(@conn, :index) %>">
   <div class="input-group">
     <span class="input-group-label"><i class="fa fa-search"></i></span>
     <input class="input-group-field" type="search" name="q" placeholder="Search your bookmarks" value="<%= assigns[:search_term] %>">
   </div>
+  <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Search your bookmarks</button>
   <%= if assigns[:search_term] do %>
-  <a class="button large secondary expanded" href="<%= bookmarks_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all your bookmarks</a> <% end %>
+  <a class="button secondary expanded" href="<%= bookmarks_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all your bookmarks</a>
+  <% end %>
 </form>
 
-<% end %>
 
 <%= if assigns[:search_term] do %>
-<h3>
+<h3 class="search-results text-center">
   <%= if @page.total_entries == 0 do %>
     Sorry, no bookmarks found for "<%= @search_term %>"
   <% else %>
-    <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+    <%= @page.total_entries %> <%= pluralize(@page.total_entries, "result") %> for "<%= @search_term %>"
   <% end %>
 </h3>
 <% end %>
-
+</header>
+<% end %>
 
 <%= paginate @conn, @page, fn -> %>
-  <%= for bookmark <- @page.entries do %>
-  <%= Podcatcher.Web.ComponentsView.render "episode_card.html", conn: @conn, episode: bookmark.episode %>
-  <% end %>
+  <%= Podcatcher.Web.ComponentsView.render "episodes.html", conn: @conn, episodes: @episodes %>
 <% end %>

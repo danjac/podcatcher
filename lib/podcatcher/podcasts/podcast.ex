@@ -20,6 +20,7 @@ defmodule Podcatcher.Podcasts.Podcast do
     field :rss_feed, :string
     field :subtitle, :string
     field :website, :string
+    field :keywords, :string
 
     has_many :episodes, Episode
     has_many :subscriptions, Subscription

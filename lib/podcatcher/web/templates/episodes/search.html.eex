@@ -1,36 +1,38 @@
-<ul class="menu">
+<header>
+<ul class="menu discover-menu">
   <li><%= link "Podcasts", to: podcasts_path(@conn, :index, q: assigns[:search_term] || "") %></li>
   <li class="active"><a href="#">Episodes</a></li>
 </ul>
 
-<hr />
-
-<%= if !assigns[:search_term] do %>
-<div class="callout">
-  Search for individual podcast episodes
-</div>
-<% end %>
-
 <form method="GET" action="<%= episodes_path(@conn, :search) %>">
   <div class="input-group">
     <span class="input-group-label"><i class="fa fa-search"></i></span>
-    <input class="input-group-field" type="search" name="q" placeholder="Find an episode" value="<%= assigns[:search_term] %>">
+    <input class="input-group-field" type="search" name="q" placeholder="Search for a keyword, description or title" value="<%= assigns[:search_term] %>">
   </div>
+  <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Find an episode</button>
 </form>
 
 <%= if assigns[:page] && assigns[:search_term] do %>
-  <h3>
+  <h3 class="search-results text-center">
     <%= if @page.total_entries == 0 do %>
       Sorry, no episodes found for "<%= @search_term %>"
     <% else %>
-      <%= @page.total_entries %> result(s) for "<%= @search_term %>"
+      <%= @page.total_entries %> <%= pluralize(@page.total_entries, "result") %> for "<%= @search_term %>"
     <% end %>
   </h3>
+  </header>
 
   <%= paginate @conn, @page, fn -> %>
-    <%= for episode <- @page.entries do %>
-    <%= Podcatcher.Web.ComponentsView.render "episode_card.html", conn: @conn, episode: episode %>
-    <% end %>
+    <%= Podcatcher.Web.ComponentsView.render "episodes.html", conn: @conn, episodes: @page.entries %>
+  <% end %>
+
+  <%= if !assigns[:search_term] && @page.total_entries == 0 && assigns[:user] do %>
+  <div class="callout">
+    <h3>You are not following any podcasts yet</h3>
+    <p>
+    Click on the subscribe icon <i class="fa fa-rss"></i> under any podcast to subscribe and follow new episodes.
+    </p>
+  </div>
   <% end %>
 
 <% end %>

@@ -21,15 +21,15 @@ defmodule Podcatcher.Web.Admin.PodcastsController do
       {:ok, true, podcast} ->
         conn
         |> put_flash(:success, "Podcast #{podcast.title} created")
-        |> redirect to: podcast_url(conn, podcast)
+        |> redirect(to: podcast_url(conn, podcast))
       {:ok, false, podcast} ->
         conn
-        |> put_flash(:warning, "Podcast #{podcast.title} already exists")
-        |> render "new.html"
+        |> put_flash(:info, "Podcast #{podcast.title} already exists")
+        |> redirect(to: podcast_url(conn, podcast))
       {:error, _} ->
         conn
         |> put_flash(:warning, "Sorry an error occurred")
-        |> render "new.html"
+        |> render("new.html")
     end
   end
 
