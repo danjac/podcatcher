@@ -62,20 +62,12 @@ config :phoenix, :serve_endpoints, true
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-#import_config "prod.secret.exs"
+import_config "prod.secret.exs"
 
 config :logger, level: :info
 
 # Env variables should be configured in rel/vm.args
 #
-config :podcatcher, Podcatcher.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "${DB_USER}",
-  password: "${DB_PASSWORD}",
-  database: "${DB_NAME}",
-  hostname: "${DB_HOST}",
-  pool_size: 20
-
 config :podcatcher, Podcatcher.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "localhost", port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.

@@ -28,3 +28,6 @@ npm-debug.log
 
 # Uploads
 /uploads
+
+# Releases
+.deliver/releases/
