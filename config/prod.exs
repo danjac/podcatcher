@@ -51,7 +51,8 @@ config :logger, level: :info
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start the server for all endpoints:
 #
-#     config :phoenix, :serve_endpoints, true
+
+config :phoenix, :serve_endpoints, true
 #
 # Alternatively, you can configure exactly which server to
 # start per endpoint:
@@ -61,9 +62,21 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+#import_config "prod.secret.exs"
 
-config :phoenix_distillery, PhoenixDistillery.Endpoint,
+config :logger, level: :info
+
+# Env variables should be configured in rel/vm.args
+#
+config :podcatcher, Podcatcher.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  username: "${DB_USER}",
+  password: "${DB_PASSWORD}",
+  database: "${DB_NAME}",
+  hostname: "${DB_HOST}",
+  pool_size: 20
+
+config :podcatcher, Podcatcher.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "localhost", port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
   cache_static_manifest: "priv/static/manifest.json",

@@ -25,9 +25,11 @@ config :logger, :console,
 config :arc,
   storage: Arc.Storage.Local
 
+
 config :quantum, :podcatcher,
   cron: [
-    "30 7 * * *": &Podcatcher.Updater.run/0,
+    # 7:30am UTC every day
+    "40 7 * * *": {"Podcatcher.Updater", :run},
   ],
   timeout: :infinity
   # timezone: "Europe/Helsinki"
