@@ -3,6 +3,7 @@
 -setcookie <%= release_name %>
 
 ## see config/prod.exs
+#
 -podcatcher database ${DB_NAME}
 -podcatcher username ${DB_USER}
 -podcatcher password ${DB_PASSWORD}
