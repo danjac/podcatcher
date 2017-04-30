@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 APP="podcatcher" # name of your release
 
 BUILD_HOST="podbaby.me" # host where to build the release
@@ -28,7 +27,7 @@ DELIVER_TO="/home/deploy/apps/podcatcher"
 symlink_static(){
   status "Symlinking static assets"
   __sync_remote "
-    ln -sfn $DELIVER_TO$APP/lib/$APP$RELEASE-$VERSION/priv/static $DELIVER_TO$APP/static
+    ln -sfn $DELIVER_TO/$APP/lib/$APP$RELEASE-$VERSION/priv/static $DELIVER_TO/$APP/static
   "
 }
 
