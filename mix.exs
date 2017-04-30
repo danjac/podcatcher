@@ -23,7 +23,8 @@ defmodule Podcatcher.Mixfile do
       :scrivener_ecto,
       :comeonin,
       :quantum,
-      :timex
+      :timex,
+      :edeliver
     ]]
   end
 
@@ -58,6 +59,7 @@ defmodule Podcatcher.Mixfile do
      {:poolboy, "~> 1.5"},
      {:bamboo, "~> 0.8.0"},
      {:cowboy, "~> 1.0"},
+     {:edeliver, "~> 1.4.2"},
      {:distillery, "~> 1.3.5"}]
   end
 
