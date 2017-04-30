@@ -15,6 +15,13 @@
       <div class="columns small-12 medium-6 large-9">
 
         <%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: @episode.podcast.categories %>
+
+        <p>
+          <%= for keyword <- keywords(@episode) do %>
+          <%= link "##{keyword}", to: episodes_path(@conn, :search, q: keyword), class: "label secondary" %>
+          <% end %>
+        </p>
+
         <div class="button-group">
           <%= Podcatcher.Web.ComponentsView.render "download_button.html", conn: @conn, episode: @episode %>
           <%= Podcatcher.Web.ComponentsView.render "bookmark_button.html", conn: @conn, episode: @episode %>
