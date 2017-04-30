@@ -6,6 +6,8 @@ BUILD_HOST="podbaby.me" # host where to build the release
 BUILD_USER="deploy" # local user at build host
 BUILD_AT="/tmp/elixir/podcatcher/builds" # build directory on build host
 
+PORT=4000
+
 # STAGING_HOSTS="test1.acme.org test2.acme.org" # staging / test hosts separated by space
 # STAGING_USER="test" # local user at staging hosts
 # TEST_AT="/test/my-erlang-app" # deploy directory on staging hosts. default is DELIVER_TO
@@ -27,6 +29,8 @@ pre_erlang_get_and_update_deps() {
   if [ "$TARGET_MIX_ENV" = "prod" ]; then
     __sync_remote "
       ln -sfn '$_prod_secret_path' '$BUILD_AT/config/prod.secret.exs'
+      cd $BUILD_AT/assets && npm install && ./node_modules/brunch/bin/brunch b -p && cd $BUILD_AT
+      MIX_ENV=prod mix phx.digest
     "
   fi
 }
