@@ -16,9 +16,18 @@ defmodule Podcatcher.AccountsTest do
     assert first.id == user.id
   end
 
-  test "get_user! returns the user with given id" do
+  test "get_user!/1 returns the user with given id" do
     user = fixture(:user)
     assert Accounts.get_user!(user.id).id == user.id
+  end
+
+  test "get_user/1 returns the user with given id" do
+    user = fixture(:user)
+    assert Accounts.get_user(user.id).id == user.id
+  end
+
+  test "get_user/1 returns nil if not found" do
+    assert is_nil(Accounts.get_user(1))
   end
 
   test "create_user/1 with valid data creates a user" do

@@ -124,7 +124,6 @@ http://espn.go.com/espnradio/feeds/rss/podcast.xml?id=2544457
 http://fanboys.fm/episodes.page0001.mp3.rss
 http://feeds.feedburner.com/thetruthapm
 http://feeds.5by5.tv/changelog
-http://feeds.danielmiessler.com/danielmiessler
 http://feeds.feedburner.com/3HoarsemenPodcast
 http://feeds.feedburner.com/ArcadeOutsidersPodcast
 http://feeds.feedburner.com/BlackListTableReads
@@ -132,7 +131,6 @@ http://feeds.feedburner.com/coyleandsharpe
 http://feeds.feedburner.com/Arabicpod-LearnArabic
 http://feeds.feedburner.com/CTBPodcast
 http://feeds.feedburner.com/CarCast
-http://feeds.feedburner.com/comedycentral/standup
 http://feeds.feedburner.com/dangerroompodcast
 http://feeds.feedburner.com/bootstrappedweb-podcast
 http://annafarisisunqualified.libsyn.com/rss

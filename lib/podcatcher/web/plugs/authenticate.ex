@@ -9,7 +9,7 @@ defmodule Podcatcher.Web.Plugs.Authenticate do
   def call(conn, _params) do
 
     user_id = get_session(conn, :user_id)
-    user = user_id && Accounts.get_user!(user_id)
+    user = user_id && Accounts.get_user(user_id)
     if user do
       conn
       |> assign(:user, user)

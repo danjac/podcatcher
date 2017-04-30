@@ -25,7 +25,7 @@ defmodule Podcatcher.Accounts do
   end
 
   @doc """
-  Gets a single user.
+  Gets a single user. Preloads bookmarks and subscriptions for user.
 
   Raises `Ecto.NoResultsError` if the User does not exist.
 
@@ -36,9 +36,18 @@ defmodule Podcatcher.Accounts do
 
       iex> get_user!(456)
       ** (Ecto.NoResultsError)
-
   """
-  def get_user!(id), do: Repo.get!(User, id) |> Repo.preload([:bookmarks, :subscriptions])
+
+  def get_user!(id), do: Repo.get!(User, id) |> preload_all
+
+  @doc """
+  Gets a single user. Returns nil if user not found. Preloads bookmarks and subscriptions for user.
+  """
+
+  def get_user(id), do: Repo.get(User, id) |> preload_all
+
+  defp preload_all(user) when is_nil(user), do: nil
+  defp preload_all(user), do: Repo.preload(user, [:bookmarks, :subscriptions])
 
   @doc """
   Creates a user.
