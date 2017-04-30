@@ -16,7 +16,7 @@
       <%= Podcatcher.Web.ComponentsView.render "categories.html", conn: @conn, categories: @podcast.categories %>
 
         <p>
-          <%= for keyword <- keywords(@podcast) do %>
+          <%= for keyword <- keywords(@podcast.keywords) do %>
           <%= link "##{keyword}", to: podcasts_path(@conn, :index, q: keyword), class: "label secondary" %>
           <% end %>
         </p>

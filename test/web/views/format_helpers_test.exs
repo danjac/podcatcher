@@ -35,4 +35,12 @@ defmodule Podcatcher.Web.FormatHelpersTest do
     assert format_date(~N[2016-12-25 10:00:07]) == "December 25, 2016"
   end
 
+  test "keywords/1 when nil" do
+    assert keywords(nil) == []
+  end
+
+  test "keywords/1 with mixed cases" do
+    assert keywords("Best, of , the, Rest") == ["best", "of", "the", "rest"]
+  end
+
 end

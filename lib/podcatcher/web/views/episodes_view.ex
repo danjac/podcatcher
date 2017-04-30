@@ -1,8 +1,6 @@
 defmodule Podcatcher.Web.EpisodesView do
   use Podcatcher.Web, :view
 
-  alias Podcatcher.Episodes.Episode
-
   @mime_types [
     {".aa", "audio/audible"},
     {".aac", "audio/aac"},
@@ -59,16 +57,6 @@ defmodule Podcatcher.Web.EpisodesView do
 
   def safe_protocol(url) do
     Regex.replace(~r/https?\:\/\//, url, "//")
-  end
-
-  def keywords(%Episode{keywords: nil}), do: []
-
-  def keywords(episode) do
-    episode.keywords
-    |> String.trim
-    |> String.split(",")
-    |> Enum.reject(&(&1 == ""))
-    |> Enum.map(&String.downcase/1)
   end
 
 end

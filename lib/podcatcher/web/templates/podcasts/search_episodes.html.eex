@@ -14,7 +14,7 @@
   <%= if @page.total_entries == 0 do %>
     Sorry, no episodes found for "<%= @search_term %>"
   <% else %>
-    <%= @page.total_entries %> <%= pluralize(@page.total_entries, "result") %> for "<%= @search_term %>"
+    <%= @page.total_entries %> <%= pluralize(@page.total_entries, "result") %> for "<%= @search_term %>" in <%= @podcast.title %>
   <% end %>
 </h3>
 
