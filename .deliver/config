@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
+
 APP="podcatcher" # name of your release
 
 BUILD_HOST="podbaby.me" # host where to build the release
 BUILD_USER="deploy" # local user at build host
 BUILD_AT="/tmp/elixir/podcatcher/builds" # build directory on build host
 
-PORT=4000
+AUTO_VERSION=git-revision
 
 # STAGING_HOSTS="test1.acme.org test2.acme.org" # staging / test hosts separated by space
 # STAGING_USER="test" # local user at staging hosts
