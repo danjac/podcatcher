@@ -29,8 +29,19 @@ pre_erlang_get_and_update_deps() {
   if [ "$TARGET_MIX_ENV" = "prod" ]; then
     __sync_remote "
       ln -sfn '$_prod_secret_path' '$BUILD_AT/config/prod.secret.exs'
-      cd $BUILD_AT/assets && npm install && ./node_modules/brunch/bin/brunch b -p && cd $BUILD_AT
-      MIX_ENV=prod mix phx.digest
     "
   fi
+}
+
+pre_erlang_clean_compile() {
+  status "Installing NPM dependencies"
+  __sync_remote "
+      [ -f ~/.profile ] && source ~/.profile
+      set -e # fail if any command fails
+      cd $BUILD_AT/assets
+      npm install $SILENCE
+      ./node_modules/brunch/bin/brunch b -p
+      cd $BUILD_AT
+      APP='$APP' MIX_ENV='$TARGET_MIX_ENV' $MIX_CMD phx.digest $SILENCE
+  "
 }
