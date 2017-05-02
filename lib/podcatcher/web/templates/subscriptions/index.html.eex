@@ -13,11 +13,11 @@
 <form method="GET" action="<%= subscriptions_path(@conn, :index) %>">
   <div class="input-group">
     <span class="input-group-label"><i class="fa fa-search"></i></span>
-    <input class="input-group-field" type="search" name="q" placeholder="Search your podcasts" value="<%= assigns[:search_term] %>">
+    <input class="input-group-field" type="search" name="q" placeholder="Search my podcasts" value="<%= assigns[:search_term] %>">
   </div>
-  <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Search your podcasts</button>
+  <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Search my podcasts</button>
   <%= if assigns[:search_term] do %>
-  <a class="button secondary expanded" href="<%= subscriptions_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all your podcasts</a>
+  <a class="button secondary expanded" href="<%= subscriptions_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all my podcasts</a>
   <% end %>
 
 </form>

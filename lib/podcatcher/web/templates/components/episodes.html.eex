@@ -7,7 +7,7 @@
 
   </div>
   <div class="card-section">
-    <h6><%= link truncate(episode.title, 70), to: episode_url(@conn, episode), title: strip_tags(episode.summary) %></h6>
+    <h6 class="subheader"><%= link truncate(episode.title, 70), to: episode_url(@conn, episode), title: strip_tags(episode.summary) %></h6>
     <div class="media-object">
       <div class="media-object-section">
           <div class="thumbnail">

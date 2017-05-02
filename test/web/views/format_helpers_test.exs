@@ -43,4 +43,8 @@ defmodule Podcatcher.Web.FormatHelpersTest do
     assert keywords("Best, of , the, Rest") == ["best", "of", "the", "rest"]
   end
 
+  test "keywords/1 if just spaces" do
+    assert keywords("Best of the Rest") == ["best", "of", "the", "rest"]
+  end
+
 end

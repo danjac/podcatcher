@@ -37,6 +37,12 @@ defmodule Podcatcher.Podcasts do
     ) |> Repo.paginate(params)
   end
 
+  def random_podcasts(params \\ []) do
+    Podcast
+    |> order_by(fragment("RANDOM()"))
+    |> Repo.paginate(params)
+  end
+
   @doc """
   Returns page of latest podcasts (by last_build_date) for a given category.
   """

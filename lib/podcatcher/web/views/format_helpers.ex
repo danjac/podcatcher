@@ -33,6 +33,7 @@ defmodule Podcatcher.Web.FormatHelpers do
   def strip_tags(content) do
     content
     |> String.trim
+    |> String.replace("\"", "'")
     |> HtmlSanitizeEx.strip_tags
     |> raw
   end
@@ -41,15 +42,30 @@ defmodule Podcatcher.Web.FormatHelpers do
   def pluralize(count, singular, _plural) when count == 1, do: singular
   def pluralize(_count, _singular, plural), do: plural
 
+  def keywords(source) when is_list(source) do
+    source
+    |> Enum.map(&keywords/1)
+    |> List.flatten
+    |> Enum.uniq
+  end
+
   def keywords(source) when is_nil(source) or source == "", do: []
 
   def keywords(source) do
     source
-    |> String.split(",")
+    |> split_keywords
     |> Enum.map(&String.trim/1)
     |> Enum.reject(&(&1 == ""))
     |> Enum.map(&String.downcase/1)
     |> Enum.uniq
+  end
+
+  defp split_keywords(source) do
+    if String.contains?(source, ",") do
+      source |> String.split(",")
+    else
+      source |> String.split(" ")
+    end
   end
 
 end

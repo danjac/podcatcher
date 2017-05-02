@@ -7,15 +7,16 @@
 <form method="GET" action="<%= podcasts_path(@conn, :index) %>">
   <div class="input-group">
     <span class="input-group-label"><i class="fa fa-search"></i></span>
-    <input class="input-group-field" type="search" name="q" placeholder="Find a podcast" value="<%= @search_term %>">
+    <input class="input-group-field" type="search" name="q" placeholder="Find a podcast" value="<%= assigns[:search_term] %>">
   </div>
   <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Find a podcast</button>
-  <%= if @search_term do %>
+  <%= link raw("<i class=\"fa fa-random\"></i> Random"), to: podcasts_path(@conn, :index, r: true), class: "button secondary expanded" %>
+  <%= if assigns[:search_term] do %>
   <a class="button secondary expanded" href="<%= podcasts_path(@conn, :index) %>"><i class="fa fa-refresh"></i> See all podcasts</a>
   <% end %>
 </form>
 
-<%= if @search_term do %>
+<%= if assigns[:search_term] do %>
 <h3 class="search-results text-center">
   <%= if @page.total_entries == 0 do %>
     Sorry, no podcasts found for "<%= @search_term %>"

@@ -3,14 +3,25 @@ defmodule Podcatcher.Web.EpisodesController do
 
   alias Podcatcher.Episodes
 
-  @num_latest_episodes 20
+  @num_latest_episodes 21
+
+  def index(%Plug.Conn{assigns: %{user: _}} = conn, %{"t" => "all"}) do
+    episodes = Episodes.latest_episodes(@num_latest_episodes)
+    render_episodes(conn, episodes, "all")
+  end
+
+  def index(%Plug.Conn{assigns: %{user: user}} = conn, _params) do
+    episodes = Episodes.latest_episodes_for_user(user, @num_latest_episodes)
+    render_episodes(conn, episodes, "user")
+  end
 
   def index(conn, _params) do
-    episodes = case conn.assigns[:user] do
-      nil -> Episodes.latest_episodes(@num_latest_episodes)
-      user -> Episodes.latest_episodes_for_user(user, @num_latest_episodes)
-    end
-    render conn, "index.html", %{episodes: episodes, page_title: "New releases"}
+    episodes = Episodes.latest_episodes(@num_latest_episodes)
+    render_episodes(conn, episodes, "all")
+  end
+
+  defp render_episodes(conn, episodes, tab) do
+    render conn, "index.html", %{episodes: episodes, page_title: "New releases", tab: tab}
   end
 
   def episode(conn, %{"id" => id}) do

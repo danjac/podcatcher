@@ -1,5 +1,16 @@
 <header>
 
+  <%= if assigns[:user] do %>
+  <ul class="menu discover-menu">
+    <li<%= if @tab == "user" do %> class="active"<% end %>>
+      <%= link('My podcasts', to: episodes_path(@conn, :index, t: "user")) %>
+    </li>
+    <li<%= if @tab == "all" do %> class="active"<% end %>>
+      <%= link('All episodes', to: episodes_path(@conn, :index, t: "all")) %>
+    </li>
+  </ul>
+  <% end %>
+
   <form method="GET" action="<%= episodes_path(@conn, :search) %>">
     <div class="input-group">
       <span class="input-group-label"><i class="fa fa-search"></i></span>

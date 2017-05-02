@@ -129,6 +129,12 @@ defmodule Podcatcher.PodcastsTest do
     assert Podcasts.latest_podcasts().entries == []
   end
 
+  test "random_podcasts/0 should return a list of podcasts in random order" do
+    podcast = fixture(:podcast)
+    [ first | _ ] = Podcasts.random_podcasts().entries
+    assert first.id == podcast.id
+  end
+
   test "search_podcasts/1 should return podcasts matching search term" do
     fixture(:podcast)
     page = Podcasts.search_podcasts("some description")

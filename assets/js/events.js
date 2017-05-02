@@ -25,6 +25,17 @@ const initEvents = () => {
 
   $("input[type='search']").on('click', event => $(event.currentTarget).select());
 
+  // Alternate search url
+
+  $("[data-search-url]").on('click', event => {
+    const $this = $(event.currentTarget);
+    const url = $this.attr('data-search-url');
+    $this
+      .parent('form')
+      .attr('action', url)
+      .submit();
+  });
+
   // Subscriptions
 
   $document.on('click', '[data-unsubscribe]', event => {

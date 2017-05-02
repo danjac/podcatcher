@@ -17,7 +17,7 @@
 
         <p>
           <%= for keyword <- keywords(@podcast.keywords) do %>
-          <%= link "##{keyword}", to: podcasts_path(@conn, :index, q: keyword), class: "label secondary" %>
+          <%= link raw("<i class=\"fa fa-tag\"></i> #{keyword}"), to: podcasts_path(@conn, :index, q: keyword), class: "label secondary" %>
           <% end %>
         </p>
 
@@ -25,14 +25,19 @@
         <%= Podcatcher.Web.ComponentsView.render "subscribe_button.html", conn: @conn, podcast: @podcast %>
       </div>
 
-     <%= if @podcast.explicit do %>
-      <p><span class="label alert"><i class="fa fa-warning"></i> Explicit</span></p>
-      <% end %>
-
-      <p>Last updated: <b><%= format_date(@podcast.last_build_date) %></b></p>
-      <p>Episodes: <b><%= @page.total_entries %></b></p>
+      <div class="row">
+        <div class="columns small-12 medium-4">
+          <p>Episodes</p><div class="stat"><%= @page.total_entries %></div>
+        </div>
+        <div class="columns small-12 medium-8">
+          <p>Last updated</p><div class="stat"><%= format_date(@podcast.last_build_date) %></div>
+        </div>
+      </div>
 
       <div class="links">
+        <%= if @podcast.explicit do %>
+        <span class="label alert"><i class="fa fa-warning"></i> Explicit</span>
+        <% end %>
         <a class="label" href="<%= @podcast.website %>"><i class="fa fa-globe"></i> Website</a>
         <a class="label" href="<%= @podcast.rss_feed %>"><i class="fa fa-rss"></i> RSS</a>
       </div>
