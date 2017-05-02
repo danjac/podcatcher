@@ -31,7 +31,8 @@ environment :prod do
   set include_erts: true
   set include_src: false
   set cookie: :"WqZg&XY4=m=&esxDSkYW&m%y>z2cz5FvUk)%Kem{byGk.q(6.Y45>@mM)vN`[<*J"
-  # set output_dir: "podcatcher/releases"
+  # uncomment this if you want live upgrades
+  set output_dir: "podcatcher/releases"
 end
 
 # You may define one or more releases in this file.
