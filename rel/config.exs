@@ -31,7 +31,7 @@ environment :prod do
   set include_erts: true
   set include_src: false
   set cookie: :"WqZg&XY4=m=&esxDSkYW&m%y>z2cz5FvUk)%Kem{byGk.q(6.Y45>@mM)vN`[<*J"
-  # set post_start_hook: "rel/hooks/post_start"
+  set output_dir: "rel/podcatcher"
 end
 
 # You may define one or more releases in this file.
