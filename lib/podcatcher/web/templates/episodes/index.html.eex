@@ -1,1 +1,14 @@
+<header>
+
+  <form method="GET" action="<%= episodes_path(@conn, :search) %>">
+    <div class="input-group">
+      <span class="input-group-label"><i class="fa fa-search"></i></span>
+      <input class="input-group-field" type="search" name="q" placeholder="Search for a keyword, description or title">
+    </div>
+    <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Search for other episodes</button>
+  </form>
+
+</header>
+
+
 <%= Podcatcher.Web.ComponentsView.render "episodes.html", conn: @conn, episodes: @episodes %>

@@ -41,15 +41,15 @@ defmodule Podcatcher.Web.FormatHelpers do
   def pluralize(count, singular, _plural) when count == 1, do: singular
   def pluralize(_count, _singular, plural), do: plural
 
-  def keywords(source) when is_nil(source), do: []
+  def keywords(source) when is_nil(source) or source == "", do: []
 
   def keywords(source) do
     source
-    |> String.trim
     |> String.split(",")
     |> Enum.map(&String.trim/1)
     |> Enum.reject(&(&1 == ""))
     |> Enum.map(&String.downcase/1)
+    |> Enum.uniq
   end
 
 end
