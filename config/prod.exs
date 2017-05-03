@@ -21,6 +21,12 @@ config :podcatcher, Podcatcher.Web.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :podcatcher, Podcatcher.Mailer,
+  adapter: Bamboo.SMTPAdapter,
+  port: 25,
+  tls: :if_available,
+  server: "localhost"
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

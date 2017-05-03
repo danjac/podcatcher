@@ -24,7 +24,7 @@ defmodule Podcatcher.Updater do
 
   def run do
     Podcasts.list_podcasts
-    |> Enum.chunk(20)
+    |> Enum.chunk(10)
     |> Enum.each(&run_batch/1)
   end
 
@@ -38,6 +38,7 @@ defmodule Podcatcher.Updater do
   end
 
   def do_fetch(podcast)  do
+    IO.puts podcast.title
     :poolboy.transaction :worker, fn(worker_pid) ->
       Worker.fetch(worker_pid, podcast, @worker_timeout)
     end, @worker_timeout
