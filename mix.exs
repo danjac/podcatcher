@@ -24,6 +24,8 @@ defmodule Podcatcher.Mixfile do
       :comeonin,
       :quantum,
       :timex,
+      :bamboo,
+      :bamboo_smtp,
       :edeliver
     ]]
   end
@@ -58,6 +60,7 @@ defmodule Podcatcher.Mixfile do
      {:quantum, "~> 1.9.1"},
      {:poolboy, "~> 1.5"},
      {:bamboo, "~> 0.8.0"},
+     {:bamboo_smtp, "~> 1.3.0"},
      {:cowboy, "~> 1.0"},
      {:edeliver, "~> 1.4.2"},
      {:distillery, "~> 1.3.5"}]
