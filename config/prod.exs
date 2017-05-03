@@ -15,9 +15,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :podcatcher, Podcatcher.Web.Endpoint,
   on_init: {Podcatcher.Web.Endpoint, :load_from_system_env, []},
-  url: [host: "beta.podbaby.me"],
-  http: [ip: {127, 0, 0, 1}, port: {:system, "PORT"}],
-  https: [ip: {127, 0, 0, 1}, port: {:system, "PORT"}],
+  url: [host: "beta.podbaby.me", port: {:system, "PORT"}],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
