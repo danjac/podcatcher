@@ -4,7 +4,7 @@ defmodule Podcatcher.Updater do
   alias Podcatcher.Podcasts
   alias Podcatcher.Updater.Worker
 
-  @worker_timeout 100_000
+  @worker_timeout 1_000_000
   @await_timeout  1_000_000
 
   def start_link do
@@ -24,17 +24,8 @@ defmodule Podcatcher.Updater do
 
   def run do
     Podcasts.list_podcasts
-    |> Enum.chunk(10)
-    |> Enum.each(&run_batch/1)
-  end
-
-
-  defp run_batch(podcasts) do
-
-    podcasts
-    |> Enum.map(&Task.async(__MODULE__, :do_fetch, [&1]))
+    |> Enum.map(&(Task.async(fn -> do_fetch(&1) end)))
     |> Enum.map(&Task.await(&1, @await_timeout))
-
   end
 
   def do_fetch(podcast)  do
@@ -47,8 +38,8 @@ defmodule Podcatcher.Updater do
   defp poolboy_config do
     [{:name, {:local, :worker}},
       {:worker_module, Worker},
-      {:size, 5},
-      {:max_overflow, 2}]
+      {:size, 20},
+      {:max_overflow, 0}]
   end
 
 end
