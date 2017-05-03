@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="csrf-token" content="<%= get_csrf_token() %>">
+
+  <link rel="icon" type="image/png" href="<%= static_path(@conn, "/images/favicon.png") %>" />
+
+  <!-- Compressed CSS -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+
+  <!-- Compressed JavaScript -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/js/foundation.min.js"></script>
+
+  <title>Podbaby</title>
+
+  <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+</head>
+
+<body class="no-js splash-page">
+  <div class="blurb text-center">
+    <header>
+    <h1>Page not found</h1>
+    </header>
+    <p>
+    </p>
+    <p>
+      <%= link("Lost? Find a podcast here", to: podcasts_path(@conn, :index), class: "large") %><br>
+    </p>
+    </div>
+
+
+  <!-- /container -->
+</body>
+
+</html>
