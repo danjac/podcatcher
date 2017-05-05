@@ -38,7 +38,7 @@ pre_erlang_get_and_update_deps() {
 
 # build assets
 pre_erlang_clean_compile() {
-  status "Building static assets"
+  status "Compiling static assets"
   __sync_remote "
       [ -f ~/.profile ] && source ~/.profile
       set -e # fail if any command fails
