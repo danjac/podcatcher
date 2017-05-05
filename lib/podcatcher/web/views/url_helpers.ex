@@ -15,7 +15,7 @@ defmodule Podcatcher.Web.URLHelpers do
   end
 
   def podcast_url(conn, podcast) do
-    podcasts_path(conn, :podcast, podcast.id, podcast.slug)
+    podcasts_path(conn, :podcast, podcast.id, podcast.slug || "")
   end
 
   def podcast_image(conn, %Podcast{image: image} = podcast, size) do
