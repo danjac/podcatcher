@@ -29,8 +29,12 @@ defmodule Podcatcher.Podcasts.FeedParser do
 
   def fetch_and_parse(url, options \\ @default_options) do
     # Logger.info "FETCHING #{url}"
-    with response = HTTPoison.get(url, [{"User-agent", Enum.join(@user_agents, ", ")}], options) do
-      handle_response(url, response)
+    try do
+      with response = HTTPoison.get(url, [{"User-agent", Enum.join(@user_agents, ", ")}], options) do
+        handle_response(url, response)
+      end
+    catch
+      {:exit, reason} -> {:error, inspect(reason)}
     end
   end
 

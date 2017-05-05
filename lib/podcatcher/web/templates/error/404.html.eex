@@ -9,7 +9,7 @@
   <meta name="author" content="">
   <meta name="csrf-token" content="<%= get_csrf_token() %>">
 
-  <link rel="icon" type="image/png" href="<%= static_path(@conn, "/images/favicon.png") %>" />
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
 
   <!-- Compressed CSS -->
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
@@ -20,7 +20,7 @@
 
   <title>Podbaby</title>
 
-  <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  <link rel="stylesheet" href="/css/app.css">
 </head>
 
 <body class="no-js splash-page">
@@ -31,7 +31,7 @@
     <p>
     </p>
     <p>
-      <%= link("Lost? Find a podcast here", to: podcasts_path(@conn, :index), class: "large") %><br>
+    <a href="/discover">Lost? Find a podcast here</a><br>
     </p>
     </div>
 
