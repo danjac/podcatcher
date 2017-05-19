@@ -29,10 +29,23 @@ defmodule Podcatcher.Updater do
     |> Enum.each(&run_batch/1)
   end
 
-  def run_batch(podcasts) do
-    podcasts
+  def run(:no_build_date) do
+    Podcasts.list_podcasts
+    |> Enum.chunk(@batch_size)
+    |> Enum.each(&(run_batch(&1, true)))
+  end
+
+  def run_batch(podcasts, no_build_date \\ false) do
+
+    filtered_podcasts = case no_build_date do
+      true -> Enum.filter(podcasts, &(is_nil(&1.last_build_date)))
+      false -> podcasts
+    end
+
+    filtered_podcasts
     |> Enum.map(&Task.async(__MODULE__, :do_fetch, [&1]))
     |> Enum.map(&Task.await(&1, @await_timeout))
+
   end
 
   def do_fetch(podcast)  do

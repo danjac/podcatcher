@@ -16,7 +16,7 @@ defmodule Mix.Tasks.Podcatcher.ImportFeeds do
       case Podcatcher.Podcasts.get_or_create_podcast_from_rss_feed(feed) do
         {:ok, true, podcast} -> IO.puts "New podcast #{podcast.title} added"
         {:ok, false, podcast} -> IO.puts "Podcast #{podcast.title} already in database"
-        {:error, reason} -> IO.puts "Error: #{reason}"
+        {:error, reason} -> IO.puts "Error: #{inspect reason}"
       end
     end
 
