@@ -50,25 +50,6 @@
           </div>
         </div>
       </div>
-
-<!--
-<div class="card-section">
-<%= with mimetype = audio_mimetype(@episode.content_url) do %>
-  <%= if mimetype do %>
-  <audio controls>
-    <source src="<%= safe_protocol(@episode.content_url) %>" type="<%= mimetype %>">
-    <!-- fallback for non supporting browsers goes here -->
-    <p>Your browser does not support HTML5 audio, but you can still
-       <a href="<%= @episode.content_url %>">download the episode</a>.</p>
-  </audio>
-  <% else %>
-  We do not support playback of this content type in the browser, however
-  you can still <a href="<%= @episode.content_url %>">download the episode</a>.
-  <% end %>
-<% end %>
-</div>
--->
-
 <div class="card-section">
 <form method="GET" action="<%= podcast_url(@conn, @episode.podcast) %>">
   <div class="input-group">
