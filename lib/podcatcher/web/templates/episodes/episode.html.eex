@@ -84,10 +84,6 @@
 <% end %>
 
 <div class="card-section">
-  <hr />
-</div>
-
-<div class="card-section">
   <%= (@episode.description || @episode.summary) |> markdown %>
 </div>
 
