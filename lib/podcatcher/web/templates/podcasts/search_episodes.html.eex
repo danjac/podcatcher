@@ -5,7 +5,7 @@
     <input class="input-group-field" type="search" name="q" placeholder="Search this podcast" value="<%= @search_term%>">
   </div>
   <button type="submit" class="button primary expanded"><i class="fa fa-search"></i> Search this podcast</button>
-  <button type="submit" class="button secondary expanded" data-search-url="<%= episodes_path(@conn, :search) %>"><i class="fa fa-search"></i> Search all podcasts</button>
+  <button type="submit" class="button secondary expanded" data-search-url="<%= episodes_path(@conn, :search) %>"><i class="fa fa-search"></i> Search in all podcasts</button>
   <a class="button secondary expanded" href="<%= podcast_url(@conn, @podcast) %>">
     <i class="fa fa-refresh"></i> See all episodes in <%= truncate(@podcast.title, 30) %>
   </a>
