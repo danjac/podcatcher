@@ -32,9 +32,7 @@
     </header>
     <p>
       <%= link("Get started", to: podcasts_path(@conn, :index), class: "button primary large") %><br>
-      <%= unless assigns[:user] do %>
       <%= link("Already a member? Sign in here", to: auth_path(@conn, :login)) %>
-      <% end %>
     </p>
     </div>
 
