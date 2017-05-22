@@ -28,8 +28,8 @@ config :arc,
 
 config :quantum, :podcatcher,
   cron: [
-    # every 4 hours
-    "0 */4 * * *": {"Podcatcher.Updater", :run},
+    # every 6 hours
+    "0 */6 * * *": {"Podcatcher.Updater", :run},
   ],
   timeout: :infinity
   # timezone: "Europe/Helsinki"
