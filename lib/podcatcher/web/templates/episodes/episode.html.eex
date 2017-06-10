@@ -50,6 +50,13 @@
           </div>
         </div>
       </div>
+
+  <div class="card-section">
+    <audio controls>
+      <source src="<%= safe_protocol(@episode.content_url) %>" type="<%= audio_mimetype(@episode.content_url) %>">
+    </audio>
+  </div>
+
 <div class="card-section">
 <form method="GET" action="<%= podcast_url(@conn, @episode.podcast) %>">
   <div class="input-group">
@@ -65,6 +72,10 @@
  <%= @episode.podcast.description |> markdown %>
 </div>
 <% end %>
+
+<div class="card-section">
+  <hr />
+</div>
 
 <div class="card-section">
   <%= (@episode.description || @episode.summary) |> markdown %>
